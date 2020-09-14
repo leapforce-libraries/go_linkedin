@@ -33,3 +33,7 @@ func NewLinkedIn(clientID string, clientSecret string, scope string, bigQuery *b
 func (li *LinkedIn) ValidateToken() error {
 	return li.oAuth2.ValidateToken()
 }
+
+func (li *LinkedIn) InitToken() error {
+	return li.oAuth2.InitToken()
+}
