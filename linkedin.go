@@ -9,7 +9,7 @@ import (
 
 const (
 	apiName         string = "LinkedIn"
-	apiURL          string = "https://start.exactonline.nl/api/v1"
+	apiURL          string = "https://api.linkedin.com/v2"
 	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
 	tokenHttpMethod string = http.MethodGet
