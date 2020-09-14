@@ -1,51 +1,35 @@
 package LinkedIn
 
 import (
-	"fmt"
-	"strings"
+	"net/http"
 
 	bigquerytools "github.com/Leapforce-nl/go_bigquerytools"
-	types "github.com/Leapforce-nl/go_types"
-
-	googleoauth2 "github.com/Leapforce-nl/go_googleoauth2"
+	oauth2 "github.com/Leapforce-nl/go_oauth2"
 )
 
-const apiName string = "LinkedIn"
+const (
+	apiName         string = "LinkedIn"
+	apiURL          string = "https://start.exactonline.nl/api/v1"
+	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
+	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
+	tokenHttpMethod string = http.MethodGet
+	redirectURL     string = "http://localhost:8080/oauth/redirect"
+)
 
 // LinkedIn stores LinkedIn configuration
 //
 type LinkedIn struct {
-	baseURL string
-	oAuth2  *googleoauth2.GoogleOAuth2
+	oAuth2 *oauth2.OAuth2
 }
 
 // methods
 //
-func NewLinkedIn(baseURL string, clientID string, clientSecret string, scopes []string, bigQuery *bigquerytools.BigQuery, isLive bool) (*LinkedIn, error) {
-	gsc := LinkedIn{}
-	gsc.baseURL = baseURL
-
-	_oAuth2 := new(googleoauth2.GoogleOAuth2)
-	_oAuth2.ApiName = apiName
-	_oAuth2.ClientID = clientID
-	_oAuth2.ClientSecret = clientSecret
-	_oAuth2.Scopes = scopes
-	_oAuth2.BigQuery = bigQuery
-	_oAuth2.IsLive = isLive
-
-	gsc.oAuth2 = _oAuth2
-
-	return &gsc, nil
+func NewLinkedIn(clientID string, clientSecret string, scope string, bigQuery *bigquerytools.BigQuery, isLive bool) (*LinkedIn, error) {
+	li := LinkedIn{}
+	li.oAuth2 = oauth2.NewOAuth(apiName, clientID, clientSecret, scope, redirectURL, authURL, tokenURL, tokenHttpMethod, bigQuery, isLive)
+	return &li, nil
 }
 
-func (gad *LinkedIn) Validate() error {
-	if gad.baseURL == "" {
-		return &types.ErrorString{fmt.Sprintf("%s baseURL not provided", apiName)}
-	}
-
-	if !strings.HasSuffix(gad.baseURL, "/") {
-		gad.baseURL = gad.baseURL + "/"
-	}
-
-	return nil
+func (li *LinkedIn) ValidateToken() error {
+	return li.oAuth2.ValidateToken()
 }
