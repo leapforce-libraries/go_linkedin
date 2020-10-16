@@ -1,9 +1,10 @@
-package LinkedIn
+package linkedin
 
 import (
 	"net/http"
 
 	bigquerytools "github.com/Leapforce-nl/go_bigquerytools"
+	linkedin_os "github.com/Leapforce-nl/go_linkedin/organizationstats"
 	oauth2 "github.com/Leapforce-nl/go_oauth2"
 )
 
@@ -19,21 +20,22 @@ const (
 // LinkedIn stores LinkedIn configuration
 //
 type LinkedIn struct {
-	oAuth2 *oauth2.OAuth2
+	OrganizationStats *linkedin_os.OrganizationStats
+}
+
+type NewLinkedInParams struct {
+	ClientID     string
+	ClientSecret string
+	Scope        string
+	BigQuery     *bigquerytools.BigQuery
+	IsLive       bool
 }
 
 // methods
 //
-func NewLinkedIn(clientID string, clientSecret string, scope string, bigQuery *bigquerytools.BigQuery, isLive bool) (*LinkedIn, error) {
+func NewLinkedIn(params NewLinkedInParams) (*LinkedIn, error) {
 	li := LinkedIn{}
-	li.oAuth2 = oauth2.NewOAuth(apiName, clientID, clientSecret, scope, redirectURL, authURL, tokenURL, tokenHttpMethod, bigQuery, isLive)
+	oa := oauth2.NewOAuth(apiName, params.ClientID, params.ClientSecret, params.Scope, redirectURL, authURL, tokenURL, tokenHttpMethod, params.BigQuery, params.IsLive)
+	li.OrganizationStats = linkedin_os.NewOrganizationStats(apiURL, oa)
 	return &li, nil
-}
-
-func (li *LinkedIn) ValidateToken() error {
-	return li.oAuth2.ValidateToken()
-}
-
-func (li *LinkedIn) InitToken() error {
-	return li.oAuth2.InitToken()
 }
