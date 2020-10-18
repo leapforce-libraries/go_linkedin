@@ -33,7 +33,7 @@ func (os *OrganizationStats) GetTimeboundPageStats(organisationID int, startDate
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(unixEnd, 10))
 
 	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", os.apiURL, values.Encode())
-	fmt.Println(urlString)
+	//fmt.Println(urlString)
 
 	pageStatsResponse := TimeboundPageStatsResponse{}
 

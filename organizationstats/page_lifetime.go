@@ -41,7 +41,7 @@ func (os *OrganizationStats) GetLifetimePageStats(organisationID int) (*[]Lifeti
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
 	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", os.apiURL, values.Encode())
-	fmt.Println(urlString)
+	//fmt.Println(urlString)
 
 	pageStatsResponse := LifetimePageStatsResponse{}
 

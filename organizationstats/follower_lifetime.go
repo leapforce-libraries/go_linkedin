@@ -43,7 +43,7 @@ func (os *OrganizationStats) GetLifetimeFollowerStats(organisationID int) (*[]Li
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
 	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", os.apiURL, values.Encode())
-	fmt.Println(urlString)
+	//fmt.Println(urlString)
 
 	followerStatsResponse := LifetimeFollowerStatsResponse{}
 

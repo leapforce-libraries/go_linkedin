@@ -38,7 +38,7 @@ func (os *OrganizationStats) GetTimeboundFollowerStats(organisationID int, start
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(unixEnd, 10))
 
 	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", os.apiURL, values.Encode())
-	fmt.Println(urlString)
+	//fmt.Println(urlString)
 
 	followerStatsResponse := TimeboundFollowerStatsResponse{}
 
