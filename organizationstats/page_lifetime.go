@@ -18,7 +18,7 @@ type LifetimePageStats struct {
 	ByIndustry        []LifetimePageStatisticsByType `json:"pageStatisticsByIndustry"`
 	ByRegion          []LifetimePageStatisticsByType `json:"pageStatisticsByRegion"`
 	ByCountry         []LifetimePageStatisticsByType `json:"pageStatisticsByCountry"`
-	Totals            LifetimeTotalPageStatistics    `json:"totalPageStatistics"`
+	Totals            TotalPageStatistics            `json:"totalPageStatistics"`
 	Organization      string                         `json:"organization"`
 }
 
@@ -34,67 +34,6 @@ type LifetimePageStatisticsByType struct {
 	Seniority       string `json:"seniority"`
 	StaffCountRange string `json:"staffCountRange"`
 }
-
-type LifetimeTotalPageStatistics struct {
-	ClicksRaw json.RawMessage `json:"clicks"`
-	Clicks    map[string]map[string]int64
-	ViewsRaw  json.RawMessage `json:"views"`
-	Views     map[string]PageViews
-}
-
-type PageViews struct {
-	PageViews int64 `json:"pageViews"`
-}
-
-/*
-type TotalPageClicks struct {
-	MobileCareersPageClicks MobileCareersPageClicks `json:"mobileCareersPageClicks"`
-	CareersPageClicks       CareersPageClicks       `json:"careersPageClicks"`
-}*/
-
-/*
-type MobileCareersPageClicks struct {
-	CareersPageJobsClicks       int `json:"careersPageJobsClicks"`
-	CareersPagePromoLinksClicks int `json:"careersPagePromoLinksClicks"`
-	CareersPageEmployeesClicks  int `json:"careersPageEmployeesClicks"`
-}*/
-
-type PageClicks struct {
-	CareersPagePromoLinksClicks  int `json:"careersPagePromoLinksClicks"`
-	CareersPageBannerPromoClicks int `json:"careersPageBannerPromoClicks"`
-	CareersPageJobsClicks        int `json:"careersPageJobsClicks"`
-	CareersPageEmployeesClicks   int `json:"careersPageEmployeesClicks"`
-}
-
-/*
-type TotalPageViews struct {
-	AboutPageViews           PageViews `json:"aboutPageViews"`
-	MobileAboutPageViews     PageViews `json:"mobileAboutPageViews"`
-	DesktopAboutPageViews    PageViews `json:"desktopAboutPageViews"`
-	CareersPageViews         PageViews `json:"careersPageViews"`
-	MobileCareersPageViews   PageViews `json:"mobileCareersPageViews"`
-	DesktopCareersPageViews  PageViews `json:"desktopCareersPageViews"`
-	InsightsPageViews        PageViews `json:"insightsPageViews"`
-	MobileInsightsPageViews  PageViews `json:"mobileInsightsPageViews"`
-	DesktopInsightsPageViews PageViews `json:"desktopInsightsPageViews"`
-	JobsPageViews            PageViews `json:"jobsPageViews"`
-	MobileJobsPageViews      PageViews `json:"mobileJobsPageViews"`
-	DesktopJobsPageViews     PageViews `json:"desktopJobsPageViews"`
-	LifeAtPageViews          PageViews `json:"lifeAtPageViews"`
-	MobileLifeAtPageViews    PageViews `json:"mobileLifeAtPageViews"`
-	DesktopLifeAtPageViews   PageViews `json:"desktopLifeAtPageViews"`
-	OverviewPageViews        PageViews `json:"overviewPageViews"`
-	DesktopOverviewPageViews PageViews `json:"desktopOverviewPageViews"`
-	AllPageViews             PageViews `json:"allPageViews"`
-	AllMobilePageViews       PageViews `json:"allMobilePageViews"`
-	AllDesktopPageViews      PageViews `json:"allDesktopPageViews"`
-	PeoplePageViews          PageViews `json:"peoplePageViews"`
-	MobilePeoplePageViews    PageViews `json:"mobilePeoplePageViews"`
-	DesktopPeoplePageViews   PageViews `json:"desktopPeoplePageViews"`
-	ProductsPageViews        PageViews `json:"productsPageViews"`
-	MobileProductsPageViews  PageViews `json:"mobileProductsPageViews"`
-	DesktopProductsPageViews PageViews `json:"desktopProductsPageViews"`
-}*/
 
 func (os *OrganizationStats) GetLifetimePageStats(organisationID int) (*[]LifetimePageStats, error) {
 	values := url.Values{}
@@ -180,10 +119,20 @@ func unmarshalPageViews(message json.RawMessage) (*map[string]PageViews, error) 
 }
 
 func unmarshalPageClicks(message json.RawMessage) (*map[string]map[string]int64, error) {
-	pageClicks := make(map[string]map[string]int64)
-	err := json.Unmarshal(message, &pageClicks)
+	pageClicks_ := make(map[string]json.RawMessage)
+	err := json.Unmarshal(message, &pageClicks_)
 	if err != nil {
 		return nil, err
+	}
+
+	pageClicks := make(map[string]map[string]int64)
+
+	for key, value := range pageClicks_ {
+		pc := make(map[string]int64)
+		err := json.Unmarshal(value, &pc)
+		if err == nil {
+			pageClicks[key] = pc
+		}
 	}
 
 	return &pageClicks, nil

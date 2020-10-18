@@ -33,8 +33,8 @@ type LifetimeFollowerCountsByType struct {
 }
 
 type FollowerCounts struct {
-	OrganicFollowerCount int `json:"organicFollowerCount"`
-	PaidFollowerCount    int `json:"paidFollowerCount"`
+	OrganicFollowerCount int64 `json:"organicFollowerCount"`
+	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
 func (os *OrganizationStats) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, error) {

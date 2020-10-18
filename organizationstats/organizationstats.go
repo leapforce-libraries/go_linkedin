@@ -22,3 +22,8 @@ type Paging struct {
 	Start int      `json:"start"`
 	Links []string `json:"links"`
 }
+
+type TimeRange struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
+}

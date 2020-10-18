@@ -21,13 +21,8 @@ type TimeboundFollowerStats struct {
 }
 
 type FollowerGains struct {
-	OrganicFollowerGain int `json:"organicFollowerGain"`
-	PaidFollowerGain    int `json:"paidFollowerGain"`
-}
-
-type TimeRange struct {
-	Start int64 `json:"start"`
-	End   int64 `json:"end"`
+	OrganicFollowerGain int64 `json:"organicFollowerGain"`
+	PaidFollowerGain    int64 `json:"paidFollowerGain"`
 }
 
 func (os *OrganizationStats) GetTimeboundFollowerStats(organisationID int, startDate civil.Date, endDate civil.Date) (*[]TimeboundFollowerStats, error) {
