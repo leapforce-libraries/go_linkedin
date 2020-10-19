@@ -20,7 +20,7 @@ func (li *LinkedIn) GetLifetimeShareStats(organisationID int) (*[]LifetimeShareS
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationalEntityShareStatistics?%s", apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationalEntityShareStatistics?%s", li.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
 	shareStatsResponse := LifetimeShareStatsResponse{}

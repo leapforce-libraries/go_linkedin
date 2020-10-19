@@ -1,6 +1,7 @@
 package linkedin
 
 import (
+	"fmt"
 	"net/http"
 
 	bigquerytools "github.com/Leapforce-nl/go_bigquerytools"
@@ -9,7 +10,8 @@ import (
 
 const (
 	apiName         string = "LinkedIn"
-	apiURL          string = "https://api.linkedin.com/v2"
+	apiURL          string = "https://api.linkedin.com"
+	apiVersion      string = "v2"
 	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
 	tokenHttpMethod string = http.MethodGet
@@ -40,4 +42,8 @@ func NewLinkedIn(params NewLinkedInParams) (*LinkedIn, error) {
 
 func (li *LinkedIn) OAuth2() *oauth2.OAuth2 {
 	return li.oAuth2
+}
+
+func (li *LinkedIn) BaseURL() string {
+	return fmt.Sprintf("%s/%s", apiURL, apiVersion)
 }

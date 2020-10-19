@@ -37,17 +37,17 @@ type FollowerCounts struct {
 	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
-func (os *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, error) {
+func (li *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", li.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
 	followerStatsResponse := LifetimeFollowerStatsResponse{}
 
-	_, err := os.OAuth2().Get(urlString, &followerStatsResponse)
+	_, err := li.OAuth2().Get(urlString, &followerStatsResponse)
 	if err != nil {
 		return nil, err
 	}

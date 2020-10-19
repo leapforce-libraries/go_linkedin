@@ -40,7 +40,7 @@ func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageSta
 	values.Set("q", "organization")
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", li.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
 	pageStatsResponse := LifetimePageStatsResponse{}

@@ -25,7 +25,7 @@ func (li *LinkedIn) GetShareShareStats(organisationID int, shareIDs []string) (*
 		values.Set(fmt.Sprintf("shares[%v]", index), fmt.Sprintf("urn:li:share:%s", shareID))
 	}
 
-	urlString := fmt.Sprintf("%s/organizationalEntityShareStatistics?%s", apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationalEntityShareStatistics?%s", li.BaseURL(), values.Encode())
 	fmt.Println(urlString)
 
 	shareStatsResponse := ShareShareStatsResponse{}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 
 	types "github.com/Leapforce-nl/go_types"
 )
@@ -55,24 +56,58 @@ type Thumbnail struct {
 	ResolvedUrl          string          `json:"resolvedUrl"`
 }
 
-func (li *LinkedIn) GetShares(organisationID int) (*[]Share, error) {
+func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, error) {
 	if li == nil {
 		return nil, &types.ErrorString{"Shares pointer is nil"}
 	}
 
-	values := url.Values{}
-	values.Set("q", "owners")
-	values.Set("owners", fmt.Sprintf("urn:li:organization:%v", organisationID))
+	start := 0
+	count := 50
+	doNext := true
 
-	urlString := fmt.Sprintf("%s/shares?%s", apiURL, values.Encode())
-	//fmt.Println(urlString)
+	shares := []Share{}
 
-	sharesResponse := SharesResponse{}
+	for doNext {
+		values := url.Values{}
+		values.Set("q", "owners")
+		values.Set("owners", fmt.Sprintf("urn:li:organization:%v", organisationID))
+		values.Set("sortBy", "CREATED")
+		values.Set("start", strconv.Itoa(start))
+		values.Set("count", strconv.Itoa(count))
 
-	_, err := li.OAuth2().Get(urlString, &sharesResponse)
-	if err != nil {
-		return nil, err
+		urlString := fmt.Sprintf("%s/shares?%s", li.BaseURL(), values.Encode())
+		//fmt.Println(urlString)
+
+		sharesResponse := SharesResponse{}
+
+		_, err := li.OAuth2().Get(urlString, &sharesResponse)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(sharesResponse.Elements) == 0 {
+			doNext = false
+			continue
+		}
+
+		for _, share := range sharesResponse.Elements {
+
+			if share.Created.Time > endDateUnix {
+				continue
+			}
+
+			if share.Created.Time < startDateUnix {
+				doNext = false
+				break
+			}
+
+			shares = append(shares, share)
+		}
+
+		//fmt.Println("shares", len(shares))
+
+		start += count
 	}
 
-	return &sharesResponse.Elements, nil
+	return &shares, nil
 }

@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
-	"time"
-
-	"cloud.google.com/go/civil"
 )
 
 type TimeboundPageStatsResponse struct {
@@ -20,19 +17,15 @@ type TimeboundPageStats struct {
 	Organization        string              `json:"organization"`
 }
 
-func (li *LinkedIn) GetTimeboundPageStats(organisationID int, startDate civil.Date, endDate civil.Date) (*[]TimeboundPageStats, error) {
-	location, _ := time.LoadLocation("GMT")
-	unixStart := startDate.In(location).Unix() * 1000
-	unixEnd := endDate.In(location).Unix() * 1000
-
+func (li *LinkedIn) GetTimeboundPageStats(organisationID int, startDateUnix int64, endDateUnix int64) (*[]TimeboundPageStats, error) {
 	values := url.Values{}
 	values.Set("q", "organization")
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
 	values.Set("timeIntervals.timeGranularityType", "DAY")
-	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(unixStart, 10))
-	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(unixEnd, 10))
+	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(startDateUnix, 10))
+	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(endDateUnix, 10))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", li.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
 	pageStatsResponse := TimeboundPageStatsResponse{}
