@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"net/url"
 
-	general "github.com/Leapforce-nl/go_linkedin/general"
 	types "github.com/Leapforce-nl/go_types"
 )
 
 type SharesResponse struct {
-	Paging   general.Paging `json:"paging"`
-	Elements []Share        `json:"elements"`
+	Paging   Paging  `json:"paging"`
+	Elements []Share `json:"elements"`
 }
 
 type Share struct {

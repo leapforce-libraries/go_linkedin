@@ -3,12 +3,10 @@ package linkedin
 import (
 	"fmt"
 	"net/url"
-
-	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type LifetimeFollowerStatsResponse struct {
-	Paging   general.Paging          `json:"paging"`
+	Paging   Paging                  `json:"paging"`
 	Elements []LifetimeFollowerStats `json:"elements"`
 }
 

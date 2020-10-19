@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"net/url"
 
-	general "github.com/Leapforce-nl/go_linkedin/general"
 	types "github.com/Leapforce-nl/go_types"
 )
 
 type UGCPostsResponse struct {
-	Paging   general.Paging `json:"paging"`
-	Elements []UGCPost      `json:"elements"`
+	Paging   Paging    `json:"paging"`
+	Elements []UGCPost `json:"elements"`
 }
 
 type UGCPost struct {

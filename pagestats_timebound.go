@@ -7,17 +7,16 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type TimeboundPageStatsResponse struct {
-	Paging   general.Paging       `json:"paging"`
+	Paging   Paging               `json:"paging"`
 	Elements []TimeboundPageStats `json:"elements"`
 }
 
 type TimeboundPageStats struct {
 	TotalPageStatistics TotalPageStatistics `json:"totalPageStatistics"`
-	TimeRange           general.TimeRange   `json:"timeRange"`
+	TimeRange           TimeRange           `json:"timeRange"`
 	Organization        string              `json:"organization"`
 }
 

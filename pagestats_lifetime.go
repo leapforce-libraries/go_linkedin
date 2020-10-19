@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-
-	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type LifetimePageStatsResponse struct {
-	Paging   general.Paging      `json:"paging"`
+	Paging   Paging              `json:"paging"`
 	Elements []LifetimePageStats `json:"elements"`
 }
 
