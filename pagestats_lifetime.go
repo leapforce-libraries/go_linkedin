@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+
+	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type LifetimePageStatsResponse struct {
-	Paging   Paging              `json:"paging"`
+	Paging   general.Paging      `json:"paging"`
 	Elements []LifetimePageStats `json:"elements"`
 }
 
@@ -35,17 +37,17 @@ type LifetimePageStatisticsByType struct {
 	StaffCountRange string `json:"staffCountRange"`
 }
 
-func (os *OrganizationStats) GetLifetimePageStats(organisationID int) (*[]LifetimePageStats, error) {
+func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageStats, error) {
 	values := url.Values{}
 	values.Set("q", "organization")
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", os.apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", apiURL, values.Encode())
 	//fmt.Println(urlString)
 
 	pageStatsResponse := LifetimePageStatsResponse{}
 
-	_, err := os.OAuth2().Get(urlString, &pageStatsResponse)
+	_, err := li.OAuth2().Get(urlString, &pageStatsResponse)
 	if err != nil {
 		return nil, err
 	}

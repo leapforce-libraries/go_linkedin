@@ -7,20 +7,21 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type TimeboundPageStatsResponse struct {
-	Paging   Paging               `json:"paging"`
+	Paging   general.Paging       `json:"paging"`
 	Elements []TimeboundPageStats `json:"elements"`
 }
 
 type TimeboundPageStats struct {
 	TotalPageStatistics TotalPageStatistics `json:"totalPageStatistics"`
-	TimeRange           TimeRange           `json:"timeRange"`
+	TimeRange           general.TimeRange   `json:"timeRange"`
 	Organization        string              `json:"organization"`
 }
 
-func (os *OrganizationStats) GetTimeboundPageStats(organisationID int, startDate civil.Date, endDate civil.Date) (*[]TimeboundPageStats, error) {
+func (li *LinkedIn) GetTimeboundPageStats(organisationID int, startDate civil.Date, endDate civil.Date) (*[]TimeboundPageStats, error) {
 	location, _ := time.LoadLocation("GMT")
 	unixStart := startDate.In(location).Unix() * 1000
 	unixEnd := endDate.In(location).Unix() * 1000
@@ -32,12 +33,12 @@ func (os *OrganizationStats) GetTimeboundPageStats(organisationID int, startDate
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(unixStart, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(unixEnd, 10))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", os.apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", apiURL, values.Encode())
 	//fmt.Println(urlString)
 
 	pageStatsResponse := TimeboundPageStatsResponse{}
 
-	_, err := os.OAuth2().Get(urlString, &pageStatsResponse)
+	_, err := li.OAuth2().Get(urlString, &pageStatsResponse)
 	if err != nil {
 		return nil, err
 	}

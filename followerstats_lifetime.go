@@ -3,10 +3,12 @@ package linkedin
 import (
 	"fmt"
 	"net/url"
+
+	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type LifetimeFollowerStatsResponse struct {
-	Paging   Paging                  `json:"paging"`
+	Paging   general.Paging          `json:"paging"`
 	Elements []LifetimeFollowerStats `json:"elements"`
 }
 
@@ -37,12 +39,12 @@ type FollowerCounts struct {
 	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
-func (os *OrganizationStats) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, error) {
+func (os *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", os.apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", apiURL, values.Encode())
 	//fmt.Println(urlString)
 
 	followerStatsResponse := LifetimeFollowerStatsResponse{}

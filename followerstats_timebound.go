@@ -7,17 +7,18 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	general "github.com/Leapforce-nl/go_linkedin/general"
 )
 
 type TimeboundFollowerStatsResponse struct {
-	Paging   Paging                   `json:"paging"`
+	Paging   general.Paging           `json:"paging"`
 	Elements []TimeboundFollowerStats `json:"elements"`
 }
 
 type TimeboundFollowerStats struct {
-	TimeRange            TimeRange     `json:"timeRange"`
-	FollowerGains        FollowerGains `json:"followerGains"`
-	OrganizationalEntity string        `json:"organizationalEntity"`
+	TimeRange            general.TimeRange `json:"timeRange"`
+	FollowerGains        FollowerGains     `json:"followerGains"`
+	OrganizationalEntity string            `json:"organizationalEntity"`
 }
 
 type FollowerGains struct {
@@ -25,7 +26,7 @@ type FollowerGains struct {
 	PaidFollowerGain    int64 `json:"paidFollowerGain"`
 }
 
-func (os *OrganizationStats) GetTimeboundFollowerStats(organisationID int, startDate civil.Date, endDate civil.Date) (*[]TimeboundFollowerStats, error) {
+func (li *LinkedIn) GetTimeboundFollowerStats(organisationID int, startDate civil.Date, endDate civil.Date) (*[]TimeboundFollowerStats, error) {
 	location, _ := time.LoadLocation("GMT")
 	unixStart := startDate.In(location).Unix() * 1000
 	unixEnd := endDate.In(location).Unix() * 1000
@@ -37,12 +38,12 @@ func (os *OrganizationStats) GetTimeboundFollowerStats(organisationID int, start
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(unixStart, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(unixEnd, 10))
 
-	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", os.apiURL, values.Encode())
+	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", apiURL, values.Encode())
 	//fmt.Println(urlString)
 
 	followerStatsResponse := TimeboundFollowerStatsResponse{}
 
-	_, err := os.OAuth2().Get(urlString, &followerStatsResponse)
+	_, err := li.OAuth2().Get(urlString, &followerStatsResponse)
 	if err != nil {
 		return nil, err
 	}
