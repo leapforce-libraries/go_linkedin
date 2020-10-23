@@ -57,3 +57,7 @@ func (li *LinkedIn) OAuth2() *oauth2.OAuth2 {
 func (li *LinkedIn) BaseURL() string {
 	return fmt.Sprintf("%s/%s", apiURL, apiVersion)
 }
+
+func (li *LinkedIn) InitToken() error {
+	return li.oAuth2.InitToken()
+}
