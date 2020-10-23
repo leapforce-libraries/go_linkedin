@@ -14,7 +14,7 @@ const (
 	apiVersion      string = "v2"
 	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
-	tokenHttpMethod string = http.MethodGet
+	tokenHTTPMethod string = http.MethodGet
 	redirectURL     string = "http://localhost:8080/oauth/redirect"
 )
 
