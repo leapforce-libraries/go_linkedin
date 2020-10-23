@@ -35,7 +35,17 @@ type NewLinkedInParams struct {
 // NewLinkedIn return new instance of LinkedIn struct
 //
 func NewLinkedIn(params NewLinkedInParams) (*LinkedIn, error) {
-	oa := oauth2.NewOAuth(apiName, params.ClientID, params.ClientSecret, params.Scope, redirectURL, authURL, tokenURL, tokenHttpMethod, params.BigQuery, params.IsLive)
+	config := oauth2.OAuth2Config{
+		ApiName:         apiName,
+		ClientID:        params.ClientID,
+		ClientSecret:    params.ClientSecret,
+		Scope:           params.Scope,
+		RedirectURL:     redirectURL,
+		AuthURL:         authURL,
+		TokenURL:        tokenURL,
+		TokenHTTPMethod: tokenHTTPMethod,
+	}
+	oa := oauth2.NewOAuth(config, params.BigQuery, params.IsLive)
 	li := LinkedIn{oa}
 	return &li, nil
 }
