@@ -3,7 +3,7 @@ package linkedin
 import (
 	"fmt"
 
-	types "github.com/Leapforce-nl/go_types"
+	types "github.com/leapforce-libraries/go_types"
 )
 
 type Organization struct {

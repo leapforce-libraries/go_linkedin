@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	types "github.com/Leapforce-nl/go_types"
+	types "github.com/leapforce-libraries/go_types"
 )
 
 type SharesResponse struct {

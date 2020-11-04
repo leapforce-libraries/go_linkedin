@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	bigquerytools "github.com/Leapforce-nl/go_bigquerytools"
-	oauth2 "github.com/Leapforce-nl/go_oauth2"
+	bigquerytools "github.com/leapforce-libraries/go_bigquerytools"
+	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 const (

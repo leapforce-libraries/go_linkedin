@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	types "github.com/Leapforce-nl/go_types"
+	types "github.com/leapforce-libraries/go_types"
 )
 
 type UGCPostsResponse struct {
