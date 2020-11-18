@@ -41,19 +41,28 @@ type Annotation struct {
 }
 type ShareContent struct {
 	ContentEntities    []ShareContentEntity `json:"contentEntities"`
-	Description        string               `json:"description"`
-	Title              string               `json:"title"`
-	ShareMediaCategory string               `json:"shareMediaCategory"`
+	Description        *string              `json:"description"`
+	Title              *string              `json:"title"`
+	LandingPageURL     *string              `json:"landingPageUrl"`
+	ShareMediaCategory *string              `json:"shareMediaCategory"`
 }
 type ShareContentEntity struct {
-	Description    string      `json:"description"`
-	EntityLocation string      `json:"entityLocation"`
+	Description    *string     `json:"description"`
+	EntityLocation *string     `json:"entityLocation"`
+	Title          *string     `json:"title"`
 	Thumbnails     []Thumbnail `json:"thumbnails"`
+	Entity         *string     `json:"entity"`
 }
 
 type Thumbnail struct {
-	ImageSpecificContent json.RawMessage `json:"imageSpecificContent"`
-	ResolvedUrl          string          `json:"resolvedUrl"`
+	ImageSpecificContent *ImageSpecificContent `json:"imageSpecificContent"`
+	ResolvedUrl          string                `json:"resolvedUrl"`
+}
+
+type ImageSpecificContent struct {
+	Size   *int `json:"size"`
+	Width  *int `json:"width"`
+	Height *int `json:"height"`
 }
 
 func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, error) {
