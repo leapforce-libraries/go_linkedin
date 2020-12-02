@@ -3,7 +3,7 @@ package linkedin
 import (
 	"fmt"
 
-	types "github.com/leapforce-libraries/go_types"
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type Organization struct {
@@ -12,9 +12,9 @@ type Organization struct {
 	LocalizedWebsite string `json:"localizedWebsite"`
 }
 
-func (li *LinkedIn) GetOrganization(organizationID int) (*Organization, error) {
+func (li *LinkedIn) GetOrganization(organizationID int) (*Organization, *errortools.Error) {
 	if li == nil {
-		return nil, &types.ErrorString{"LinkedIn pointer is nil"}
+		return nil, errortools.ErrorMessage("LinkedIn pointer is nil")
 	}
 
 	urlString := fmt.Sprintf("%s/organizations/%v", li.BaseURL(), organizationID)
@@ -22,9 +22,9 @@ func (li *LinkedIn) GetOrganization(organizationID int) (*Organization, error) {
 
 	organization := Organization{}
 
-	_, err := li.OAuth2().Get(urlString, &organization)
-	if err != nil {
-		return nil, err
+	_, _, e := li.OAuth2().Get(urlString, &organization, nil)
+	if e != nil {
+		return nil, e
 	}
 
 	return &organization, nil

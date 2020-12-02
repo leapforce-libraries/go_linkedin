@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	types "github.com/leapforce-libraries/go_types"
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type SharesResponse struct {
@@ -65,9 +65,9 @@ type ImageSpecificContent struct {
 	Height *int `json:"height"`
 }
 
-func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, error) {
+func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
 	if li == nil {
-		return nil, &types.ErrorString{"Shares pointer is nil"}
+		return nil, errortools.ErrorMessage("Shares pointer is nil")
 	}
 
 	start := 0
@@ -89,9 +89,9 @@ func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUn
 
 		sharesResponse := SharesResponse{}
 
-		_, err := li.OAuth2().Get(urlString, &sharesResponse)
-		if err != nil {
-			return nil, err
+		_, _, e := li.OAuth2().Get(urlString, &sharesResponse, nil)
+		if e != nil {
+			return nil, e
 		}
 
 		if len(sharesResponse.Elements) == 0 {

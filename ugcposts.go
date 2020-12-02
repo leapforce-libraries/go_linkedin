@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	types "github.com/leapforce-libraries/go_types"
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type UGCPostsResponse struct {
@@ -16,9 +16,9 @@ type UGCPost struct {
 	Author string `json:"author"`
 }
 
-func (li *LinkedIn) GetUGCPosts(organisationID int) (*[]UGCPost, error) {
+func (li *LinkedIn) GetUGCPosts(organisationID int) (*[]UGCPost, *errortools.Error) {
 	if li == nil {
-		return nil, &types.ErrorString{"UGCPosts pointer is nil"}
+		return nil, errortools.ErrorMessage("UGCPosts pointer is nil")
 	}
 
 	values := url.Values{}
@@ -31,9 +31,9 @@ func (li *LinkedIn) GetUGCPosts(organisationID int) (*[]UGCPost, error) {
 
 	followerStatsResponse := UGCPostsResponse{}
 
-	_, err := li.OAuth2().Get(urlString, &followerStatsResponse)
-	if err != nil {
-		return nil, err
+	_, _, e := li.OAuth2().Get(urlString, &followerStatsResponse, nil)
+	if e != nil {
+		return nil, e
 	}
 
 	return &followerStatsResponse.Elements, nil

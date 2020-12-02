@@ -3,6 +3,8 @@ package linkedin
 import (
 	"fmt"
 	"net/url"
+
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type LifetimeFollowerStatsResponse struct {
@@ -37,7 +39,7 @@ type FollowerCounts struct {
 	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
-func (li *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, error) {
+func (li *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
@@ -47,9 +49,9 @@ func (li *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFol
 
 	followerStatsResponse := LifetimeFollowerStatsResponse{}
 
-	_, err := li.OAuth2().Get(urlString, &followerStatsResponse)
-	if err != nil {
-		return nil, err
+	_, _, e := li.OAuth2().Get(urlString, &followerStatsResponse, nil)
+	if e != nil {
+		return nil, e
 	}
 
 	return &followerStatsResponse.Elements, nil

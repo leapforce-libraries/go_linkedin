@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type LifetimePageStatsResponse struct {
@@ -35,7 +37,7 @@ type LifetimePageStatisticsByType struct {
 	StaffCountRange string `json:"staffCountRange"`
 }
 
-func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageStats, error) {
+func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageStats, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organization")
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
@@ -45,46 +47,46 @@ func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageSta
 
 	pageStatsResponse := LifetimePageStatsResponse{}
 
-	_, err := li.OAuth2().Get(urlString, &pageStatsResponse)
-	if err != nil {
-		return nil, err
+	_, _, e := li.OAuth2().Get(urlString, &pageStatsResponse, nil)
+	if e != nil {
+		return nil, e
 	}
 
 	for i := range pageStatsResponse.Elements {
-		err = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByStaffCountRange)
-		if err != nil {
-			return nil, err
+		e = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByStaffCountRange)
+		if e != nil {
+			return nil, e
 		}
-		err = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByFunction)
-		if err != nil {
-			return nil, err
+		e = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByFunction)
+		if e != nil {
+			return nil, e
 		}
-		err = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].BySeniority)
-		if err != nil {
-			return nil, err
+		e = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].BySeniority)
+		if e != nil {
+			return nil, e
 		}
-		err = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByIndustry)
-		if err != nil {
-			return nil, err
+		e = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByIndustry)
+		if e != nil {
+			return nil, e
 		}
-		err = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByRegion)
-		if err != nil {
-			return nil, err
+		e = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByRegion)
+		if e != nil {
+			return nil, e
 		}
-		err = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByCountry)
-		if err != nil {
-			return nil, err
+		e = unmarshalPageViewsSlice(&pageStatsResponse.Elements[i].ByCountry)
+		if e != nil {
+			return nil, e
 		}
 
-		totalPageViews, err := unmarshalPageViews(pageStatsResponse.Elements[i].Totals.ViewsRaw)
-		if err != nil {
-			return nil, err
+		totalPageViews, e := unmarshalPageViews(pageStatsResponse.Elements[i].Totals.ViewsRaw)
+		if e != nil {
+			return nil, e
 		}
 		pageStatsResponse.Elements[i].Totals.Views = *totalPageViews
 
-		totalPageClicks, err := unmarshalPageClicks(pageStatsResponse.Elements[i].Totals.ClicksRaw)
-		if err != nil {
-			return nil, err
+		totalPageClicks, e := unmarshalPageClicks(pageStatsResponse.Elements[i].Totals.ClicksRaw)
+		if e != nil {
+			return nil, e
 		}
 		pageStatsResponse.Elements[i].Totals.Clicks = *totalPageClicks
 	}
@@ -92,15 +94,15 @@ func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageSta
 	return &pageStatsResponse.Elements, nil
 }
 
-func unmarshalPageViewsSlice(stats *[]LifetimePageStatisticsByType) error {
+func unmarshalPageViewsSlice(stats *[]LifetimePageStatisticsByType) *errortools.Error {
 	if stats == nil {
 		return nil
 	}
 
 	for j := range *stats {
-		pageViews, err := unmarshalPageViews((*stats)[j].PageStatisticsRaw.RawMessage)
-		if err != nil {
-			return err
+		pageViews, e := unmarshalPageViews((*stats)[j].PageStatisticsRaw.RawMessage)
+		if e != nil {
+			return e
 		}
 		(*stats)[j].PageStatistics = *pageViews
 	}
@@ -108,21 +110,21 @@ func unmarshalPageViewsSlice(stats *[]LifetimePageStatisticsByType) error {
 	return nil
 }
 
-func unmarshalPageViews(message json.RawMessage) (*map[string]PageViews, error) {
+func unmarshalPageViews(message json.RawMessage) (*map[string]PageViews, *errortools.Error) {
 	pageViews := make(map[string]PageViews)
 	err := json.Unmarshal(message, &pageViews)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &pageViews, nil
 }
 
-func unmarshalPageClicks(message json.RawMessage) (*map[string]map[string]int64, error) {
+func unmarshalPageClicks(message json.RawMessage) (*map[string]map[string]int64, *errortools.Error) {
 	pageClicks_ := make(map[string]json.RawMessage)
 	err := json.Unmarshal(message, &pageClicks_)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	pageClicks := make(map[string]map[string]int64)

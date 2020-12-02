@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type TimeboundFollowerStatsResponse struct {
@@ -22,7 +24,7 @@ type FollowerGains struct {
 	PaidFollowerGain    int64 `json:"paidFollowerGain"`
 }
 
-func (li *LinkedIn) GetTimeboundFollowerStats(organisationID int, startDateUnix int64, endDateUnix int64) (*[]TimeboundFollowerStats, error) {
+func (li *LinkedIn) GetTimeboundFollowerStats(organisationID int, startDateUnix int64, endDateUnix int64) (*[]TimeboundFollowerStats, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
@@ -35,9 +37,9 @@ func (li *LinkedIn) GetTimeboundFollowerStats(organisationID int, startDateUnix 
 
 	followerStatsResponse := TimeboundFollowerStatsResponse{}
 
-	_, err := li.OAuth2().Get(urlString, &followerStatsResponse)
-	if err != nil {
-		return nil, err
+	_, _, e := li.OAuth2().Get(urlString, &followerStatsResponse, nil)
+	if e != nil {
+		return nil, e
 	}
 
 	return &followerStatsResponse.Elements, nil

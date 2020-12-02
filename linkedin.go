@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	bigquerytools "github.com/leapforce-libraries/go_bigquerytools"
+	errortools "github.com/leapforce-libraries/go_errortools"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
@@ -34,7 +35,7 @@ type NewLinkedInParams struct {
 
 // NewLinkedIn return new instance of LinkedIn struct
 //
-func NewLinkedIn(params NewLinkedInParams) (*LinkedIn, error) {
+func NewLinkedIn(params NewLinkedInParams) *LinkedIn {
 	config := oauth2.OAuth2Config{
 		ApiName:         apiName,
 		ClientID:        params.ClientID,
@@ -47,7 +48,7 @@ func NewLinkedIn(params NewLinkedInParams) (*LinkedIn, error) {
 	}
 	oa := oauth2.NewOAuth(config, params.BigQuery, params.IsLive)
 	li := LinkedIn{oa}
-	return &li, nil
+	return &li
 }
 
 func (li *LinkedIn) OAuth2() *oauth2.OAuth2 {
@@ -58,6 +59,6 @@ func (li *LinkedIn) BaseURL() string {
 	return fmt.Sprintf("%s/%s", apiURL, apiVersion)
 }
 
-func (li *LinkedIn) InitToken() error {
+func (li *LinkedIn) InitToken() *errortools.Error {
 	return li.oAuth2.InitToken()
 }

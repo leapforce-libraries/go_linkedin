@@ -3,6 +3,8 @@ package linkedin
 import (
 	"fmt"
 	"net/url"
+
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type ShareShareStatsResponse struct {
@@ -16,7 +18,7 @@ type ShareShareStats struct {
 	Share                string               `json:"share"`
 }
 
-func (li *LinkedIn) GetShareShareStats(organisationID int, shareIDs []string) (*[]ShareShareStats, error) {
+func (li *LinkedIn) GetShareShareStats(organisationID int, shareIDs []string) (*[]ShareShareStats, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
@@ -30,9 +32,9 @@ func (li *LinkedIn) GetShareShareStats(organisationID int, shareIDs []string) (*
 
 	shareStatsResponse := ShareShareStatsResponse{}
 
-	_, err := li.OAuth2().Get(urlString, &shareStatsResponse)
-	if err != nil {
-		return nil, err
+	_, _, e := li.OAuth2().Get(urlString, &shareStatsResponse, nil)
+	if e != nil {
+		return nil, e
 	}
 
 	return &shareStatsResponse.Elements, nil
