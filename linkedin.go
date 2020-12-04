@@ -30,7 +30,6 @@ type NewLinkedInParams struct {
 	ClientSecret string
 	Scope        string
 	BigQuery     *bigquerytools.BigQuery
-	IsLive       bool
 }
 
 // NewLinkedIn return new instance of LinkedIn struct
@@ -46,7 +45,7 @@ func NewLinkedIn(params NewLinkedInParams) *LinkedIn {
 		TokenURL:        tokenURL,
 		TokenHTTPMethod: tokenHTTPMethod,
 	}
-	oa := oauth2.NewOAuth(config, params.BigQuery, params.IsLive)
+	oa := oauth2.NewOAuth(config, params.BigQuery)
 	li := LinkedIn{oa}
 	return &li
 }
