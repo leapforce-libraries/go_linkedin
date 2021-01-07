@@ -4,19 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
-	bigquerytools "github.com/leapforce-libraries/go_bigquerytools"
 	errortools "github.com/leapforce-libraries/go_errortools"
+	google "github.com/leapforce-libraries/go_google"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 const (
-	apiName         string = "LinkedIn"
-	apiURL          string = "https://api.linkedin.com"
-	apiVersion      string = "v2"
-	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
-	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
-	tokenHTTPMethod string = http.MethodGet
-	redirectURL     string = "http://localhost:8080/oauth/redirect"
+	APIName         string = "LinkedIn"
+	APIURL          string = "https://api.linkedin.com"
+	APIVersion      string = "v2"
+	AuthURL         string = "https://www.linkedin.com/oauth/v2/authorization"
+	TokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
+	TokenHTTPMethod string = http.MethodGet
+	RedirectURL     string = "http://localhost:8080/oauth/redirect"
 )
 
 // LinkedIn stores LinkedIn configuration
@@ -29,25 +29,32 @@ type NewLinkedInParams struct {
 	ClientID     string
 	ClientSecret string
 	Scope        string
-	BigQuery     *bigquerytools.BigQuery
+	BigQuery     *google.BigQuery
 }
 
 // NewLinkedIn return new instance of LinkedIn struct
 //
 func NewLinkedIn(params NewLinkedInParams) *LinkedIn {
-	config := oauth2.OAuth2Config{
-		ApiName:         apiName,
-		ClientID:        params.ClientID,
-		ClientSecret:    params.ClientSecret,
-		Scope:           params.Scope,
-		RedirectURL:     redirectURL,
-		AuthURL:         authURL,
-		TokenURL:        tokenURL,
-		TokenHTTPMethod: tokenHTTPMethod,
+	getTokenFunction := func() (*oauth2.Token, *errortools.Error) {
+		return google.GetToken(APIName, params.ClientID, params.BigQuery)
 	}
-	oa := oauth2.NewOAuth(config, params.BigQuery)
-	li := LinkedIn{oa}
-	return &li
+
+	saveTokenFunction := func(token *oauth2.Token) *errortools.Error {
+		return google.SaveToken(APIName, params.ClientID, token, params.BigQuery)
+	}
+
+	config := oauth2.OAuth2Config{
+		ClientID:          params.ClientID,
+		ClientSecret:      params.ClientSecret,
+		RedirectURL:       RedirectURL,
+		AuthURL:           AuthURL,
+		TokenURL:          TokenURL,
+		TokenHTTPMethod:   TokenHTTPMethod,
+		GetTokenFunction:  &getTokenFunction,
+		SaveTokenFunction: &saveTokenFunction,
+	}
+
+	return &LinkedIn{oauth2.NewOAuth(config)}
 }
 
 func (li *LinkedIn) OAuth2() *oauth2.OAuth2 {
@@ -55,7 +62,7 @@ func (li *LinkedIn) OAuth2() *oauth2.OAuth2 {
 }
 
 func (li *LinkedIn) BaseURL() string {
-	return fmt.Sprintf("%s/%s", apiURL, apiVersion)
+	return fmt.Sprintf("%s/%s", APIURL, APIVersion)
 }
 
 func (li *LinkedIn) InitToken() *errortools.Error {
