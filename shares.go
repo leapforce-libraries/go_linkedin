@@ -65,8 +65,8 @@ type ImageSpecificContent struct {
 	Height *int `json:"height"`
 }
 
-func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
-	if li == nil {
+func (service *Service) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
+	if service == nil {
 		return nil, errortools.ErrorMessage("Shares pointer is nil")
 	}
 
@@ -84,12 +84,12 @@ func (li *LinkedIn) GetShares(organisationID int, startDateUnix int64, endDateUn
 		values.Set("start", strconv.Itoa(start))
 		values.Set("count", strconv.Itoa(count))
 
-		urlString := fmt.Sprintf("%s/shares?%s", li.BaseURL(), values.Encode())
+		urlString := fmt.Sprintf("%s/shares?%s", service.BaseURL(), values.Encode())
 		//fmt.Println(urlString)
 
 		sharesResponse := SharesResponse{}
 
-		_, _, e := li.OAuth2().Get(urlString, &sharesResponse, nil)
+		_, _, e := service.OAuth2().Get(urlString, &sharesResponse, nil)
 		if e != nil {
 			return nil, e
 		}

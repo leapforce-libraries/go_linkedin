@@ -21,11 +21,11 @@ const (
 
 // LinkedIn stores LinkedIn configuration
 //
-type LinkedIn struct {
+type Service struct {
 	oAuth2 *oauth2.OAuth2
 }
 
-type NewLinkedInParams struct {
+type ServiceConfig struct {
 	ClientID     string
 	ClientSecret string
 	Scope        string
@@ -34,18 +34,18 @@ type NewLinkedInParams struct {
 
 // NewLinkedIn return new instance of LinkedIn struct
 //
-func NewLinkedIn(params NewLinkedInParams) *LinkedIn {
+func NewService(config ServiceConfig) *Service {
 	getTokenFunction := func() (*oauth2.Token, *errortools.Error) {
-		return google.GetToken(APIName, params.ClientID, params.BigQuery)
+		return google.GetToken(APIName, config.ClientID, config.BigQuery)
 	}
 
 	saveTokenFunction := func(token *oauth2.Token) *errortools.Error {
-		return google.SaveToken(APIName, params.ClientID, token, params.BigQuery)
+		return google.SaveToken(APIName, config.ClientID, token, config.BigQuery)
 	}
 
-	config := oauth2.OAuth2Config{
-		ClientID:          params.ClientID,
-		ClientSecret:      params.ClientSecret,
+	oauth2Config := oauth2.OAuth2Config{
+		ClientID:          config.ClientID,
+		ClientSecret:      config.ClientSecret,
 		RedirectURL:       RedirectURL,
 		AuthURL:           AuthURL,
 		TokenURL:          TokenURL,
@@ -54,17 +54,17 @@ func NewLinkedIn(params NewLinkedInParams) *LinkedIn {
 		SaveTokenFunction: &saveTokenFunction,
 	}
 
-	return &LinkedIn{oauth2.NewOAuth(config)}
+	return &Service{oauth2.NewOAuth(oauth2Config)}
 }
 
-func (li *LinkedIn) OAuth2() *oauth2.OAuth2 {
-	return li.oAuth2
+func (service *Service) OAuth2() *oauth2.OAuth2 {
+	return service.oAuth2
 }
 
-func (li *LinkedIn) BaseURL() string {
+func (service *Service) BaseURL() string {
 	return fmt.Sprintf("%s/%s", APIURL, APIVersion)
 }
 
-func (li *LinkedIn) InitToken() *errortools.Error {
-	return li.oAuth2.InitToken()
+func (service *Service) InitToken() *errortools.Error {
+	return service.oAuth2.InitToken()
 }

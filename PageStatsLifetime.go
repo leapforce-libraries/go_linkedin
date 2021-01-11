@@ -8,12 +8,12 @@ import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
-type LifetimePageStatsResponse struct {
+type PageStatsLifetimeResponse struct {
 	Paging   Paging              `json:"paging"`
-	Elements []LifetimePageStats `json:"elements"`
+	Elements []PageStatsLifetime `json:"elements"`
 }
 
-type LifetimePageStats struct {
+type PageStatsLifetime struct {
 	ByStaffCountRange []LifetimePageStatisticsByType `json:"pageStatisticsByStaffCountRange"`
 	ByFunction        []LifetimePageStatisticsByType `json:"pageStatisticsByFunction"`
 	BySeniority       []LifetimePageStatisticsByType `json:"pageStatisticsBySeniority"`
@@ -37,17 +37,17 @@ type LifetimePageStatisticsByType struct {
 	StaffCountRange string `json:"staffCountRange"`
 }
 
-func (li *LinkedIn) GetLifetimePageStats(organisationID int) (*[]LifetimePageStats, *errortools.Error) {
+func (service *Service) GetPageStatsLifetime(organisationID int) (*[]PageStatsLifetime, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organization")
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", li.BaseURL(), values.Encode())
+	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", service.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
-	pageStatsResponse := LifetimePageStatsResponse{}
+	pageStatsResponse := PageStatsLifetimeResponse{}
 
-	_, _, e := li.OAuth2().Get(urlString, &pageStatsResponse, nil)
+	_, _, e := service.OAuth2().Get(urlString, &pageStatsResponse, nil)
 	if e != nil {
 		return nil, e
 	}

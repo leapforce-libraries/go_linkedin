@@ -7,12 +7,12 @@ import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
-type LifetimeFollowerStatsResponse struct {
+type FollowerStatsLifetimeResponse struct {
 	Paging   Paging                  `json:"paging"`
-	Elements []LifetimeFollowerStats `json:"elements"`
+	Elements []FollowerStatsLifetime `json:"elements"`
 }
 
-type LifetimeFollowerStats struct {
+type FollowerStatsLifetime struct {
 	ByAssociationType    []LifetimeFollowerCountsByType `json:"followerCountsByAssociationType"`
 	ByStaffCountRange    []LifetimeFollowerCountsByType `json:"followerCountsByStaffCountRange"`
 	ByFunction           []LifetimeFollowerCountsByType `json:"followerCountsByFunction"`
@@ -39,17 +39,17 @@ type FollowerCounts struct {
 	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
-func (li *LinkedIn) GetLifetimeFollowerStats(organisationID int) (*[]LifetimeFollowerStats, *errortools.Error) {
+func (service *Service) GetFollowerStatsLifetime(organisationID int) (*[]FollowerStatsLifetime, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", li.BaseURL(), values.Encode())
+	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", service.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
-	followerStatsResponse := LifetimeFollowerStatsResponse{}
+	followerStatsResponse := FollowerStatsLifetimeResponse{}
 
-	_, _, e := li.OAuth2().Get(urlString, &followerStatsResponse, nil)
+	_, _, e := service.OAuth2().Get(urlString, &followerStatsResponse, nil)
 	if e != nil {
 		return nil, e
 	}

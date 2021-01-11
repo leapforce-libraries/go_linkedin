@@ -12,17 +12,17 @@ type Organization struct {
 	LocalizedWebsite string `json:"localizedWebsite"`
 }
 
-func (li *LinkedIn) GetOrganization(organizationID int) (*Organization, *errortools.Error) {
-	if li == nil {
-		return nil, errortools.ErrorMessage("LinkedIn pointer is nil")
+func (service *Service) GetOrganization(organizationID int) (*Organization, *errortools.Error) {
+	if service == nil {
+		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
-	urlString := fmt.Sprintf("%s/organizations/%v", li.BaseURL(), organizationID)
+	urlString := fmt.Sprintf("%s/organizations/%v", service.BaseURL(), organizationID)
 	//fmt.Println(urlString)
 
 	organization := Organization{}
 
-	_, _, e := li.OAuth2().Get(urlString, &organization, nil)
+	_, _, e := service.OAuth2().Get(urlString, &organization, nil)
 	if e != nil {
 		return nil, e
 	}

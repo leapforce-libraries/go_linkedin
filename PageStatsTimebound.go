@@ -8,18 +8,18 @@ import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
-type TimeboundPageStatsResponse struct {
+type PageStatsTimeboundResponse struct {
 	Paging   Paging               `json:"paging"`
-	Elements []TimeboundPageStats `json:"elements"`
+	Elements []PageStatsTimebound `json:"elements"`
 }
 
-type TimeboundPageStats struct {
+type PageStatsTimebound struct {
 	TotalPageStatistics TotalPageStatistics `json:"totalPageStatistics"`
 	TimeRange           TimeRange           `json:"timeRange"`
 	Organization        string              `json:"organization"`
 }
 
-func (li *LinkedIn) GetTimeboundPageStats(organisationID int, startDateUnix int64, endDateUnix int64) (*[]TimeboundPageStats, *errortools.Error) {
+func (service *Service) GetPageStatsTimebound(organisationID int, startDateUnix int64, endDateUnix int64) (*[]PageStatsTimebound, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organization")
 	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
@@ -27,12 +27,12 @@ func (li *LinkedIn) GetTimeboundPageStats(organisationID int, startDateUnix int6
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(startDateUnix, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(endDateUnix, 10))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", li.BaseURL(), values.Encode())
+	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", service.BaseURL(), values.Encode())
 	//fmt.Println(urlString)
 
-	pageStatsResponse := TimeboundPageStatsResponse{}
+	pageStatsResponse := PageStatsTimeboundResponse{}
 
-	_, _, e := li.OAuth2().Get(urlString, &pageStatsResponse, nil)
+	_, _, e := service.OAuth2().Get(urlString, &pageStatsResponse, nil)
 	if e != nil {
 		return nil, e
 	}

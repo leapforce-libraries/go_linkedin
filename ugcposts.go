@@ -16,8 +16,8 @@ type UGCPost struct {
 	Author string `json:"author"`
 }
 
-func (li *LinkedIn) GetUGCPosts(organisationID int) (*[]UGCPost, *errortools.Error) {
-	if li == nil {
+func (service *Service) GetUGCPosts(organisationID int) (*[]UGCPost, *errortools.Error) {
+	if service == nil {
 		return nil, errortools.ErrorMessage("UGCPosts pointer is nil")
 	}
 
@@ -25,13 +25,13 @@ func (li *LinkedIn) GetUGCPosts(organisationID int) (*[]UGCPost, *errortools.Err
 	values.Set("q", "authors")
 	values.Set("authors", fmt.Sprintf("List({urn:li:organization:%v})", organisationID))
 
-	urlString := fmt.Sprintf("%s/ugcPosts?%s", li.BaseURL(), values.Encode())
+	urlString := fmt.Sprintf("%s/ugcPosts?%s", service.BaseURL(), values.Encode())
 	urlString = "https://api.linkedin.com/v2/ugcPosts?q=authors&authors=LIST(urn%3Ali%3Aorganization%3A28586605)&sortBy=LAST_MODIFIED"
 	//fmt.Println(urlString)
 
 	followerStatsResponse := UGCPostsResponse{}
 
-	_, _, e := li.OAuth2().Get(urlString, &followerStatsResponse, nil)
+	_, _, e := service.OAuth2().Get(urlString, &followerStatsResponse, nil)
 	if e != nil {
 		return nil, e
 	}

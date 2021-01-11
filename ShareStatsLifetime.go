@@ -1,0 +1,43 @@
+package linkedin
+
+import (
+	"fmt"
+	"net/url"
+
+	errortools "github.com/leapforce-libraries/go_errortools"
+)
+
+type ShareStatsLifetimeResponse struct {
+	Paging   Paging               `json:"paging"`
+	Elements []ShareStatsLifetime `json:"elements"`
+}
+
+type ShareStatsLifetime struct {
+	TotalShareStatistics TotalShareStatistics `json:"totalShareStatistics"`
+	OrganizationalEntity string               `json:"organizationalEntity"`
+	Share                *string              `json:"share"`
+}
+
+func (service *Service) GetShareStatsLifetime(organisationID int, shareIDs *[]string) (*[]ShareStatsLifetime, *errortools.Error) {
+	values := url.Values{}
+	values.Set("q", "organizationalEntity")
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
+
+	if shareIDs != nil {
+		for index, shareID := range *shareIDs {
+			values.Set(fmt.Sprintf("shares[%v]", index), fmt.Sprintf("urn:li:share:%s", shareID))
+		}
+	}
+
+	urlString := fmt.Sprintf("%s/organizationalEntityShareStatistics?%s", service.BaseURL(), values.Encode())
+	//fmt.Println(urlString)
+
+	shareStatsResponse := ShareStatsLifetimeResponse{}
+
+	_, _, e := service.OAuth2().Get(urlString, &shareStatsResponse, nil)
+	if e != nil {
+		return nil, e
+	}
+
+	return &shareStatsResponse.Elements, nil
+}
