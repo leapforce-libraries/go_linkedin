@@ -6,6 +6,7 @@ import (
 
 	errortools "github.com/leapforce-libraries/go_errortools"
 	google "github.com/leapforce-libraries/go_google"
+	bigquery "github.com/leapforce-libraries/go_google/bigquery"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
@@ -29,7 +30,7 @@ type ServiceConfig struct {
 	ClientID     string
 	ClientSecret string
 	Scope        string
-	BigQuery     *google.BigQuery
+	BigQuery     *bigquery.Service
 }
 
 // NewLinkedIn return new instance of LinkedIn struct
