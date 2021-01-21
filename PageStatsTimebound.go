@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
+	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 type PageStatsTimeboundResponse struct {
@@ -27,12 +28,13 @@ func (service *Service) GetPageStatsTimebound(organisationID int, startDateUnix 
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(startDateUnix, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(endDateUnix, 10))
 
-	urlString := fmt.Sprintf("%s/organizationPageStatistics?%s", service.BaseURL(), values.Encode())
-	//fmt.Println(urlString)
-
 	pageStatsResponse := PageStatsTimeboundResponse{}
 
-	_, _, e := service.OAuth2().Get(urlString, &pageStatsResponse, nil)
+	requestConfig := oauth2.RequestConfig{
+		URL:           service.url(fmt.Sprintf("organizationPageStatistics?%s", values.Encode())),
+		ResponseModel: &pageStatsResponse,
+	}
+	_, _, e := service.oAuth2.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
+	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 type SharesResponse struct {
@@ -84,12 +85,13 @@ func (service *Service) GetShares(organisationID int, startDateUnix int64, endDa
 		values.Set("start", strconv.Itoa(start))
 		values.Set("count", strconv.Itoa(count))
 
-		urlString := fmt.Sprintf("%s/shares?%s", service.BaseURL(), values.Encode())
-		//fmt.Println(urlString)
-
 		sharesResponse := SharesResponse{}
 
-		_, _, e := service.OAuth2().Get(urlString, &sharesResponse, nil)
+		requestConfig := oauth2.RequestConfig{
+			URL:           service.url(fmt.Sprintf("shares?%s", values.Encode())),
+			ResponseModel: &sharesResponse,
+		}
+		_, _, e := service.oAuth2.Get(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

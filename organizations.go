@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
+	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 type Organization struct {
@@ -17,12 +18,13 @@ func (service *Service) GetOrganization(organizationID int) (*Organization, *err
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
-	urlString := fmt.Sprintf("%s/organizations/%v", service.BaseURL(), organizationID)
-	//fmt.Println(urlString)
-
 	organization := Organization{}
 
-	_, _, e := service.OAuth2().Get(urlString, &organization, nil)
+	requestConfig := oauth2.RequestConfig{
+		URL:           service.url(fmt.Sprintf("organizations/%v", organizationID)),
+		ResponseModel: &organization,
+	}
+	_, _, e := service.oAuth2.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

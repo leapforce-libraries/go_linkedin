@@ -12,8 +12,7 @@ import (
 
 const (
 	APIName         string = "LinkedIn"
-	APIURL          string = "https://api.linkedin.com"
-	APIVersion      string = "v2"
+	APIURL          string = "https://api.linkedin.com/v2"
 	AuthURL         string = "https://www.linkedin.com/oauth/v2/authorization"
 	TokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
 	TokenHTTPMethod string = http.MethodGet
@@ -58,12 +57,8 @@ func NewService(config ServiceConfig) *Service {
 	return &Service{oauth2.NewOAuth(oauth2Config)}
 }
 
-func (service *Service) OAuth2() *oauth2.OAuth2 {
-	return service.oAuth2
-}
-
-func (service *Service) BaseURL() string {
-	return fmt.Sprintf("%s/%s", APIURL, APIVersion)
+func (service *Service) url(path string) string {
+	return fmt.Sprintf("%s/%s", APIURL, path)
 }
 
 func (service *Service) InitToken() *errortools.Error {

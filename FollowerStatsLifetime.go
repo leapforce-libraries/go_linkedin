@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
+	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 type FollowerStatsLifetimeResponse struct {
@@ -44,12 +45,13 @@ func (service *Service) GetFollowerStatsLifetime(organisationID int) (*[]Followe
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
 
-	urlString := fmt.Sprintf("%s/organizationalEntityFollowerStatistics?%s", service.BaseURL(), values.Encode())
-	//fmt.Println(urlString)
-
 	followerStatsResponse := FollowerStatsLifetimeResponse{}
 
-	_, _, e := service.OAuth2().Get(urlString, &followerStatsResponse, nil)
+	requestConfig := oauth2.RequestConfig{
+		URL:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
+		ResponseModel: &followerStatsResponse,
+	}
+	_, _, e := service.oAuth2.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

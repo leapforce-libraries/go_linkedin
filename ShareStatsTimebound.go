@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
+	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
 type ShareStatsTimeboundResponse struct {
@@ -34,12 +35,13 @@ func (service *Service) GetShareStatsTimebound(organisationID int, startDateUnix
 		}
 	}
 
-	urlString := fmt.Sprintf("%s/organizationalEntityShareStatistics?%s", service.BaseURL(), values.Encode())
-	//fmt.Println(urlString)
-
 	shareStatsResponse := ShareStatsTimeboundResponse{}
 
-	_, _, e := service.OAuth2().Get(urlString, &shareStatsResponse, nil)
+	requestConfig := oauth2.RequestConfig{
+		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
+		ResponseModel: &shareStatsResponse,
+	}
+	_, _, e := service.oAuth2.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}
