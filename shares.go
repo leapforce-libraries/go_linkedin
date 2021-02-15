@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	oauth2 "github.com/leapforce-libraries/go_oauth2"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type SharesResponse struct {
@@ -87,7 +87,7 @@ func (service *Service) GetShares(organisationID int, startDateUnix int64, endDa
 
 		sharesResponse := SharesResponse{}
 
-		requestConfig := oauth2.RequestConfig{
+		requestConfig := go_http.RequestConfig{
 			URL:           service.url(fmt.Sprintf("shares?%s", values.Encode())),
 			ResponseModel: &sharesResponse,
 		}

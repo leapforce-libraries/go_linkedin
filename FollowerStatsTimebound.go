@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	oauth2 "github.com/leapforce-libraries/go_oauth2"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type FollowerStatsTimeboundResponse struct {
@@ -35,7 +35,7 @@ func (service *Service) GetFollowerStatsTimebound(organisationID int, startDateU
 
 	followerStatsResponse := FollowerStatsTimeboundResponse{}
 
-	requestConfig := oauth2.RequestConfig{
+	requestConfig := go_http.RequestConfig{
 		URL:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
 		ResponseModel: &followerStatsResponse,
 	}

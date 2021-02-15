@@ -5,7 +5,7 @@ import (
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	oauth2 "github.com/leapforce-libraries/go_oauth2"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type ShareStatsLifetimeResponse struct {
@@ -32,7 +32,7 @@ func (service *Service) GetShareStatsLifetime(organisationID int, shareIDs *[]st
 
 	shareStatsResponse := ShareStatsLifetimeResponse{}
 
-	requestConfig := oauth2.RequestConfig{
+	requestConfig := go_http.RequestConfig{
 		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &shareStatsResponse,
 	}

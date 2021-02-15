@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	oauth2 "github.com/leapforce-libraries/go_oauth2"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type Organization struct {
@@ -20,7 +20,7 @@ func (service *Service) GetOrganization(organizationID int) (*Organization, *err
 
 	organization := Organization{}
 
-	requestConfig := oauth2.RequestConfig{
+	requestConfig := go_http.RequestConfig{
 		URL:           service.url(fmt.Sprintf("organizations/%v", organizationID)),
 		ResponseModel: &organization,
 	}

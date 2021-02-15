@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	oauth2 "github.com/leapforce-libraries/go_oauth2"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type PageStatsLifetimeResponse struct {
@@ -45,7 +45,7 @@ func (service *Service) GetPageStatsLifetime(organisationID int) (*[]PageStatsLi
 
 	pageStatsResponse := PageStatsLifetimeResponse{}
 
-	requestConfig := oauth2.RequestConfig{
+	requestConfig := go_http.RequestConfig{
 		URL:           service.url(fmt.Sprintf("organizationPageStatistics?%s", values.Encode())),
 		ResponseModel: &pageStatsResponse,
 	}
