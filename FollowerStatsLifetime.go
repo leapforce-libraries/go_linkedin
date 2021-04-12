@@ -40,10 +40,10 @@ type FollowerCounts struct {
 	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
-func (service *Service) GetFollowerStatsLifetime(organisationID int) (*[]FollowerStatsLifetime, *errortools.Error) {
+func (service *Service) GetFollowerStatsLifetime(organizationID int64) (*[]FollowerStatsLifetime, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
-	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
 
 	followerStatsResponse := FollowerStatsLifetimeResponse{}
 

@@ -25,10 +25,10 @@ type FollowerGains struct {
 	PaidFollowerGain    int64 `json:"paidFollowerGain"`
 }
 
-func (service *Service) GetFollowerStatsTimebound(organisationID int, startDateUnix int64, endDateUnix int64) (*[]FollowerStatsTimebound, *errortools.Error) {
+func (service *Service) GetFollowerStatsTimebound(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]FollowerStatsTimebound, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
-	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
 	values.Set("timeIntervals.timeGranularityType", "DAY")
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(startDateUnix, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(endDateUnix, 10))

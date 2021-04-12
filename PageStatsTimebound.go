@@ -20,10 +20,10 @@ type PageStatsTimebound struct {
 	Organization        string              `json:"organization"`
 }
 
-func (service *Service) GetPageStatsTimebound(organisationID int, startDateUnix int64, endDateUnix int64) (*[]PageStatsTimebound, *errortools.Error) {
+func (service *Service) GetPageStatsTimebound(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]PageStatsTimebound, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organization")
-	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organisationID))
+	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organizationID))
 	values.Set("timeIntervals.timeGranularityType", "DAY")
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(startDateUnix, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(endDateUnix, 10))

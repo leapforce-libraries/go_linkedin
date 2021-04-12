@@ -11,12 +11,12 @@ import (
 )
 
 const (
-	APIName         string = "LinkedIn"
-	APIURL          string = "https://api.linkedin.com/v2"
-	AuthURL         string = "https://www.linkedin.com/oauth/v2/authorization"
-	TokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
-	TokenHTTPMethod string = http.MethodGet
-	RedirectURL     string = "http://localhost:8080/oauth/redirect"
+	apiName         string = "LinkedIn"
+	apiURL          string = "https://api.linkedin.com/v2"
+	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
+	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
+	tokenHTTPMethod string = http.MethodGet
+	redirectURL     string = "http://localhost:8080/oauth/redirect"
 )
 
 // LinkedIn stores LinkedIn configuration
@@ -36,20 +36,20 @@ type ServiceConfig struct {
 //
 func NewService(config ServiceConfig) *Service {
 	getTokenFunction := func() (*oauth2.Token, *errortools.Error) {
-		return google.GetToken(APIName, config.ClientID, config.BigQuery)
+		return google.GetToken(apiName, config.ClientID, config.BigQuery)
 	}
 
 	saveTokenFunction := func(token *oauth2.Token) *errortools.Error {
-		return google.SaveToken(APIName, config.ClientID, token, config.BigQuery)
+		return google.SaveToken(apiName, config.ClientID, token, config.BigQuery)
 	}
 
 	oauth2Config := oauth2.OAuth2Config{
 		ClientID:          config.ClientID,
 		ClientSecret:      config.ClientSecret,
-		RedirectURL:       RedirectURL,
-		AuthURL:           AuthURL,
-		TokenURL:          TokenURL,
-		TokenHTTPMethod:   TokenHTTPMethod,
+		RedirectURL:       redirectURL,
+		AuthURL:           authURL,
+		TokenURL:          tokenURL,
+		TokenHTTPMethod:   tokenHTTPMethod,
 		GetTokenFunction:  &getTokenFunction,
 		SaveTokenFunction: &saveTokenFunction,
 	}
@@ -58,7 +58,7 @@ func NewService(config ServiceConfig) *Service {
 }
 
 func (service *Service) url(path string) string {
-	return fmt.Sprintf("%s/%s", APIURL, path)
+	return fmt.Sprintf("%s/%s", apiURL, path)
 }
 
 func (service *Service) InitToken() *errortools.Error {

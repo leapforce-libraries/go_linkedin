@@ -13,7 +13,7 @@ type Organization struct {
 	LocalizedWebsite string `json:"localizedWebsite"`
 }
 
-func (service *Service) GetOrganization(organizationID int) (*Organization, *errortools.Error) {
+func (service *Service) GetOrganization(organizationID int64) (*Organization, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}

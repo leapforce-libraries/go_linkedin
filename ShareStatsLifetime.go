@@ -19,10 +19,10 @@ type ShareStatsLifetime struct {
 	Share                *string              `json:"share"`
 }
 
-func (service *Service) GetShareStatsLifetime(organisationID int, shareIDs *[]string) (*[]ShareStatsLifetime, *errortools.Error) {
+func (service *Service) GetShareStatsLifetime(organizationID int64, shareIDs *[]string) (*[]ShareStatsLifetime, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
-	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organisationID))
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
 
 	if shareIDs != nil {
 		for index, shareID := range *shareIDs {

@@ -66,7 +66,7 @@ type ImageSpecificContent struct {
 	Height *int `json:"height"`
 }
 
-func (service *Service) GetShares(organisationID int, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
+func (service *Service) GetShares(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Shares pointer is nil")
 	}
@@ -80,7 +80,7 @@ func (service *Service) GetShares(organisationID int, startDateUnix int64, endDa
 	for doNext {
 		values := url.Values{}
 		values.Set("q", "owners")
-		values.Set("owners", fmt.Sprintf("urn:li:organization:%v", organisationID))
+		values.Set("owners", fmt.Sprintf("urn:li:organization:%v", organizationID))
 		values.Set("sortBy", "CREATED")
 		values.Set("start", strconv.Itoa(start))
 		values.Set("count", strconv.Itoa(count))
