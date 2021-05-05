@@ -96,11 +96,6 @@ func (service *Service) GetShares(organizationID int64, startDateUnix int64, end
 			return nil, e
 		}
 
-		if len(sharesResponse.Elements) == 0 {
-			doNext = false
-			continue
-		}
-
 		for _, share := range sharesResponse.Elements {
 
 			if share.Created.Time > endDateUnix {
@@ -115,7 +110,9 @@ func (service *Service) GetShares(organizationID int64, startDateUnix int64, end
 			shares = append(shares, share)
 		}
 
-		//fmt.Println("shares", len(shares))
+		if !sharesResponse.Paging.HasLink("next") {
+			break
+		}
 
 		start += count
 	}
