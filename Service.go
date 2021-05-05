@@ -46,6 +46,7 @@ func NewService(config ServiceConfig) *Service {
 	oauth2Config := oauth2.OAuth2Config{
 		ClientID:          config.ClientID,
 		ClientSecret:      config.ClientSecret,
+		Scope:             config.Scope,
 		RedirectURL:       redirectURL,
 		AuthURL:           authURL,
 		TokenURL:          tokenURL,
