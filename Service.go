@@ -22,6 +22,7 @@ const (
 // LinkedIn stores LinkedIn configuration
 //
 type Service struct {
+	clientID      string
 	oAuth2Service *oauth2.Service
 }
 
@@ -64,7 +65,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 		return nil, e
 	}
 
-	return &Service{oAuth2Service}, nil
+	return &Service{serviceConfig.ClientID, oAuth2Service}, nil
 }
 
 func (service *Service) url(path string) string {
@@ -77,6 +78,10 @@ func (service *Service) InitToken() *errortools.Error {
 
 func (service Service) APIName() string {
 	return apiName
+}
+
+func (service Service) APIKey() string {
+	return service.clientID
 }
 
 func (service Service) APICallCount() int64 {
