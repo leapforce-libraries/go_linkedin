@@ -122,7 +122,7 @@ func (service *Service) GetUGCPosts(organizationID int64, startDateUnix int64, e
 		header.Set("X-Restli-Protocol-Version", "2.0.0")
 		requestConfig.NonDefaultHeaders = &header
 
-		_, _, e := service.oAuth2.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.Get(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

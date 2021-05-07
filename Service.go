@@ -22,31 +22,35 @@ const (
 // LinkedIn stores LinkedIn configuration
 //
 type Service struct {
-	oAuth2 *oauth2.OAuth2
+	oAuth2Service *oauth2.Service
 }
 
 type ServiceConfig struct {
-	ClientID     string
-	ClientSecret string
-	Scope        string
-	BigQuery     *bigquery.Service
+	ClientID        string
+	ClientSecret    string
+	Scope           string
+	BigQueryService *bigquery.Service
 }
 
-// NewLinkedIn return new instance of LinkedIn struct
+// NewService return new instance of LinkedIn struct
 //
-func NewService(config ServiceConfig) *Service {
+func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
+	if serviceConfig == nil {
+		return nil, errortools.ErrorMessage("ServiceConfig must not be a nil pointer")
+	}
+
 	getTokenFunction := func() (*oauth2.Token, *errortools.Error) {
-		return google.GetToken(apiName, config.ClientID, config.BigQuery)
+		return google.GetToken(apiName, serviceConfig.ClientID, serviceConfig.BigQueryService)
 	}
 
 	saveTokenFunction := func(token *oauth2.Token) *errortools.Error {
-		return google.SaveToken(apiName, config.ClientID, token, config.BigQuery)
+		return google.SaveToken(apiName, serviceConfig.ClientID, token, serviceConfig.BigQueryService)
 	}
 
-	oauth2Config := oauth2.OAuth2Config{
-		ClientID:          config.ClientID,
-		ClientSecret:      config.ClientSecret,
-		Scope:             config.Scope,
+	oAuth2ServiceConfig := oauth2.ServiceConfig{
+		ClientID:          serviceConfig.ClientID,
+		ClientSecret:      serviceConfig.ClientSecret,
+		Scope:             serviceConfig.Scope,
 		RedirectURL:       redirectURL,
 		AuthURL:           authURL,
 		TokenURL:          tokenURL,
@@ -55,7 +59,12 @@ func NewService(config ServiceConfig) *Service {
 		SaveTokenFunction: &saveTokenFunction,
 	}
 
-	return &Service{oauth2.NewOAuth(oauth2Config)}
+	oAuth2Service, e := oauth2.NewService(&oAuth2ServiceConfig)
+	if e != nil {
+		return nil, e
+	}
+
+	return &Service{oAuth2Service}, nil
 }
 
 func (service *Service) url(path string) string {
@@ -63,5 +72,13 @@ func (service *Service) url(path string) string {
 }
 
 func (service *Service) InitToken() *errortools.Error {
-	return service.oAuth2.InitToken()
+	return service.oAuth2Service.InitToken()
+}
+
+func (service Service) APIName() string {
+	return apiName
+}
+
+func (service Service) APICallCount() int64 {
+	return service.oAuth2Service.APICallCount()
 }

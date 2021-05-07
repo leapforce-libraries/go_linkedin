@@ -148,7 +148,7 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 			URL:           service.url(fmt.Sprintf("adCampaignsV2?%s", values.Encode())),
 			ResponseModel: &adCampaignsResponse,
 		}
-		_, _, e := service.oAuth2.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.Get(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

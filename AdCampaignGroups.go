@@ -101,7 +101,7 @@ func (service *Service) SearchAdCampaignGroups(config *SearchAdCampaignGroupsCon
 			URL:           service.url(fmt.Sprintf("adCampaignGroupsV2?%s", values.Encode())),
 			ResponseModel: &adCampaignGroupsResponse,
 		}
-		_, _, e := service.oAuth2.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.Get(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

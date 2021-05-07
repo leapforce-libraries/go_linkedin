@@ -36,7 +36,7 @@ func (service *Service) GetShareStatsLifetime(organizationID int64, shareIDs *[]
 		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &shareStatsResponse,
 	}
-	_, _, e := service.oAuth2.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

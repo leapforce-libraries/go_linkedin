@@ -117,7 +117,7 @@ func (service *Service) SearchAdCreatives(config *SearchAdCreativesConfig) (*[]A
 			URL:           service.url(fmt.Sprintf("adCreativesV2?%s", values.Encode())),
 			ResponseModel: &adCreativesResponse,
 		}
-		_, _, e := service.oAuth2.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.Get(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

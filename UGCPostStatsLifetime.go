@@ -36,7 +36,7 @@ func (service *Service) GetUGCPostStatsLifetime(organizationID int64, ugcPostIDs
 		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &ugcPostStatsResponse,
 	}
-	_, _, e := service.oAuth2.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

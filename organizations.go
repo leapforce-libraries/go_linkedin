@@ -24,7 +24,7 @@ func (service *Service) GetOrganization(organizationID int64) (*Organization, *e
 		URL:           service.url(fmt.Sprintf("organizations/%v", organizationID)),
 		ResponseModel: &organization,
 	}
-	_, _, e := service.oAuth2.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

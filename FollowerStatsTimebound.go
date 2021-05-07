@@ -39,7 +39,7 @@ func (service *Service) GetFollowerStatsTimebound(organizationID int64, startDat
 		URL:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
 		ResponseModel: &followerStatsResponse,
 	}
-	_, _, e := service.oAuth2.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.Get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

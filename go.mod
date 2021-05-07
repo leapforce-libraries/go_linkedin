@@ -4,8 +4,8 @@ go 1.15
 
 require (
 	cloud.google.com/go v0.81.0
-	github.com/leapforce-libraries/go_errortools v0.0.0-20210305222651-2350bce9f587
-	github.com/leapforce-libraries/go_google v0.0.0-20210331163703-a6c7ab82adc3
-	github.com/leapforce-libraries/go_http v0.0.0-20210411203458-ee4cb58f4726
-	github.com/leapforce-libraries/go_oauth2 v0.0.0-20210411203535-2bc6914d6a73
+	github.com/leapforce-libraries/go_errortools v0.0.0-20210421105612-afc8a27266b6
+	github.com/leapforce-libraries/go_google v0.0.0-20210507114344-dac5ae74da7a
+	github.com/leapforce-libraries/go_http v0.0.0-20210503134448-53f988eb0c36
+	github.com/leapforce-libraries/go_oauth2 v0.0.0-20210507121742-64f5c0a1a2ef
 )
