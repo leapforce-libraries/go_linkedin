@@ -29,7 +29,6 @@ type Service struct {
 type ServiceConfig struct {
 	ClientID        string
 	ClientSecret    string
-	Scope           string
 	BigQueryService *bigquery.Service
 }
 
@@ -51,7 +50,6 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	oAuth2ServiceConfig := oauth2.ServiceConfig{
 		ClientID:          serviceConfig.ClientID,
 		ClientSecret:      serviceConfig.ClientSecret,
-		Scope:             serviceConfig.Scope,
 		RedirectURL:       redirectURL,
 		AuthURL:           authURL,
 		TokenURL:          tokenURL,
@@ -72,8 +70,8 @@ func (service *Service) url(path string) string {
 	return fmt.Sprintf("%s/%s", apiURL, path)
 }
 
-func (service *Service) InitToken() *errortools.Error {
-	return service.oAuth2Service.InitToken()
+func (service *Service) InitToken(scope string) *errortools.Error {
+	return service.oAuth2Service.InitToken(scope)
 }
 
 func (service Service) APIName() string {
@@ -86,4 +84,8 @@ func (service Service) APIKey() string {
 
 func (service Service) APICallCount() int64 {
 	return service.oAuth2Service.APICallCount()
+}
+
+func (service *Service) APIReset() {
+	service.oAuth2Service.APIReset()
 }

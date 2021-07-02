@@ -27,3 +27,23 @@ type AdRunSchedule struct {
 	Start int64 `json:"start"`
 	End   int64 `json:"end"`
 }
+
+type Date struct {
+	Day   int64 `json:"day"`
+	Month int64 `json:"month"`
+	Year  int64 `json:"year"`
+}
+
+type DateRange struct {
+	End   Date `json:"end"`
+	Start Date `json:"start"`
+}
+
+type TimeGranularity string
+
+const (
+	TimeGranularityAll     TimeGranularity = "ALL"
+	TimeGranularityDaily   TimeGranularity = "DAILY"
+	TimeGranularityMonthly TimeGranularity = "MONTHLY"
+	TimeGranularityYearly  TimeGranularity = "YEARLY"
+)

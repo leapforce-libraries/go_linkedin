@@ -15,34 +15,39 @@ type AdCampaignsResponse struct {
 }
 
 type AdCampaign struct {
-	TargetingCriteria json.RawMessage `json:"targetingCriteria"`
-	ServingStatuses   []string        `json:"servingStatuses"`
-	Type              string          `json:"type"`
-	Locale            AdLocale        `json:"locale"`
-	Version           AdVersion       `json:"version"`
-	AssociatedEntity  string          `json:"associatedEntity"`
-	Test              bool            `json:"test"`
-	RunSchedule       AdRunSchedule   `json:"runSchedule"`
-	Targeting         struct {
+	Account                  string              `json:"account"`
+	AssociatedEntity         string              `json:"associatedEntity"`
+	AudienceExpansionEnabled bool                `json:"audienceExpansionEnabled"`
+	CampaignGroup            string              `json:"campaignGroup"`
+	ChangeAuditStamps        AdChangeAuditStamps `json:"changeAuditStamps"`
+	CostType                 string              `json:"costType"`
+	CreativeSelection        string              `json:"creativeSelection"`
+	DailyBudget              AdBudget            `json:"dailyBudget"`
+	Format                   string              `json:"format"`
+	ID                       int64               `json:"id"`
+	Locale                   AdLocale            `json:"locale"`
+	Name                     string              `json:"name"`
+	ObjectiveType            string              `json:"objectiveType"`
+	OffsiteDeliveryEnabled   bool                `json:"offsiteDeliveryEnabled"`
+	OffsitePreferences       json.RawMessage     `json:"offsitePreferences"`
+	OptimizationTargetType   string              `json:"optimizationTargetType"`
+	PacingStrategy           string              `json:"pacingStrategy"`
+	RunSchedule              AdRunSchedule       `json:"runSchedule"`
+	ServingStatuses          []string            `json:"servingStatuses"`
+	Status                   string              `json:"status"`
+	Targeting                struct {
 		IncludedTargetingFacets struct {
 			Employers        []string   `json:"employers"`
 			Locations        []string   `json:"locations"`
 			InterfaceLocales []AdLocale `json:"interfaceLocales"`
 		} `json:"includedTargetingFacets"`
 	} `json:"targeting"`
-	OptimizationTargetType   string              `json:"optimizationTargetType"`
-	ChangeAuditStamps        AdChangeAuditStamps `json:"changeAuditStamps"`
-	CampaignGroup            string              `json:"campaignGroup"`
-	DailyBudget              AdBudget            `json:"dailyBudget"`
-	UnitCost                 AdBudget            `json:"unitCost"`
-	CreativeSelection        string              `json:"creativeSelection"`
-	CostType                 string              `json:"costType"`
-	Name                     string              `json:"name"`
-	OffsiteDeliveryEnabled   bool                `json:"offsiteDeliveryEnabled"`
-	ID                       int64               `json:"id"`
-	AudienceExpansionEnabled bool                `json:"audienceExpansionEnabled"`
-	Account                  string              `json:"account"`
-	Status                   string              `json:"status"`
+	TargetingCriteria json.RawMessage `json:"targetingCriteria"`
+	Test              bool            `json:"test"`
+	TotalBudget       AdBudget        `json:"totalBudget"`
+	Type              string          `json:"type"`
+	UnitCost          AdBudget        `json:"unitCost"`
+	Version           AdVersion       `json:"version"`
 }
 
 type AdCampaignStatus string
