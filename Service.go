@@ -11,12 +11,13 @@ import (
 )
 
 const (
-	apiName         string = "LinkedIn"
-	apiURL          string = "https://api.linkedin.com/v2"
-	authURL         string = "https://www.linkedin.com/oauth/v2/authorization"
-	tokenURL        string = "https://www.linkedin.com/oauth/v2/accessToken"
-	tokenHTTPMethod string = http.MethodGet
-	redirectURL     string = "http://localhost:8080/oauth/redirect"
+	apiName           string = "LinkedIn"
+	apiURL            string = "https://api.linkedin.com/v2"
+	authURL           string = "https://www.linkedin.com/oauth/v2/authorization"
+	tokenURL          string = "https://www.linkedin.com/oauth/v2/accessToken"
+	tokenHTTPMethod   string = http.MethodGet
+	redirectURL       string = "http://localhost:8080/oauth/redirect"
+	CampaignURNPrefix string = "urn:li:sponsoredCampaign:"
 )
 
 // LinkedIn stores LinkedIn configuration

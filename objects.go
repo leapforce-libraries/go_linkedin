@@ -1,5 +1,11 @@
 package linkedin
 
+import (
+	"time"
+
+	"cloud.google.com/go/civil"
+)
+
 type AdLocale struct {
 	Country  string `json:"country"`
 	Language string `json:"language"`
@@ -28,15 +34,15 @@ type AdRunSchedule struct {
 	End   int64 `json:"end"`
 }
 
-type Date struct {
-	Day   int64 `json:"day"`
-	Month int64 `json:"month"`
-	Year  int64 `json:"year"`
+type AdDate struct {
+	Day   int `json:"day"`
+	Month int `json:"month"`
+	Year  int `json:"year"`
 }
 
-type DateRange struct {
-	End   Date `json:"end"`
-	Start Date `json:"start"`
+type AdDateRange struct {
+	End   *AdDate `json:"end"`
+	Start *AdDate `json:"start"`
 }
 
 type TimeGranularity string
@@ -47,3 +53,27 @@ const (
 	TimeGranularityMonthly TimeGranularity = "MONTHLY"
 	TimeGranularityYearly  TimeGranularity = "YEARLY"
 )
+
+func (d *AdDate) ToDate() *civil.Date {
+	if d == nil {
+		return nil
+	}
+
+	return &civil.Date{
+		Year:  d.Year,
+		Month: time.Month(d.Month),
+		Day:   d.Day,
+	}
+}
+
+func NewAdDate(date *civil.Date) *AdDate {
+	if date == nil {
+		return nil
+	}
+
+	return &AdDate{
+		Year:  date.Year,
+		Month: int(date.Month),
+		Day:   date.Day,
+	}
+}

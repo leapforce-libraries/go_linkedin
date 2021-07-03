@@ -3,6 +3,7 @@ package linkedin
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
@@ -23,7 +24,7 @@ type AdAnalytics struct {
 	ConversionValueInLocalCurrency           go_types.Float64String `json:"conversionValueInLocalCurrency"`
 	CostInLocalCurrency                      go_types.Float64String `json:"costInLocalCurrency"`
 	CostInUsd                                go_types.Float64String `json:"costInUsd"`
-	DateRange                                DateRange              `json:"dateRange"`
+	DateRange                                AdDateRange            `json:"dateRange"`
 	ExternalWebsiteConversions               int64                  `json:"externalWebsiteConversions"`
 	ExternalWebsitePostClickConversions      int64                  `json:"externalWebsitePostClickConversions"`
 	ExternalWebsitePostViewConversions       int64                  `json:"externalWebsitePostViewConversions"`
@@ -104,7 +105,7 @@ const (
 
 type GetAdAnalyticsConfig struct {
 	Pivot           AdAnalyticsPivot
-	DateRange       DateRange
+	DateRange       AdDateRange
 	TimeGranularity TimeGranularity
 	CampaignType    *AdCampaignType
 	Shares          *[]string
@@ -115,6 +116,7 @@ type GetAdAnalyticsConfig struct {
 	Companies       *[]string
 	Start           *uint
 	Count           *uint
+	Fields          *[]string
 }
 
 func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnalytics, *errortools.Error) {
@@ -128,16 +130,19 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 
 	values.Set("q", "analytics")
 	values.Set("pivot", string(config.Pivot))
-	values.Set("dateRange.start.day", fmt.Sprintf("%v", config.DateRange.Start.Day))
-	values.Set("dateRange.start.month", fmt.Sprintf("%v", config.DateRange.Start.Month))
-	values.Set("dateRange.start.year", fmt.Sprintf("%v", config.DateRange.Start.Year))
-	values.Set("dateRange.end.day", fmt.Sprintf("%v", config.DateRange.End.Day))
-	values.Set("dateRange.end.month", fmt.Sprintf("%v", config.DateRange.End.Month))
-	values.Set("dateRange.end.year", fmt.Sprintf("%v", config.DateRange.End.Year))
+	if config.DateRange.Start != nil {
+		values.Set("dateRange.start.day", fmt.Sprintf("%v", config.DateRange.Start.Day))
+		values.Set("dateRange.start.month", fmt.Sprintf("%v", config.DateRange.Start.Month))
+		values.Set("dateRange.start.year", fmt.Sprintf("%v", config.DateRange.Start.Year))
+	}
+	if config.DateRange.End != nil {
+		values.Set("dateRange.end.day", fmt.Sprintf("%v", config.DateRange.End.Day))
+		values.Set("dateRange.end.month", fmt.Sprintf("%v", config.DateRange.End.Month))
+		values.Set("dateRange.end.year", fmt.Sprintf("%v", config.DateRange.End.Year))
+	}
 	values.Set("timeGranularity", string(config.TimeGranularity))
 	if config.CampaignType != nil {
 		values.Set("campaignType", string(*config.CampaignType))
-
 	}
 	if config.Shares != nil {
 		for i, share := range *config.Shares {
@@ -168,6 +173,9 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		for i, company := range *config.Companies {
 			values.Set(fmt.Sprintf("companies[%v]", i), company)
 		}
+	}
+	if config.Fields != nil {
+		values.Set("fields", strings.Join(*config.Fields, ","))
 	}
 
 	adAnalytics := []AdAnalytics{}
