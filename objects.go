@@ -77,3 +77,8 @@ func NewAdDate(date *civil.Date) *AdDate {
 		Day:   date.Day,
 	}
 }
+
+type AspectRatio struct {
+	HeightAspect float64 `json:"heightAspect"`
+	WidthAspect  float64 `json:"widthAspect"`
+}

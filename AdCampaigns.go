@@ -29,13 +29,21 @@ type AdCampaign struct {
 	Name                     string              `json:"name"`
 	ObjectiveType            string              `json:"objectiveType"`
 	OffsiteDeliveryEnabled   bool                `json:"offsiteDeliveryEnabled"`
-	OffsitePreferences       json.RawMessage     `json:"offsitePreferences"`
-	OptimizationTargetType   string              `json:"optimizationTargetType"`
-	PacingStrategy           string              `json:"pacingStrategy"`
-	RunSchedule              AdRunSchedule       `json:"runSchedule"`
-	ServingStatuses          []string            `json:"servingStatuses"`
-	Status                   string              `json:"status"`
-	Targeting                struct {
+	OffsitePreferences       struct {
+		IABCategories struct {
+			Exclude []string `json:"exclude"`
+			Include []string `json:"include"`
+		} `json:"iabCategories"`
+		PublisherRestrictionFiles struct {
+			Exclude []string `json:"exclude"`
+		} `json:"publisherRestrictionFiles"`
+	} `json:"offsitePreferences"`
+	OptimizationTargetType string        `json:"optimizationTargetType"`
+	PacingStrategy         string        `json:"pacingStrategy"`
+	RunSchedule            AdRunSchedule `json:"runSchedule"`
+	ServingStatuses        []string      `json:"servingStatuses"`
+	Status                 string        `json:"status"`
+	Targeting              struct {
 		IncludedTargetingFacets struct {
 			Employers        []string   `json:"employers"`
 			Locations        []string   `json:"locations"`

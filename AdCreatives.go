@@ -1,7 +1,6 @@
 package linkedin
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/url"
 
@@ -16,21 +15,98 @@ type AdCreativesResponse struct {
 
 type AdCreative struct {
 	Campaign          string              `json:"campaign"`
-	ProcessingState   string              `json:"processingState"`
 	ChangeAuditStamps AdChangeAuditStamps `json:"changeAuditStamps"`
-	Test              bool                `json:"test"`
 	ID                int64               `json:"id"`
+	ProcessingState   string              `json:"processingState"`
 	Reference         string              `json:"reference"`
 	Review            struct {
 		ReviewStatus string `json:"reviewStatus"`
 	} `json:"review"`
-	Status    string `json:"status"`
-	Type      string `json:"type"`
-	Variables struct {
-		ClickURI string          `json:"clickUri"`
-		Data     json.RawMessage `json:"data"`
+	ServingStatuses []string `json:"servingStatuses"`
+	Status          string   `json:"status"`
+	Test            bool     `json:"test"`
+	Type            string   `json:"type"`
+	Variables       struct {
+		ClickURI string                  `json:"clickUri"`
+		Data     AdCreativeVariablesData `json:"data"`
 	} `json:"variables"`
 	Version AdVersion `json:"version"`
+}
+
+type AdCreativeVariablesData struct {
+	TextAd                  *TextAdCreativeVariables                  `json:"com.linkedin.ads.TextAdCreativeVariables"`
+	SponsoredUpdate         *SponsoredUpdateCreativeVariables         `json:"com.linkedin.ads.SponsoredUpdateCreativeVariables"`
+	SponsoredInMail         *SponsoredInMailCreativeVariables         `json:"com.linkedin.ads.SponsoredInMailCreativeVariables"`
+	SponsoredVideo          *SponsoredVideoCreativeVariables          `json:"com.linkedin.ads.SponsoredVideoCreativeVariables"`
+	SponsoredUpdateCarousel *SponsoredUpdateCarouselCreativeVariables `json:"com.linkedin.ads.SponsoredUpdateCarouselCreativeVariables"`
+	FollowCompany           *FollowCompanyCreativeVariablesV2         `json:"com.linkedin.ads.FollowCompanyCreativeVariablesV2"`
+	Spotlight               *SpotlightCreativeVariablesV2             `json:"com.linkedin.ads.SpotlightCreativeVariablesV2"`
+	Jobs                    *JobsCreativeVariablesV2                  `json:"com.linkedin.ads.JobsCreativeVariablesV2"`
+}
+
+type TextAdCreativeVariables struct {
+	Text  string `json:"text"`
+	Title string `json:"title"`
+}
+
+type SponsoredUpdateCreativeVariables struct {
+	Activity               string `json:"activity"`
+	DirectSponsoredContent bool   `json:"directSponsoredContent"`
+	Share                  string `json:"share"`
+}
+
+type SponsoredInMailCreativeVariables struct {
+	Content string `json:"content"`
+}
+
+type SponsoredVideoCreativeVariables struct {
+	DurationMicro            int64       `json:"durationMicro"`
+	MediaAsset               string      `json:"mediaAsset"`
+	UserGeneratedContentPost string      `json:"userGeneratedContentPost"`
+	VideoAspectRatio         AspectRatio `json:"videoAspectRatio"`
+}
+
+type SponsoredUpdateCarouselCreativeVariables struct {
+	Activity               string `json:"activity"`
+	DirectSponsoredContent bool   `json:"directSponsoredContent"`
+	Share                  string `json:"share"`
+}
+
+type FollowCompanyCreativeVariablesV2 struct {
+	CallToAction string `json:"callToAction"`
+	Description  struct {
+		FollowCompanyDescription string `json:"com.linkedin.ads.FollowCompanyDescription"`
+	} `json:"description"`
+	Headline struct {
+		FollowCompanyHeadline string `json:"com.linkedin.ads.FollowCompanyHeadline"`
+	} `json:"headline"`
+	Organization struct {
+		Company string `json:"company"`
+	} `json:"organization"`
+	OrganizationLogo string `json:"organizationLogo"`
+	OrganizationName string `json:"organizationName"`
+}
+
+type SpotlightCreativeVariablesV2 struct {
+	CallToAction           string `json:"callToAction"`
+	CustomBackground       string `json:"customBackground"`
+	Description            string `json:"description"`
+	ForumName              string `json:"forumName"`
+	Headline               string `json:"headline"`
+	Logo                   string `json:"logo"`
+	ShowMemberProfilePhoto bool   `json:"showMemberProfilePhoto"`
+}
+
+type JobsCreativeVariablesV2 struct {
+	ButtonLabel struct {
+		JobsButtonLabel string `json:"com.linkedin.ads.JobsButtonLabel"`
+	} `json:"buttonLabel"`
+	CompanyName string `json:"companyName"`
+	Headline    struct {
+		JobsHeadline string `json:"com.linkedin.ads.JobsHeadline"`
+	} `json:"headline"`
+	Logo         string `json:"logo"`
+	Organization string `json:"organization"`
 }
 
 type AdCreativeStatus string

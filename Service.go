@@ -18,6 +18,7 @@ const (
 	tokenHTTPMethod   string = http.MethodGet
 	redirectURL       string = "http://localhost:8080/oauth/redirect"
 	CampaignURNPrefix string = "urn:li:sponsoredCampaign:"
+	CreativeURNPrefix string = "urn:li:sponsoredCreative:"
 )
 
 // LinkedIn stores LinkedIn configuration

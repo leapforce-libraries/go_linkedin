@@ -14,16 +14,17 @@ type AdCampaignGroupsResponse struct {
 }
 
 type AdCampaignGroup struct {
-	RunSchedule          AdRunSchedule       `json:"runSchedule"`
-	ChangeAuditStamps    AdChangeAuditStamps `json:"changeAuditStamps"`
-	Name                 string              `json:"name"`
-	Test                 bool                `json:"test"`
-	ServingStatuses      []string            `json:"servingStatuses"`
+	Account              string              `json:"account"`
 	AllowedCampaignTypes []AdCampaignType    `json:"allowedCampaignTypes"`
 	Backfilled           bool                `json:"backfilled"`
+	ChangeAuditStamps    AdChangeAuditStamps `json:"changeAuditStamps"`
 	ID                   int64               `json:"id"`
-	Account              string              `json:"account"`
+	Name                 string              `json:"name"`
+	RunSchedule          AdRunSchedule       `json:"runSchedule"`
+	ServingStatuses      []string            `json:"servingStatuses"`
 	Status               string              `json:"status"`
+	Test                 bool                `json:"test"`
+	TotalBudget          AdBudget            `json:"totalBudget"`
 }
 
 type AdCampaignGroupStatus string

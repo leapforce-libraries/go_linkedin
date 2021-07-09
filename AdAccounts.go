@@ -14,7 +14,6 @@ type AdAccountsResponse struct {
 }
 
 type AdAccount struct {
-	Test                           bool                `json:"test"`
 	ChangeAuditStamps              AdChangeAuditStamps `json:"changeAuditStamps"`
 	Currency                       string              `json:"currency"`
 	ID                             int64               `json:"id"`
@@ -23,11 +22,11 @@ type AdAccount struct {
 	NotifiedOnCreativeApproval     bool                `json:"notifiedOnCreativeApproval"`
 	NotifiedOnCreativeRejection    bool                `json:"notifiedOnCreativeRejection"`
 	NotifiedOnEndOfCampaign        bool                `json:"notifiedOnEndOfCampaign"`
+	NotifiedOnNewFeaturesEnabled   bool                `json:"notifiedOnNewFeaturesEnabled"`
 	Reference                      string              `json:"reference"`
 	ServingStatuses                []string            `json:"servingStatuses"`
 	Status                         string              `json:"status"`
-	TotalBudget                    AdBudget            `json:"totalBudget"`
-	TotalBudgetEndsAt              int64               `json:"totalBudgetEndsAt"`
+	Test                           bool                `json:"test"`
 	Type                           string              `json:"type"`
 	Version                        AdVersion           `json:"version"`
 }

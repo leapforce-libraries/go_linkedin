@@ -45,7 +45,7 @@ type AdAnalytics struct {
 	Reactions                                int64                  `json:"reactions"`
 	Sends                                    int64                  `json:"sends"`
 	Shares                                   int64                  `json:"shares"`
-	TextUrlClicks                            int64                  `json:"textUrlClicks"`
+	TextURLClicks                            int64                  `json:"textUrlClicks"`
 	TotalEngagements                         int64                  `json:"totalEngagements"`
 	VideoCompletions                         int64                  `json:"videoCompletions"`
 	VideoFirstQuartileCompletions            int64                  `json:"videoFirstQuartileCompletions"`
@@ -53,9 +53,11 @@ type AdAnalytics struct {
 	VideoStarts                              int64                  `json:"videoStarts"`
 	VideoThirdQuartileCompletions            int64                  `json:"videoThirdQuartileCompletions"`
 	VideoViews                               int64                  `json:"videoViews"`
+	ViralCardClicks                          int64                  `json:"viralCardClicks"`
+	ViralCardImpressions                     int64                  `json:"viralCardImpressions"`
 	ViralClicks                              int64                  `json:"viralClicks"`
-	ViralComments                            int64                  `json:"viralComments"`
 	ViralCommentLikes                        int64                  `json:"viralCommentLikes"`
+	ViralComments                            int64                  `json:"viralComments"`
 	ViralCompanyPageClicks                   int64                  `json:"viralCompanyPageClicks"`
 	ViralExternalWebsiteConversions          int64                  `json:"viralExternalWebsiteConversions"`
 	ViralExternalWebsitePostClickConversions int64                  `json:"viralExternalWebsitePostClickConversions"`
