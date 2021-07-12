@@ -60,7 +60,7 @@ type SearchAdAccountsConfig struct {
 func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdAccount, *errortools.Error) {
 	var values url.Values = url.Values{}
 	var start uint = 0
-	var count *uint = nil
+	var count uint = countDefault
 
 	values.Set("q", "search")
 
@@ -107,9 +107,7 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 		if start > 0 {
 			values.Set("start", fmt.Sprintf("%v", start))
 		}
-		if count != nil {
-			values.Set("count", fmt.Sprintf("%v", *count))
-		}
+		values.Set("count", fmt.Sprintf("%v", count))
 
 		adAccountsResponse := AdAccountsResponse{}
 
@@ -134,12 +132,12 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 			}
 		}
 
-		if count == nil {
+		/*if count == nil {
 			_count := uint(adAccountsResponse.Paging.Count)
 			count = &_count
-		}
+		}*/
 
-		start += *count
+		start += count
 
 		if uint(adAccountsResponse.Paging.Total) <= start {
 			break

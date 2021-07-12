@@ -94,7 +94,7 @@ type SearchAdCampaignsConfig struct {
 func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]AdCampaign, *errortools.Error) {
 	var values url.Values = url.Values{}
 	var start uint = 0
-	var count *uint = nil
+	var count uint = countDefault
 
 	values.Set("q", "search")
 
@@ -141,7 +141,7 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 			start = *config.Start
 		}
 		if config.Count != nil {
-			start = *config.Count
+			count = *config.Count
 		}
 	}
 
@@ -151,9 +151,7 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 		if start > 0 {
 			values.Set("start", fmt.Sprintf("%v", start))
 		}
-		if count != nil {
-			values.Set("count", fmt.Sprintf("%v", *count))
-		}
+		values.Set("count", fmt.Sprintf("%v", count))
 
 		adCampaignsResponse := AdCampaignsResponse{}
 
@@ -178,12 +176,7 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 			}
 		}
 
-		if count == nil {
-			_count := uint(adCampaignsResponse.Paging.Count)
-			count = &_count
-		}
-
-		start += *count
+		start += count
 
 		if uint(adCampaignsResponse.Paging.Total) <= start {
 			break

@@ -3,6 +3,8 @@ package linkedin
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
 	google "github.com/leapforce-libraries/go_google"
@@ -11,14 +13,16 @@ import (
 )
 
 const (
-	apiName           string = "LinkedIn"
-	apiURL            string = "https://api.linkedin.com/v2"
-	authURL           string = "https://www.linkedin.com/oauth/v2/authorization"
-	tokenURL          string = "https://www.linkedin.com/oauth/v2/accessToken"
-	tokenHTTPMethod   string = http.MethodGet
-	redirectURL       string = "http://localhost:8080/oauth/redirect"
-	CampaignURNPrefix string = "urn:li:sponsoredCampaign:"
-	CreativeURNPrefix string = "urn:li:sponsoredCreative:"
+	apiName                string = "LinkedIn"
+	apiURL                 string = "https://api.linkedin.com/v2"
+	authURL                string = "https://www.linkedin.com/oauth/v2/authorization"
+	tokenURL               string = "https://www.linkedin.com/oauth/v2/accessToken"
+	tokenHTTPMethod        string = http.MethodGet
+	redirectURL            string = "http://localhost:8080/oauth/redirect"
+	CampaignURNPrefix      string = "urn:li:sponsoredCampaign:"
+	CreativeURNPrefix      string = "urn:li:sponsoredCreative:"
+	InMailContentURNPrefix string = "urn:li:adInMailContent:"
+	countDefault           uint   = 10
 )
 
 // LinkedIn stores LinkedIn configuration
@@ -70,6 +74,14 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 
 func (service *Service) url(path string) string {
 	return fmt.Sprintf("%s/%s", apiURL, path)
+}
+
+func (service *Service) FromURN(prefix string, urn string) int64 {
+	id, err := strconv.ParseInt(strings.TrimPrefix(urn, prefix), 10, 64)
+	if err != nil {
+		return 0
+	}
+	return id
 }
 
 func (service *Service) InitToken(scope string, accessType *string, prompt *string, state *string) *errortools.Error {

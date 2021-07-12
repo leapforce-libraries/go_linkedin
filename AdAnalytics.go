@@ -128,7 +128,7 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 
 	var values url.Values = url.Values{}
 	var start uint = 0
-	var count *uint = nil
+	var count uint = countDefault
 
 	values.Set("q", "analytics")
 	values.Set("pivot", string(config.Pivot))
@@ -186,9 +186,7 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		if start > 0 {
 			values.Set("start", fmt.Sprintf("%v", start))
 		}
-		if count != nil {
-			values.Set("count", fmt.Sprintf("%v", *count))
-		}
+		values.Set("count", fmt.Sprintf("%v", count))
 
 		adAnalyticsResponse := AdAnalyticssResponse{}
 
@@ -213,12 +211,7 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 			}
 		}
 
-		if count == nil {
-			_count := uint(adAnalyticsResponse.Paging.Count)
-			count = &_count
-		}
-
-		start += *count
+		start += count
 
 		if uint(adAnalyticsResponse.Paging.Total) <= start {
 			break
