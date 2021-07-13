@@ -23,6 +23,7 @@ const (
 	CreativeURNPrefix      string = "urn:li:sponsoredCreative:"
 	InMailContentURNPrefix string = "urn:li:adInMailContent:"
 	countDefault           uint   = 10
+	maxURNsPerCall         uint   = 50
 )
 
 // LinkedIn stores LinkedIn configuration

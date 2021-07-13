@@ -11,9 +11,13 @@ import (
 	go_http "github.com/leapforce-libraries/go_http"
 )
 
-type UGCPostsResponse struct {
+type UGCPostsByOwnerResponse struct {
 	Paging   Paging    `json:"paging"`
 	Elements []UGCPost `json:"elements"`
+}
+
+type UGCPostsResponse struct {
+	Results map[string]UGCPost `json:"results"`
 }
 
 type UGCPost struct {
@@ -92,9 +96,9 @@ type ShareFeatures struct {
 	Hashtags []string `json:"hashtags"`
 }
 
-func (service *Service) GetUGCPosts(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]UGCPost, *errortools.Error) {
+func (service *Service) GetUGCPostsByOwner(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]UGCPost, *errortools.Error) {
 	if service == nil {
-		return nil, errortools.ErrorMessage("UGCPosts pointer is nil")
+		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
 	start := 0
@@ -110,7 +114,7 @@ func (service *Service) GetUGCPosts(organizationID int64, startDateUnix int64, e
 		values.Set("start", strconv.Itoa(start))
 		values.Set("count", strconv.Itoa(count))
 
-		ugcPostsResponse := UGCPostsResponse{}
+		ugcPostsResponse := UGCPostsByOwnerResponse{}
 
 		requestConfig := go_http.RequestConfig{
 			URL:           service.url(fmt.Sprintf("ugcPosts?%s&authors=List(%s)", values.Encode(), url.QueryEscape(fmt.Sprintf("urn:li:organization:%v", organizationID)))),
@@ -149,4 +153,90 @@ func (service *Service) GetUGCPosts(organizationID int64, startDateUnix int64, e
 	}
 
 	return &ugcPosts, nil
+}
+
+func (service *Service) GetUGCPosts(urns []string) (*[]UGCPost, *errortools.Error) {
+	if service == nil {
+		return nil, errortools.ErrorMessage("Service pointer is nil")
+	}
+
+	ugcPosts := []UGCPost{}
+
+	// deduplicate urns
+	var _urnsMap map[string]bool = make(map[string]bool)
+	_urns := []string{}
+	for _, urn := range urns {
+		_, ok := _urnsMap[urn]
+		if ok {
+			continue
+		}
+		_urnsMap[urn] = true
+		_urns = append(_urns, urn)
+	}
+
+	for {
+		params := ""
+
+		for i, urn := range _urns {
+			if uint(i) == maxURNsPerCall {
+				break
+			}
+
+			param := fmt.Sprintf("ids[%v]=%s", i, urn)
+
+			if i > 0 {
+				params = fmt.Sprintf("%s&%s", params, param)
+			} else {
+				params = param
+			}
+		}
+
+		ugcPostsResponse := UGCPostsResponse{}
+
+		requestConfig := go_http.RequestConfig{
+			URL:           service.url(fmt.Sprintf("ugcPosts?%s", params)),
+			ResponseModel: &ugcPostsResponse,
+		}
+		_, _, e := service.oAuth2Service.Get(&requestConfig)
+		if e != nil {
+			return nil, e
+		}
+
+		for _, ugcPost := range ugcPostsResponse.Results {
+			ugcPosts = append(ugcPosts, ugcPost)
+		}
+
+		if uint(len(_urns)) <= maxURNsPerCall {
+			break
+		} else {
+			_urns = _urns[maxURNsPerCall+1:]
+		}
+	}
+
+	return &ugcPosts, nil
+}
+
+func (service *Service) GetUGCPost(urn string) (*UGCPost, *errortools.Error) {
+	if service == nil {
+		return nil, errortools.ErrorMessage("Service pointer is nil")
+	}
+
+	ugcPost := UGCPost{}
+
+	requestConfig := go_http.RequestConfig{
+		URL:           service.url(fmt.Sprintf("ugcPosts/%s", url.QueryEscape(urn))),
+		ResponseModel: &ugcPost,
+	}
+
+	// add authentication header
+	header := http.Header{}
+	header.Set("X-Restli-Protocol-Version", "2.0.0")
+	requestConfig.NonDefaultHeaders = &header
+
+	_, _, e := service.oAuth2Service.Get(&requestConfig)
+	if e != nil {
+		return nil, e
+	}
+
+	return &ugcPost, nil
 }
