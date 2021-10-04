@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
@@ -19,7 +20,7 @@ type UGCPostStatsLifetime struct {
 	UGCPost              *string              `json:"ugcPost"`
 }
 
-func (service *Service) GetUGCPostStatsLifetime(organizationID int64, ugcPostIDs *[]string) (*[]UGCPostStatsLifetime, *errortools.Error) {
+func (service *Service) GetUGCPostStatsLifetime(organizationID int64, ugcPostIDs *[]string) (*[]UGCPostStatsLifetime, *http.Response, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
@@ -36,10 +37,10 @@ func (service *Service) GetUGCPostStatsLifetime(organizationID int64, ugcPostIDs
 		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &ugcPostStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.Get(&requestConfig)
+	_, response, e := service.oAuth2Service.Get(&requestConfig)
 	if e != nil {
-		return nil, e
+		return nil, response, e
 	}
 
-	return &ugcPostStatsResponse.Elements, nil
+	return &ugcPostStatsResponse.Elements, response, nil
 }

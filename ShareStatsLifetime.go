@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
@@ -19,7 +20,7 @@ type ShareStatsLifetime struct {
 	Share                *string              `json:"share"`
 }
 
-func (service *Service) GetShareStatsLifetime(organizationID int64, shareIDs *[]string) (*[]ShareStatsLifetime, *errortools.Error) {
+func (service *Service) GetShareStatsLifetime(organizationID int64, shareIDs *[]string) (*[]ShareStatsLifetime, *http.Response, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
@@ -36,10 +37,10 @@ func (service *Service) GetShareStatsLifetime(organizationID int64, shareIDs *[]
 		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &shareStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.Get(&requestConfig)
+	_, response, e := service.oAuth2Service.Get(&requestConfig)
 	if e != nil {
-		return nil, e
+		return nil, response, e
 	}
 
-	return &shareStatsResponse.Elements, nil
+	return &shareStatsResponse.Elements, response, nil
 }
