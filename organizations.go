@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	"net/http"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
@@ -21,10 +22,11 @@ func (service *Service) GetOrganization(organizationID int64) (*Organization, *e
 	organization := Organization{}
 
 	requestConfig := go_http.RequestConfig{
+		Method:        http.MethodGet,
 		URL:           service.url(fmt.Sprintf("organizations/%v", organizationID)),
 		ResponseModel: &organization,
 	}
-	_, _, e := service.oAuth2Service.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

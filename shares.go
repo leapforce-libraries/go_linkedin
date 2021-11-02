@@ -3,6 +3,7 @@ package linkedin
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -96,10 +97,11 @@ func (service *Service) GetSharesByOwner(organizationID int64, startDateUnix int
 		sharesResponse := SharesByOwnerResponse{}
 
 		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
 			URL:           service.url(fmt.Sprintf("shares?%s", values.Encode())),
 			ResponseModel: &sharesResponse,
 		}
-		_, _, e := service.oAuth2Service.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -169,10 +171,11 @@ func (service *Service) GetShares(urns []string) (*[]Share, *errortools.Error) {
 		sharesResponse := SharesResponse{}
 
 		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
 			URL:           service.url(fmt.Sprintf("shares?%s", params)),
 			ResponseModel: &sharesResponse,
 		}
-		_, _, e := service.oAuth2Service.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

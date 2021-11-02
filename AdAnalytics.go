@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -191,10 +192,11 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		adAnalyticsResponse := AdAnalyticssResponse{}
 
 		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
 			URL:           service.url(fmt.Sprintf("adAnalyticsV2?%s", values.Encode())),
 			ResponseModel: &adAnalyticsResponse,
 		}
-		_, _, e := service.oAuth2Service.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

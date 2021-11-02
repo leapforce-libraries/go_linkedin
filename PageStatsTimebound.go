@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -31,10 +32,11 @@ func (service *Service) GetPageStatsTimebound(organizationID int64, startDateUni
 	pageStatsResponse := PageStatsTimeboundResponse{}
 
 	requestConfig := go_http.RequestConfig{
+		Method:        http.MethodGet,
 		URL:           service.url(fmt.Sprintf("organizationPageStatistics?%s", values.Encode())),
 		ResponseModel: &pageStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

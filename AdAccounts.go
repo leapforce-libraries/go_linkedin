@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
@@ -112,10 +113,11 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 		adAccountsResponse := AdAccountsResponse{}
 
 		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
 			URL:           service.url(fmt.Sprintf("adAccountsV2?%s", values.Encode())),
 			ResponseModel: &adAccountsResponse,
 		}
-		_, _, e := service.oAuth2Service.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

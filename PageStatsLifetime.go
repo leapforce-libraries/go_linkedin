@@ -3,6 +3,7 @@ package linkedin
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
@@ -46,10 +47,11 @@ func (service *Service) GetPageStatsLifetime(organizationID int64) (*[]PageStats
 	pageStatsResponse := PageStatsLifetimeResponse{}
 
 	requestConfig := go_http.RequestConfig{
+		Method:        http.MethodGet,
 		URL:           service.url(fmt.Sprintf("organizationPageStatistics?%s", values.Encode())),
 		ResponseModel: &pageStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.Get(&requestConfig)
+	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

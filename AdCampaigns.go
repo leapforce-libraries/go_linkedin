@@ -3,6 +3,7 @@ package linkedin
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
@@ -156,10 +157,11 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 		adCampaignsResponse := AdCampaignsResponse{}
 
 		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
 			URL:           service.url(fmt.Sprintf("adCampaignsV2?%s", values.Encode())),
 			ResponseModel: &adCampaignsResponse,
 		}
-		_, _, e := service.oAuth2Service.Get(&requestConfig)
+		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
