@@ -7,8 +7,7 @@ import (
 	"strings"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	google "github.com/leapforce-libraries/go_google"
-	bigquery "github.com/leapforce-libraries/go_google/bigquery"
+	gcs "github.com/leapforce-libraries/go_googlecloudstorage"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
 )
 
@@ -34,9 +33,9 @@ type Service struct {
 }
 
 type ServiceConfig struct {
-	ClientID        string
-	ClientSecret    string
-	BigQueryService *bigquery.Service
+	ClientID     string
+	ClientSecret string
+	CredMap      *gcs.Map
 }
 
 // NewService return new instance of LinkedIn struct
@@ -45,24 +44,23 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	if serviceConfig == nil {
 		return nil, errortools.ErrorMessage("ServiceConfig must not be a nil pointer")
 	}
-
-	getTokenFunction := func() (*oauth2.Token, *errortools.Error) {
-		return google.GetToken(apiName, serviceConfig.ClientID, serviceConfig.BigQueryService)
+	if serviceConfig.CredMap == nil {
+		return nil, errortools.ErrorMessage("CredMap must not be a nil pointer")
 	}
 
-	saveTokenFunction := func(token *oauth2.Token) *errortools.Error {
-		return google.SaveToken(apiName, serviceConfig.ClientID, token, serviceConfig.BigQueryService)
+	tokenMap, e := oauth2.NewTokenMap(serviceConfig.CredMap)
+	if e != nil {
+		return nil, e
 	}
 
 	oAuth2ServiceConfig := oauth2.ServiceConfig{
-		ClientID:          serviceConfig.ClientID,
-		ClientSecret:      serviceConfig.ClientSecret,
-		RedirectURL:       redirectURL,
-		AuthURL:           authURL,
-		TokenURL:          tokenURL,
-		TokenHTTPMethod:   tokenHTTPMethod,
-		GetTokenFunction:  &getTokenFunction,
-		SaveTokenFunction: &saveTokenFunction,
+		ClientID:        serviceConfig.ClientID,
+		ClientSecret:    serviceConfig.ClientSecret,
+		RedirectURL:     redirectURL,
+		AuthURL:         authURL,
+		TokenURL:        tokenURL,
+		TokenHTTPMethod: tokenHTTPMethod,
+		TokenSource:     tokenMap,
 	}
 
 	oAuth2Service, e := oauth2.NewService(&oAuth2ServiceConfig)
