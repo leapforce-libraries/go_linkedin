@@ -9,6 +9,7 @@ import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 	gcs "github.com/leapforce-libraries/go_googlecloudstorage"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
+	go_tokenmap "github.com/leapforce-libraries/go_oauth2/tokenmap"
 )
 
 const (
@@ -48,7 +49,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 		return nil, errortools.ErrorMessage("CredMap must not be a nil pointer")
 	}
 
-	tokenMap, e := oauth2.NewTokenMap(serviceConfig.CredMap)
+	tokenMap, e := go_tokenmap.NewTokenMap(serviceConfig.CredMap)
 	if e != nil {
 		return nil, e
 	}
