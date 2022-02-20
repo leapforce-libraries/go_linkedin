@@ -28,7 +28,7 @@ type AdCreative struct {
 	Test            bool     `json:"test"`
 	Type            string   `json:"type"`
 	Variables       struct {
-		ClickURI string                  `json:"clickUri"`
+		ClickUri string                  `json:"clickUri"`
 		Data     AdCreativeVariablesData `json:"data"`
 	} `json:"variables"`
 	Version AdVersion `json:"version"`

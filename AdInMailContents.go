@@ -12,7 +12,7 @@ type AdInMailContent struct {
 	Account           string              `json:"account"`
 	ChangeAuditStamps AdChangeAuditStamps `json:"changeAuditStamps"`
 	Editable          bool                `json:"editable"`
-	HTMLBody          string              `json:"htmlBody"`
+	HtmlBody          string              `json:"htmlBody"`
 	Id                int64               `json:"id"`
 	LegalText         struct {
 		RawText string `json:"rawText"`
