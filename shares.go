@@ -153,7 +153,7 @@ func (service *Service) GetShares(urns []string) (*[]Share, *errortools.Error) {
 		params := ""
 
 		for i, urn := range _urns {
-			if uint(i) == maxURNsPerCall {
+			if uint(i) == maxUrnsPerCall {
 				break
 			}
 
@@ -184,10 +184,10 @@ func (service *Service) GetShares(urns []string) (*[]Share, *errortools.Error) {
 			shares = append(shares, share)
 		}
 
-		if uint(len(_urns)) <= maxURNsPerCall {
+		if uint(len(_urns)) <= maxUrnsPerCall {
 			break
 		} else {
-			_urns = _urns[maxURNsPerCall:]
+			_urns = _urns[maxUrnsPerCall:]
 		}
 	}
 

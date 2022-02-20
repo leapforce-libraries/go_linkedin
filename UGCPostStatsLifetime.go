@@ -9,18 +9,18 @@ import (
 	go_http "github.com/leapforce-libraries/go_http"
 )
 
-type UGCPostStatsLifetimeResponse struct {
+type UgcPostStatsLifetimeResponse struct {
 	Paging   Paging                 `json:"paging"`
-	Elements []UGCPostStatsLifetime `json:"elements"`
+	Elements []UgcPostStatsLifetime `json:"elements"`
 }
 
-type UGCPostStatsLifetime struct {
+type UgcPostStatsLifetime struct {
 	TotalShareStatistics TotalShareStatistics `json:"totalShareStatistics"`
 	OrganizationalEntity string               `json:"organizationalEntity"`
-	UGCPost              *string              `json:"ugcPost"`
+	UgcPost              *string              `json:"ugcPost"`
 }
 
-func (service *Service) GetUGCPostStatsLifetime(organizationID int64, ugcPostIDs *[]string) (*[]UGCPostStatsLifetime, *http.Response, *errortools.Error) {
+func (service *Service) GetUgcPostStatsLifetime(organizationID int64, ugcPostIDs *[]string) (*[]UgcPostStatsLifetime, *http.Response, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
 	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
@@ -31,7 +31,7 @@ func (service *Service) GetUGCPostStatsLifetime(organizationID int64, ugcPostIDs
 		}
 	}
 
-	ugcPostStatsResponse := UGCPostStatsLifetimeResponse{}
+	ugcPostStatsResponse := UgcPostStatsLifetimeResponse{}
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,

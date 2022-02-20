@@ -19,11 +19,11 @@ const (
 	tokenURL               string = "https://www.linkedin.com/oauth/v2/accessToken"
 	tokenHTTPMethod        string = http.MethodGet
 	redirectURL            string = "http://localhost:8080/oauth/redirect"
-	CampaignURNPrefix      string = "urn:li:sponsoredCampaign:"
-	CreativeURNPrefix      string = "urn:li:sponsoredCreative:"
-	InMailContentURNPrefix string = "urn:li:adInMailContent:"
+	CampaignUrnPrefix      string = "urn:li:sponsoredCampaign:"
+	CreativeUrnPrefix      string = "urn:li:sponsoredCreative:"
+	InMailContentUrnPrefix string = "urn:li:adInMailContent:"
 	countDefault           uint   = 10
-	maxURNsPerCall         uint   = 50
+	maxUrnsPerCall         uint   = 50
 )
 
 // LinkedIn stores LinkedIn configuration
@@ -76,7 +76,7 @@ func (service *Service) url(path string) string {
 	return fmt.Sprintf("%s/%s", apiURL, path)
 }
 
-func (service *Service) FromURN(prefix string, urn string) int64 {
+func (service *Service) FromUrn(prefix string, urn string) int64 {
 	id, err := strconv.ParseInt(strings.TrimPrefix(urn, prefix), 10, 64)
 	if err != nil {
 		return 0
@@ -88,18 +88,18 @@ func (service *Service) InitToken(scope string, accessType *string, prompt *stri
 	return service.oAuth2Service.InitToken(scope, accessType, prompt, state)
 }
 
-func (service Service) APIName() string {
+func (service Service) ApiName() string {
 	return apiName
 }
 
-func (service Service) APIKey() string {
+func (service Service) ApiKey() string {
 	return service.clientID
 }
 
-func (service Service) APICallCount() int64 {
-	return service.oAuth2Service.APICallCount()
+func (service Service) ApiCallCount() int64 {
+	return service.oAuth2Service.ApiCallCount()
 }
 
-func (service *Service) APIReset() {
-	service.oAuth2Service.APIReset()
+func (service *Service) ApiReset() {
+	service.oAuth2Service.ApiReset()
 }

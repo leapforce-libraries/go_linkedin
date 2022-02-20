@@ -11,23 +11,23 @@ import (
 	go_http "github.com/leapforce-libraries/go_http"
 )
 
-type UGCPostsByOwnerResponse struct {
+type UgcPostsByOwnerResponse struct {
 	Paging   Paging    `json:"paging"`
-	Elements []UGCPost `json:"elements"`
+	Elements []UgcPost `json:"elements"`
 }
 
-type UGCPostsResponse struct {
-	Results map[string]UGCPost `json:"results"`
+type UgcPostsResponse struct {
+	Results map[string]UgcPost `json:"results"`
 }
 
-type UGCPost struct {
+type UgcPost struct {
 	Author                     string                     `json:"author"`
 	Created                    CreatedModified            `json:"created"`
 	FirstPublishedAt           int64                      `json:"firstPublishedAt"`
 	ID                         string                     `json:"id"`
 	LastModified               CreatedModified            `json:"lastModified"`
 	LifecycleState             string                     `json:"lifecycleState"`
-	SpecificContent            map[string]UGCShareContent `json:"specificContent"`
+	SpecificContent            map[string]UgcShareContent `json:"specificContent"`
 	VersionTag                 string                     `json:"versionTag"`
 	Visibility                 json.RawMessage            `json:"visibility"`
 	Distribution               json.RawMessage            `json:"distribution"`
@@ -40,7 +40,7 @@ type Distribution struct {
 	FeedDistribution             string   `json:"feedDistribution"`
 }
 
-type UGCShareContent struct {
+type UgcShareContent struct {
 	ShareCommentary    *ShareCommentary `json:"shareCommentary"`
 	Media              []Media          `json:"media"`
 	ShareFeatures      ShareFeatures    `json:"shareFeatures"`
@@ -78,17 +78,17 @@ type Text struct {
 
 type Media struct {
 	Description Text           `json:"description"`
-	OriginalURL string         `json:"originalUrl"`
+	OriginalUrl string         `json:"originalUrl"`
 	Recipes     []string       `json:"recipes"`
 	Media       string         `json:"media"`
 	Title       Text           `json:"title"`
-	Thumbnails  []UGCThumbnail `json:"thumbnails"`
+	Thumbnails  []UgcThumbnail `json:"thumbnails"`
 	Status      string         `json:"status"`
 }
 
-type UGCThumbnail struct {
+type UgcThumbnail struct {
 	Width  *int   `json:"width"`
-	URL    string `json:"url"`
+	Url    string `json:"url"`
 	Height *int   `json:"height"`
 }
 
@@ -96,7 +96,7 @@ type ShareFeatures struct {
 	Hashtags []string `json:"hashtags"`
 }
 
-func (service *Service) GetUGCPostsByOwner(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]UGCPost, *errortools.Error) {
+func (service *Service) GetUgcPostsByOwner(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]UgcPost, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
@@ -105,7 +105,7 @@ func (service *Service) GetUGCPostsByOwner(organizationID int64, startDateUnix i
 	count := 50
 	doNext := true
 
-	ugcPosts := []UGCPost{}
+	ugcPosts := []UgcPost{}
 
 	for doNext {
 		values := url.Values{}
@@ -114,7 +114,7 @@ func (service *Service) GetUGCPostsByOwner(organizationID int64, startDateUnix i
 		values.Set("start", strconv.Itoa(start))
 		values.Set("count", strconv.Itoa(count))
 
-		ugcPostsResponse := UGCPostsByOwnerResponse{}
+		ugcPostsResponse := UgcPostsByOwnerResponse{}
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
@@ -156,12 +156,12 @@ func (service *Service) GetUGCPostsByOwner(organizationID int64, startDateUnix i
 	return &ugcPosts, nil
 }
 
-func (service *Service) GetUGCPosts(urns []string) (*[]UGCPost, *errortools.Error) {
+func (service *Service) GetUgcPosts(urns []string) (*[]UgcPost, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
-	ugcPosts := []UGCPost{}
+	ugcPosts := []UgcPost{}
 
 	// deduplicate urns
 	var _urnsMap map[string]bool = make(map[string]bool)
@@ -179,7 +179,7 @@ func (service *Service) GetUGCPosts(urns []string) (*[]UGCPost, *errortools.Erro
 		params := ""
 
 		for i, urn := range _urns {
-			if uint(i) == maxURNsPerCall {
+			if uint(i) == maxUrnsPerCall {
 				break
 			}
 
@@ -192,7 +192,7 @@ func (service *Service) GetUGCPosts(urns []string) (*[]UGCPost, *errortools.Erro
 			}
 		}
 
-		ugcPostsResponse := UGCPostsResponse{}
+		ugcPostsResponse := UgcPostsResponse{}
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
@@ -208,22 +208,22 @@ func (service *Service) GetUGCPosts(urns []string) (*[]UGCPost, *errortools.Erro
 			ugcPosts = append(ugcPosts, ugcPost)
 		}
 
-		if uint(len(_urns)) <= maxURNsPerCall {
+		if uint(len(_urns)) <= maxUrnsPerCall {
 			break
 		} else {
-			_urns = _urns[maxURNsPerCall+1:]
+			_urns = _urns[maxUrnsPerCall+1:]
 		}
 	}
 
 	return &ugcPosts, nil
 }
 
-func (service *Service) GetUGCPost(urn string) (*UGCPost, *errortools.Error) {
+func (service *Service) GetUgcPost(urn string) (*UgcPost, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
-	ugcPost := UGCPost{}
+	ugcPost := UgcPost{}
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
