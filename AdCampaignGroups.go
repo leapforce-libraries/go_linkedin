@@ -19,7 +19,7 @@ type AdCampaignGroup struct {
 	AllowedCampaignTypes []AdCampaignType    `json:"allowedCampaignTypes"`
 	Backfilled           bool                `json:"backfilled"`
 	ChangeAuditStamps    AdChangeAuditStamps `json:"changeAuditStamps"`
-	ID                   int64               `json:"id"`
+	Id                   int64               `json:"id"`
 	Name                 string              `json:"name"`
 	RunSchedule          AdRunSchedule       `json:"runSchedule"`
 	ServingStatuses      []string            `json:"servingStatuses"`
@@ -40,7 +40,7 @@ const (
 
 type SearchAdCampaignGroupsConfig struct {
 	Account *[]int64
-	ID      *[]int64
+	Id      *[]int64
 	Status  *[]AdCampaignGroupStatus
 	Name    *[]string
 	Test    *bool
@@ -61,8 +61,8 @@ func (service *Service) SearchAdCampaignGroups(config *SearchAdCampaignGroupsCon
 				values.Set(fmt.Sprintf("search.account.values[%v]", i), fmt.Sprintf("urn:li:sponsoredAccount:%v", account))
 			}
 		}
-		if config.ID != nil {
-			for i, id := range *config.ID {
+		if config.Id != nil {
+			for i, id := range *config.Id {
 				values.Set(fmt.Sprintf("search.id.values[%v]", i), fmt.Sprintf("%v", id))
 			}
 		}
@@ -99,10 +99,10 @@ func (service *Service) SearchAdCampaignGroups(config *SearchAdCampaignGroupsCon
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("adCampaignGroupsV2?%s", values.Encode())),
+			Url:           service.url(fmt.Sprintf("adCampaignGroupsV2?%s", values.Encode())),
 			ResponseModel: &adCampaignGroupsResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -129,8 +129,8 @@ func (service *Service) SearchAdCampaignGroups(config *SearchAdCampaignGroupsCon
 	return &adCampaignGroups, nil
 }
 
-func (service *Service) GetAdCampaignGroups(accountID int64) (*[]AdCampaignGroup, *errortools.Error) {
-	account := []int64{accountID}
+func (service *Service) GetAdCampaignGroups(accountId int64) (*[]AdCampaignGroup, *errortools.Error) {
+	account := []int64{accountId}
 
 	campaigns, e := service.SearchAdCampaignGroups(&SearchAdCampaignGroupsConfig{
 		Account: &account,

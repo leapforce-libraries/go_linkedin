@@ -46,7 +46,7 @@ type AdAnalytics struct {
 	Reactions                                int64                  `json:"reactions"`
 	Sends                                    int64                  `json:"sends"`
 	Shares                                   int64                  `json:"shares"`
-	TextURLClicks                            int64                  `json:"textUrlClicks"`
+	TextUrlClicks                            int64                  `json:"textUrlClicks"`
 	TotalEngagements                         int64                  `json:"totalEngagements"`
 	VideoCompletions                         int64                  `json:"videoCompletions"`
 	VideoFirstQuartileCompletions            int64                  `json:"videoFirstQuartileCompletions"`
@@ -193,10 +193,10 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("adAnalyticsV2?%s", values.Encode())),
+			Url:           service.url(fmt.Sprintf("adAnalyticsV2?%s", values.Encode())),
 			ResponseModel: &adAnalyticsResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

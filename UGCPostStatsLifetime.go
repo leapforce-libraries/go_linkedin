@@ -20,14 +20,14 @@ type UgcPostStatsLifetime struct {
 	UgcPost              *string              `json:"ugcPost"`
 }
 
-func (service *Service) GetUgcPostStatsLifetime(organizationID int64, ugcPostIDs *[]string) (*[]UgcPostStatsLifetime, *http.Response, *errortools.Error) {
+func (service *Service) GetUgcPostStatsLifetime(organizationId int64, ugcPostIds *[]string) (*[]UgcPostStatsLifetime, *http.Response, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
-	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationId))
 
-	if ugcPostIDs != nil {
-		for index, ugcPostID := range *ugcPostIDs {
-			values.Set(fmt.Sprintf("ugcPosts[%v]", index), ugcPostID)
+	if ugcPostIds != nil {
+		for index, ugcPostId := range *ugcPostIds {
+			values.Set(fmt.Sprintf("ugcPosts[%v]", index), ugcPostId)
 		}
 	}
 
@@ -35,10 +35,10 @@ func (service *Service) GetUgcPostStatsLifetime(organizationID int64, ugcPostIDs
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
+		Url:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &ugcPostStatsResponse,
 	}
-	_, response, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, response, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, response, e
 	}

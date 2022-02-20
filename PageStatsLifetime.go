@@ -39,19 +39,19 @@ type LifetimePageStatisticsByType struct {
 	StaffCountRange string `json:"staffCountRange"`
 }
 
-func (service *Service) GetPageStatsLifetime(organizationID int64) (*[]PageStatsLifetime, *errortools.Error) {
+func (service *Service) GetPageStatsLifetime(organizationId int64) (*[]PageStatsLifetime, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organization")
-	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organizationID))
+	values.Set("organization", fmt.Sprintf("urn:li:organization:%v", organizationId))
 
 	pageStatsResponse := PageStatsLifetimeResponse{}
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("organizationPageStatistics?%s", values.Encode())),
+		Url:           service.url(fmt.Sprintf("organizationPageStatistics?%s", values.Encode())),
 		ResponseModel: &pageStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

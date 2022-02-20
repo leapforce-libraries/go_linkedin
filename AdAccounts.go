@@ -17,7 +17,7 @@ type AdAccountsResponse struct {
 type AdAccount struct {
 	ChangeAuditStamps              AdChangeAuditStamps `json:"changeAuditStamps"`
 	Currency                       string              `json:"currency"`
-	ID                             int64               `json:"id"`
+	Id                             int64               `json:"id"`
 	Name                           string              `json:"name"`
 	NotifiedOnCampaignOptimization bool                `json:"notifiedOnCampaignOptimization"`
 	NotifiedOnCreativeApproval     bool                `json:"notifiedOnCreativeApproval"`
@@ -51,7 +51,7 @@ type SearchAdAccountsConfig struct {
 	Status    *[]AdAccountStatus
 	Reference *[]string
 	Name      *[]string
-	ID        *[]int64
+	Id        *[]int64
 	Type      *[]AdAccountType
 	Test      *bool
 	Start     *uint
@@ -81,8 +81,8 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 				values.Set(fmt.Sprintf("search.name.values[%v]", i), name)
 			}
 		}
-		if config.ID != nil {
-			for i, id := range *config.ID {
+		if config.Id != nil {
+			for i, id := range *config.Id {
 				values.Set(fmt.Sprintf("search.id.values[%v]", i), fmt.Sprintf("%v", id))
 			}
 		}
@@ -114,10 +114,10 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("adAccountsV2?%s", values.Encode())),
+			Url:           service.url(fmt.Sprintf("adAccountsV2?%s", values.Encode())),
 			ResponseModel: &adAccountsResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -149,11 +149,11 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 	return &adAccounts, nil
 }
 
-func (service *Service) GetAdAccount(accountID int64) (*AdAccount, *errortools.Error) {
-	id := []int64{accountID}
+func (service *Service) GetAdAccount(accountId int64) (*AdAccount, *errortools.Error) {
+	id := []int64{accountId}
 
 	accounts, e := service.SearchAdAccounts(&SearchAdAccountsConfig{
-		ID: &id,
+		Id: &id,
 	})
 	if e != nil {
 		return nil, e

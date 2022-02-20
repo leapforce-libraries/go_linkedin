@@ -26,10 +26,10 @@ type FollowerGains struct {
 	PaidFollowerGain    int64 `json:"paidFollowerGain"`
 }
 
-func (service *Service) GetFollowerStatsTimebound(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]FollowerStatsTimebound, *errortools.Error) {
+func (service *Service) GetFollowerStatsTimebound(organizationId int64, startDateUnix int64, endDateUnix int64) (*[]FollowerStatsTimebound, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
-	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationId))
 	values.Set("timeIntervals.timeGranularityType", "DAY")
 	values.Set("timeIntervals.timeRange.start", strconv.FormatInt(startDateUnix, 10))
 	values.Set("timeIntervals.timeRange.end", strconv.FormatInt(endDateUnix, 10))
@@ -38,10 +38,10 @@ func (service *Service) GetFollowerStatsTimebound(organizationID int64, startDat
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
+		Url:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
 		ResponseModel: &followerStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

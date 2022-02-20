@@ -24,7 +24,7 @@ type UgcPost struct {
 	Author                     string                     `json:"author"`
 	Created                    CreatedModified            `json:"created"`
 	FirstPublishedAt           int64                      `json:"firstPublishedAt"`
-	ID                         string                     `json:"id"`
+	Id                         string                     `json:"id"`
 	LastModified               CreatedModified            `json:"lastModified"`
 	LifecycleState             string                     `json:"lifecycleState"`
 	SpecificContent            map[string]UgcShareContent `json:"specificContent"`
@@ -96,7 +96,7 @@ type ShareFeatures struct {
 	Hashtags []string `json:"hashtags"`
 }
 
-func (service *Service) GetUgcPostsByOwner(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]UgcPost, *errortools.Error) {
+func (service *Service) GetUgcPostsByOwner(organizationId int64, startDateUnix int64, endDateUnix int64) (*[]UgcPost, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
@@ -118,7 +118,7 @@ func (service *Service) GetUgcPostsByOwner(organizationID int64, startDateUnix i
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("ugcPosts?%s&authors=List(%s)", values.Encode(), url.QueryEscape(fmt.Sprintf("urn:li:organization:%v", organizationID)))),
+			Url:           service.url(fmt.Sprintf("ugcPosts?%s&authors=List(%s)", values.Encode(), url.QueryEscape(fmt.Sprintf("urn:li:organization:%v", organizationId)))),
 			ResponseModel: &ugcPostsResponse,
 		}
 
@@ -127,7 +127,7 @@ func (service *Service) GetUgcPostsByOwner(organizationID int64, startDateUnix i
 		header.Set("X-Restli-Protocol-Version", "2.0.0")
 		requestConfig.NonDefaultHeaders = &header
 
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -196,10 +196,10 @@ func (service *Service) GetUgcPosts(urns []string) (*[]UgcPost, *errortools.Erro
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("ugcPosts?%s", params)),
+			Url:           service.url(fmt.Sprintf("ugcPosts?%s", params)),
 			ResponseModel: &ugcPostsResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -227,7 +227,7 @@ func (service *Service) GetUgcPost(urn string) (*UgcPost, *errortools.Error) {
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("ugcPosts/%s", url.QueryEscape(urn))),
+		Url:           service.url(fmt.Sprintf("ugcPosts/%s", url.QueryEscape(urn))),
 		ResponseModel: &ugcPost,
 	}
 
@@ -236,7 +236,7 @@ func (service *Service) GetUgcPost(urn string) (*UgcPost, *errortools.Error) {
 	header.Set("X-Restli-Protocol-Version", "2.0.0")
 	requestConfig.NonDefaultHeaders = &header
 
-	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

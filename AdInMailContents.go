@@ -13,7 +13,7 @@ type AdInMailContent struct {
 	ChangeAuditStamps AdChangeAuditStamps `json:"changeAuditStamps"`
 	Editable          bool                `json:"editable"`
 	HTMLBody          string              `json:"htmlBody"`
-	ID                int64               `json:"id"`
+	Id                int64               `json:"id"`
 	LegalText         struct {
 		RawText string `json:"rawText"`
 	} `json:"legalText"`
@@ -51,15 +51,15 @@ type AdInMailStandardSubContent struct {
 	AdUnitV2   string `json:"adUnitV2"`
 }
 
-func (service *Service) GetAdInMailContent(adInMailContentID int64) (*AdInMailContent, *errortools.Error) {
+func (service *Service) GetAdInMailContent(adInMailContentId int64) (*AdInMailContent, *errortools.Error) {
 	adInMailContent := AdInMailContent{}
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("adInMailContentsV2/%v", adInMailContentID)),
+		Url:           service.url(fmt.Sprintf("adInMailContentsV2/%v", adInMailContentId)),
 		ResponseModel: &adInMailContent,
 	}
-	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

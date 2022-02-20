@@ -27,7 +27,7 @@ type Share struct {
 	Created      CreatedModified            `json:"created"`
 	Text         ShareText                  `json:"text"`
 	LastModified CreatedModified            `json:"lastModified"`
-	ID           string                     `json:"id"`
+	Id           string                     `json:"id"`
 	Distribution map[string]json.RawMessage `json:"distribution"`
 	Content      *ShareContent              `json:"content"`
 }
@@ -52,7 +52,7 @@ type ShareContent struct {
 	ContentEntities    []ShareContentEntity `json:"contentEntities"`
 	Description        *string              `json:"description"`
 	Title              *string              `json:"title"`
-	LandingPageURL     *string              `json:"landingPageUrl"`
+	LandingPageUrl     *string              `json:"landingPageUrl"`
 	ShareMediaCategory *string              `json:"shareMediaCategory"`
 }
 
@@ -75,7 +75,7 @@ type ImageSpecificContent struct {
 	Height *int `json:"height"`
 }
 
-func (service *Service) GetSharesByOwner(organizationID int64, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
+func (service *Service) GetSharesByOwner(organizationId int64, startDateUnix int64, endDateUnix int64) (*[]Share, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
@@ -89,7 +89,7 @@ func (service *Service) GetSharesByOwner(organizationID int64, startDateUnix int
 	for doNext {
 		values := url.Values{}
 		values.Set("q", "owners")
-		values.Set("owners", fmt.Sprintf("urn:li:organization:%v", organizationID))
+		values.Set("owners", fmt.Sprintf("urn:li:organization:%v", organizationId))
 		values.Set("sortBy", "CREATED")
 		values.Set("start", strconv.Itoa(start))
 		values.Set("count", strconv.Itoa(count))
@@ -98,10 +98,10 @@ func (service *Service) GetSharesByOwner(organizationID int64, startDateUnix int
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("shares?%s", values.Encode())),
+			Url:           service.url(fmt.Sprintf("shares?%s", values.Encode())),
 			ResponseModel: &sharesResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -172,10 +172,10 @@ func (service *Service) GetShares(urns []string) (*[]Share, *errortools.Error) {
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("shares?%s", params)),
+			Url:           service.url(fmt.Sprintf("shares?%s", params)),
 			ResponseModel: &sharesResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}

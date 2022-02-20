@@ -41,19 +41,19 @@ type FollowerCounts struct {
 	PaidFollowerCount    int64 `json:"paidFollowerCount"`
 }
 
-func (service *Service) GetFollowerStatsLifetime(organizationID int64) (*[]FollowerStatsLifetime, *errortools.Error) {
+func (service *Service) GetFollowerStatsLifetime(organizationId int64) (*[]FollowerStatsLifetime, *errortools.Error) {
 	values := url.Values{}
 	values.Set("q", "organizationalEntity")
-	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationID))
+	values.Set("organizationalEntity", fmt.Sprintf("urn:li:organization:%v", organizationId))
 
 	followerStatsResponse := FollowerStatsLifetimeResponse{}
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
+		Url:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
 		ResponseModel: &followerStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

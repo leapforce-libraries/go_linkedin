@@ -25,7 +25,7 @@ type AdCampaign struct {
 	CreativeSelection        string              `json:"creativeSelection"`
 	DailyBudget              AdBudget            `json:"dailyBudget"`
 	Format                   string              `json:"format"`
-	ID                       int64               `json:"id"`
+	Id                       int64               `json:"id"`
 	Locale                   AdLocale            `json:"locale"`
 	Name                     string              `json:"name"`
 	ObjectiveType            string              `json:"objectiveType"`
@@ -83,7 +83,7 @@ type SearchAdCampaignsConfig struct {
 	Account          *[]int64
 	CampaignGroup    *[]int64
 	AssociatedEntity *[]string
-	ID               *[]int64
+	Id               *[]int64
 	Status           *[]AdCampaignStatus
 	Type             *[]AdCampaignType
 	Name             *[]string
@@ -115,8 +115,8 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 				values.Set(fmt.Sprintf("search.associatedEntity.values[%v]", i), associatedEntity)
 			}
 		}
-		if config.ID != nil {
-			for i, id := range *config.ID {
+		if config.Id != nil {
+			for i, id := range *config.Id {
 				values.Set(fmt.Sprintf("search.id.values[%v]", i), fmt.Sprintf("%v", id))
 			}
 		}
@@ -158,10 +158,10 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("adCampaignsV2?%s", values.Encode())),
+			Url:           service.url(fmt.Sprintf("adCampaignsV2?%s", values.Encode())),
 			ResponseModel: &adCampaignsResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -188,8 +188,8 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 	return &adCampaigns, nil
 }
 
-func (service *Service) GetAdCampaigns(accountID int64) (*[]AdCampaign, *errortools.Error) {
-	account := []int64{accountID}
+func (service *Service) GetAdCampaigns(accountId int64) (*[]AdCampaign, *errortools.Error) {
+	account := []int64{accountId}
 
 	campaigns, e := service.SearchAdCampaigns(&SearchAdCampaignsConfig{
 		Account: &account,

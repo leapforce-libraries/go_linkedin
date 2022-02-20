@@ -14,7 +14,7 @@ type Organization struct {
 	LocalizedWebsite string `json:"localizedWebsite"`
 }
 
-func (service *Service) GetOrganization(organizationID int64) (*Organization, *errortools.Error) {
+func (service *Service) GetOrganization(organizationId int64) (*Organization, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
@@ -23,10 +23,10 @@ func (service *Service) GetOrganization(organizationID int64) (*Organization, *e
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		URL:           service.url(fmt.Sprintf("organizations/%v", organizationID)),
+		Url:           service.url(fmt.Sprintf("organizations/%v", organizationId)),
 		ResponseModel: &organization,
 	}
-	_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

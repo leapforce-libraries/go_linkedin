@@ -17,7 +17,7 @@ type AdCreativesResponse struct {
 type AdCreative struct {
 	Campaign          string              `json:"campaign"`
 	ChangeAuditStamps AdChangeAuditStamps `json:"changeAuditStamps"`
-	ID                int64               `json:"id"`
+	Id                int64               `json:"id"`
 	ProcessingState   string              `json:"processingState"`
 	Reference         string              `json:"reference"`
 	Review            struct {
@@ -131,7 +131,7 @@ const (
 
 type SearchAdCreativesConfig struct {
 	Campaign  *[]int64
-	ID        *[]int64
+	Id        *[]int64
 	Reference *[]string
 	Status    *[]AdCreativeStatus
 	Test      *bool
@@ -152,8 +152,8 @@ func (service *Service) SearchAdCreatives(config *SearchAdCreativesConfig) (*[]A
 				values.Set(fmt.Sprintf("search.campaign.values[%v]", i), fmt.Sprintf("urn:li:sponsoredCampaign:%v", campaign))
 			}
 		}
-		if config.ID != nil {
-			for i, id := range *config.ID {
+		if config.Id != nil {
+			for i, id := range *config.Id {
 				values.Set(fmt.Sprintf("search.id.values[%v]", i), fmt.Sprintf("%v", id))
 			}
 		}
@@ -190,10 +190,10 @@ func (service *Service) SearchAdCreatives(config *SearchAdCreativesConfig) (*[]A
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			URL:           service.url(fmt.Sprintf("adCreativesV2?%s", values.Encode())),
+			Url:           service.url(fmt.Sprintf("adCreativesV2?%s", values.Encode())),
 			ResponseModel: &adCreativesResponse,
 		}
-		_, _, e := service.oAuth2Service.HTTPRequest(&requestConfig)
+		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 		if e != nil {
 			return nil, e
 		}
@@ -220,8 +220,8 @@ func (service *Service) SearchAdCreatives(config *SearchAdCreativesConfig) (*[]A
 	return &adCreatives, nil
 }
 
-func (service *Service) GetAdCreatives(campaignID int64) (*[]AdCreative, *errortools.Error) {
-	campaign := []int64{campaignID}
+func (service *Service) GetAdCreatives(campaignId int64) (*[]AdCreative, *errortools.Error) {
+	campaign := []int64{campaignId}
 
 	creatives, e := service.SearchAdCreatives(&SearchAdCreativesConfig{
 		Campaign: &campaign,

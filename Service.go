@@ -14,11 +14,11 @@ import (
 
 const (
 	apiName                string = "LinkedIn"
-	apiURL                 string = "https://api.linkedin.com/v2"
-	authURL                string = "https://www.linkedin.com/oauth/v2/authorization"
-	tokenURL               string = "https://www.linkedin.com/oauth/v2/accessToken"
-	tokenHTTPMethod        string = http.MethodGet
-	redirectURL            string = "http://localhost:8080/oauth/redirect"
+	apiUrl                 string = "https://api.linkedin.com/v2"
+	authUrl                string = "https://www.linkedin.com/oauth/v2/authorization"
+	tokenUrl               string = "https://www.linkedin.com/oauth/v2/accessToken"
+	tokenHttpMethod        string = http.MethodGet
+	redirectUrl            string = "http://localhost:8080/oauth/redirect"
 	CampaignUrnPrefix      string = "urn:li:sponsoredCampaign:"
 	CreativeUrnPrefix      string = "urn:li:sponsoredCreative:"
 	InMailContentUrnPrefix string = "urn:li:adInMailContent:"
@@ -29,12 +29,12 @@ const (
 // LinkedIn stores LinkedIn configuration
 //
 type Service struct {
-	clientID      string
+	clientId      string
 	oAuth2Service *oauth2.Service
 }
 
 type ServiceConfig struct {
-	ClientID     string
+	ClientId     string
 	ClientSecret string
 	CredMap      *gcs.Map
 }
@@ -55,12 +55,12 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	}
 
 	oAuth2ServiceConfig := oauth2.ServiceConfig{
-		ClientID:        serviceConfig.ClientID,
+		ClientId:        serviceConfig.ClientId,
 		ClientSecret:    serviceConfig.ClientSecret,
-		RedirectURL:     redirectURL,
-		AuthURL:         authURL,
-		TokenURL:        tokenURL,
-		TokenHTTPMethod: tokenHTTPMethod,
+		RedirectUrl:     redirectUrl,
+		AuthUrl:         authUrl,
+		TokenUrl:        tokenUrl,
+		TokenHttpMethod: tokenHttpMethod,
 		TokenSource:     tokenMap,
 	}
 
@@ -69,11 +69,11 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 		return nil, e
 	}
 
-	return &Service{serviceConfig.ClientID, oAuth2Service}, nil
+	return &Service{serviceConfig.ClientId, oAuth2Service}, nil
 }
 
 func (service *Service) url(path string) string {
-	return fmt.Sprintf("%s/%s", apiURL, path)
+	return fmt.Sprintf("%s/%s", apiUrl, path)
 }
 
 func (service *Service) FromUrn(prefix string, urn string) int64 {
@@ -93,7 +93,7 @@ func (service Service) ApiName() string {
 }
 
 func (service Service) ApiKey() string {
-	return service.clientID
+	return service.clientId
 }
 
 func (service Service) ApiCallCount() int64 {
