@@ -478,6 +478,8 @@ github.com/leapforce-libraries/go_google v0.0.0-20220220163223-304493bbfe12 h1:8
 github.com/leapforce-libraries/go_google v0.0.0-20220220163223-304493bbfe12/go.mod h1:SkmooNvyidmHarxL9rAmeupo+3H6DuFL0cYisyjpi+Q=
 github.com/leapforce-libraries/go_google v0.0.0-20220220164852-f03261600b62 h1:Gd2oOCvHMD9pjcW/Y0j4aHeHhrhjT7wQPZe/zbI5AhQ=
 github.com/leapforce-libraries/go_google v0.0.0-20220220164852-f03261600b62/go.mod h1:y+HbGSVcS0fFe+sHx6KWREwkBv6zWrW6I4lcUMpQ6YA=
+github.com/leapforce-libraries/go_google v0.0.0-20220227185040-4d446ceb95ac h1:pQcL1pUz21tuUdkVD+xV52glAmC+PcCutqg6mVoJURc=
+github.com/leapforce-libraries/go_google v0.0.0-20220227185040-4d446ceb95ac/go.mod h1:y+HbGSVcS0fFe+sHx6KWREwkBv6zWrW6I4lcUMpQ6YA=
 github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20210428222229-1147c7986a8d/go.mod h1:5vTKz3d/EqR85Ge5dN6+emiKfMDh73mibAQRs7wQz8k=
 github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20210604121700-75c6cd17e42e h1:0xQ9vraB46fyvzKJeo03UqPlvETlfFEMy23ysgRmDrY=
 github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20210604121700-75c6cd17e42e/go.mod h1:6/17uiw7JJrdEwrrsF3Msr0WGEOMdjj04nRpraCilXo=
@@ -493,6 +495,8 @@ github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220220163255-cbfe4
 github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220220163255-cbfe4f06b7b6/go.mod h1:c1hfgLumi2RAzItbaAtJQi+T8iQQkoMb0BQ9aKCn6zo=
 github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220220164933-e31a793cf294 h1:73GZZVitX1J4EbFdotl0S9GG1G8I9nr4hkGV0FIIdQY=
 github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220220164933-e31a793cf294/go.mod h1:lFjP1sjQzBJFOYepK5rlMGnM5pH3OBR4GzLys7qu+94=
+github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220304131021-747972e9ea07 h1:BXzmO5KtS1eX7syXC+8ZSoqxeszbzrVmo2USgP91mt4=
+github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220304131021-747972e9ea07/go.mod h1:EYjC/G15lOFMnGaw9HJ9Nh6QAmsFz45N2mYyYfU1d5Q=
 github.com/leapforce-libraries/go_http v0.0.0-20210201153939-7377a0b73fe0 h1:UE549/g4K+f9A6ZwhRrxprYq6CbIFXo1owttc8ZNUDw=
 github.com/leapforce-libraries/go_http v0.0.0-20210201153939-7377a0b73fe0/go.mod h1:xqKc0io3rZB/bCsH8/F1diK3JGJacZv/2IBYF7lIWt4=
 github.com/leapforce-libraries/go_http v0.0.0-20210219130405-85d07ecd3d24 h1:cYVZQoME1JO4tNW1KWBmKscSUgrGx4lcYUXAJGJKibk=
