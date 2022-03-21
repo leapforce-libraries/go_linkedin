@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
-	gcs "github.com/leapforce-libraries/go_googlecloudstorage"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
-	go_tokenmap "github.com/leapforce-libraries/go_oauth2/tokenmap"
+	go_token "github.com/leapforce-libraries/go_oauth2/token"
+	tokensource "github.com/leapforce-libraries/go_oauth2/tokensource"
 )
 
 const (
@@ -17,11 +17,12 @@ const (
 	apiUrl                 string = "https://api.linkedin.com/v2"
 	authUrl                string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl               string = "https://www.linkedin.com/oauth/v2/accessToken"
-	tokenHttpMethod        string = http.MethodGet
-	redirectUrl            string = "http://localhost:8080/oauth/redirect"
+	tokenHttpMethod        string = http.MethodPost
+	defaultRedirectUrl     string = "http://localhost:8080/oauth/redirect"
 	CampaignUrnPrefix      string = "urn:li:sponsoredCampaign:"
 	CreativeUrnPrefix      string = "urn:li:sponsoredCreative:"
 	InMailContentUrnPrefix string = "urn:li:adInMailContent:"
+	OrganizationUrnPrefix  string = "urn:li:organization:"
 	countDefault           uint   = 10
 	maxUrnsPerCall         uint   = 50
 )
@@ -36,7 +37,8 @@ type Service struct {
 type ServiceConfig struct {
 	ClientId     string
 	ClientSecret string
-	CredMap      *gcs.Map
+	TokenSource  tokensource.TokenSource
+	RedirectUrl  *string
 }
 
 // NewService return new instance of LinkedIn struct
@@ -45,13 +47,10 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	if serviceConfig == nil {
 		return nil, errortools.ErrorMessage("ServiceConfig must not be a nil pointer")
 	}
-	if serviceConfig.CredMap == nil {
-		return nil, errortools.ErrorMessage("CredMap must not be a nil pointer")
-	}
 
-	tokenMap, e := go_tokenmap.NewTokenMap(serviceConfig.CredMap)
-	if e != nil {
-		return nil, e
+	redirectUrl := defaultRedirectUrl
+	if serviceConfig.RedirectUrl != nil {
+		redirectUrl = *serviceConfig.RedirectUrl
 	}
 
 	oAuth2ServiceConfig := oauth2.ServiceConfig{
@@ -61,7 +60,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 		AuthUrl:         authUrl,
 		TokenUrl:        tokenUrl,
 		TokenHttpMethod: tokenHttpMethod,
-		TokenSource:     tokenMap,
+		TokenSource:     serviceConfig.TokenSource,
 	}
 
 	oAuth2Service, e := oauth2.NewService(&oAuth2ServiceConfig)
@@ -84,8 +83,16 @@ func (service *Service) FromUrn(prefix string, urn string) int64 {
 	return id
 }
 
-func (service *Service) InitToken(scope string, accessType *string, prompt *string, state *string) *errortools.Error {
-	return service.oAuth2Service.InitToken(scope, accessType, prompt, state)
+func (service *Service) AuthorizeUrl(scope string, accessType *string, prompt *string, state *string) string {
+	return service.oAuth2Service.AuthorizeUrl(scope, accessType, prompt, state)
+}
+
+func (service *Service) ValidateToken() (*go_token.Token, *errortools.Error) {
+	return service.oAuth2Service.ValidateToken()
+}
+
+func (service *Service) GetTokenFromCode(r *http.Request, checkState *func(state string) *errortools.Error) *errortools.Error {
+	return service.oAuth2Service.GetTokenFromCode(r, checkState)
 }
 
 func (service Service) ApiName() string {
