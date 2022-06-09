@@ -23,6 +23,8 @@ const (
 	CreativeUrnPrefix      string = "urn:li:sponsoredCreative:"
 	InMailContentUrnPrefix string = "urn:li:adInMailContent:"
 	OrganizationUrnPrefix  string = "urn:li:organization:"
+	ShareUrnPrefix         string = "urn:li:share:"
+	UgcPostUrnPrefix       string = "urn:li:ugcPost:"
 	countDefault           uint   = 10
 	maxUrnsPerCall         uint   = 50
 )
