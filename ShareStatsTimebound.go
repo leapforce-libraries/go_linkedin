@@ -32,7 +32,7 @@ func (service *Service) GetShareStatsTimebound(organizationId int64, startDateUn
 
 	if shareIds != nil {
 		for index, shareId := range *shareIds {
-			values.Set(fmt.Sprintf("shares[%v]", index), fmt.Sprintf("urn:li:share:%s", shareId))
+			values.Set(fmt.Sprintf("shares[%v]", index), shareId)
 		}
 	}
 
