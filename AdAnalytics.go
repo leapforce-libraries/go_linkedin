@@ -187,7 +187,6 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		Url:           service.url(fmt.Sprintf("adAnalyticsV2?%s", values.Encode())),
 		ResponseModel: &adAnalyticsResponse,
 	}
-	fmt.Println(requestConfig.Url)
 	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
