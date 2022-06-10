@@ -210,11 +210,11 @@ func (service *Service) SearchAdCreatives(config *SearchAdCreativesConfig) (*[]A
 			}
 		}
 
-		start += count
-
-		if uint(adCreativesResponse.Paging.Total) <= start {
+		if len(adCreativesResponse.Elements) < int(count) {
 			break
 		}
+
+		start += count
 	}
 
 	return &adCreatives, nil

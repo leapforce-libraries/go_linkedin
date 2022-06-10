@@ -134,16 +134,11 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 			}
 		}
 
-		/*if count == nil {
-			_count := uint(adAccountsResponse.Paging.Count)
-			count = &_count
-		}*/
-
-		start += count
-
-		if uint(adAccountsResponse.Paging.Total) <= start {
+		if len(adAccountsResponse.Elements) < int(count) {
 			break
 		}
+
+		start += count
 	}
 
 	return &adAccounts, nil

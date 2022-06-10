@@ -119,11 +119,11 @@ func (service *Service) SearchAdCampaignGroups(config *SearchAdCampaignGroupsCon
 			}
 		}
 
-		start += count
-
-		if uint(adCampaignGroupsResponse.Paging.Total) <= start {
+		if len(adCampaignGroupsResponse.Elements) < int(count) {
 			break
 		}
+
+		start += count
 	}
 
 	return &adCampaignGroups, nil

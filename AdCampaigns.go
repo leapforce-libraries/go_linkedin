@@ -178,11 +178,11 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 			}
 		}
 
-		start += count
-
-		if uint(adCampaignsResponse.Paging.Total) <= start {
+		if len(adCampaignsResponse.Elements) < int(count) {
 			break
 		}
+
+		start += count
 	}
 
 	return &adCampaigns, nil

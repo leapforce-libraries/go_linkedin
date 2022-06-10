@@ -11,8 +11,9 @@ import (
 	go_types "github.com/leapforce-libraries/go_types"
 )
 
-type AdAnalyticssResponse struct {
-	Paging   Paging        `json:"paging"`
+type AdAnalyticsResponse struct {
+	// no pagination supported, see: https://docs.microsoft.com/en-us/linkedin/marketing/integrations/ads-reporting/ads-reporting
+	//Paging   Paging        `json:"paging"`
 	Elements []AdAnalytics `json:"elements"`
 }
 
@@ -128,8 +129,6 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 	}
 
 	var values url.Values = url.Values{}
-	var start uint = 0
-	var count uint = countDefault
 
 	values.Set("q", "analytics")
 	values.Set("pivot", string(config.Pivot))
@@ -181,44 +180,18 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		values.Set("fields", strings.Join(*config.Fields, ","))
 	}
 
-	adAnalytics := []AdAnalytics{}
+	adAnalyticsResponse := AdAnalyticsResponse{}
 
-	for {
-		if start > 0 {
-			values.Set("start", fmt.Sprintf("%v", start))
-		}
-		values.Set("count", fmt.Sprintf("%v", count))
-
-		adAnalyticsResponse := AdAnalyticssResponse{}
-
-		requestConfig := go_http.RequestConfig{
-			Method:        http.MethodGet,
-			Url:           service.url(fmt.Sprintf("adAnalyticsV2?%s", values.Encode())),
-			ResponseModel: &adAnalyticsResponse,
-		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
-		if e != nil {
-			return nil, e
-		}
-
-		if len(adAnalyticsResponse.Elements) == 0 {
-			break
-		}
-
-		adAnalytics = append(adAnalytics, adAnalyticsResponse.Elements...)
-
-		if config != nil {
-			if config.Start != nil {
-				break
-			}
-		}
-
-		start += count
-
-		if uint(adAnalyticsResponse.Paging.Total) <= start {
-			break
-		}
+	requestConfig := go_http.RequestConfig{
+		Method:        http.MethodGet,
+		Url:           service.url(fmt.Sprintf("adAnalyticsV2?%s", values.Encode())),
+		ResponseModel: &adAnalyticsResponse,
+	}
+	fmt.Println(requestConfig.Url)
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	if e != nil {
+		return nil, e
 	}
 
-	return &adAnalytics, nil
+	return &adAnalyticsResponse.Elements, nil
 }
