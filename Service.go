@@ -15,6 +15,7 @@ import (
 const (
 	apiName                string = "LinkedIn"
 	apiUrl                 string = "https://api.linkedin.com/v2"
+	apiUrlWithoutVersion   string = "https://api.linkedin.com"
 	authUrl                string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl               string = "https://www.linkedin.com/oauth/v2/accessToken"
 	tokenHttpMethod        string = http.MethodPost
