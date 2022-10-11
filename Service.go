@@ -15,9 +15,12 @@ import (
 const (
 	apiName                string = "LinkedIn"
 	apiUrl                 string = "https://api.linkedin.com/v2"
+	apiUrlRest             string = "https://api.linkedin.com/rest"
 	apiUrlWithoutVersion   string = "https://api.linkedin.com"
 	authUrl                string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl               string = "https://www.linkedin.com/oauth/v2/accessToken"
+	linkedInVersionHeader  string = "LinkedIn-Version"
+	defaultLinkedInVersion string = "202208"
 	tokenHttpMethod        string = http.MethodPost
 	defaultRedirectUrl     string = "http://localhost:8080/oauth/redirect"
 	CampaignUrnPrefix      string = "urn:li:sponsoredCampaign:"
@@ -76,6 +79,10 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 
 func (service *Service) url(path string) string {
 	return fmt.Sprintf("%s/%s", apiUrl, path)
+}
+
+func (service *Service) urlRest(path string) string {
+	return fmt.Sprintf("%s/%s", apiUrlRest, path)
 }
 
 func (service *Service) FromUrn(prefix string, urn string) int64 {
