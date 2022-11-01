@@ -11,7 +11,7 @@ type Post struct {
 	Commentary                string           `json:"commentary"`
 	Visibility                string           `json:"visibility"`
 	Distribution              PostDistribution `json:"distribution"`
-	Content                   PostContent      `json:"content"`
+	Content                   *PostContent     `json:"content,omitempty"`
 	LifecycleState            string           `json:"lifecycleState"`
 	IsReshareDisabledByAuthor bool             `json:"isReshareDisabledByAuthor"`
 }
