@@ -20,7 +20,7 @@ const (
 	authUrl                string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl               string = "https://www.linkedin.com/oauth/v2/accessToken"
 	linkedInVersionHeader  string = "LinkedIn-Version"
-	defaultLinkedInVersion string = "202208"
+	defaultLinkedInVersion string = "202210"
 	tokenHttpMethod        string = http.MethodPost
 	defaultRedirectUrl     string = "http://localhost:8080/oauth/redirect"
 	CampaignUrnPrefix      string = "urn:li:sponsoredCampaign:"
@@ -29,6 +29,7 @@ const (
 	OrganizationUrnPrefix  string = "urn:li:organization:"
 	ShareUrnPrefix         string = "urn:li:share:"
 	UgcPostUrnPrefix       string = "urn:li:ugcPost:"
+	PostUrnPrefix          string = "urn:li:post:"
 	countDefault           uint   = 10
 	maxUrnsPerCall         uint   = 50
 )
