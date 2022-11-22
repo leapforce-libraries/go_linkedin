@@ -122,16 +122,14 @@ func (service *Service) PostsByOwner(cfg *PostsByOwnerConfig) (*[]Post, *errorto
 			return nil, e
 		}
 
-		fmt.Println(len(postsResponse.Elements))
-
 		for _, post := range postsResponse.Elements {
 
 			if post.CreatedAt > cfg.EndDateUnix {
-				//continue
+				continue
 			}
 
 			if post.CreatedAt < cfg.StartDateUnix {
-				//continue
+				continue
 			}
 
 			posts = append(posts, post)
