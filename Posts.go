@@ -17,7 +17,7 @@ type Post struct {
 	Distribution              PostDistribution   `json:"distribution,omitempty"`
 	Content                   *PostContent       `json:"content,omitempty"`
 	LifecycleState            string             `json:"lifecycleState,omitempty"`
-	LifecycleStateInfo        LifecycleStateInfo `json:"lifecycleStateInfo,omitempty"`
+	LifecycleStateInfo        *LifecycleStateInfo `json:"lifecycleStateInfo,omitempty"`
 	IsRepostDisabledByAuthor  bool               `json:"isRepostDisabledByAuthor,omitempty"`
 	IsReshareDisabledByAuthor bool               `json:"isReshareDisabledByAuthor,omitempty"`
 	LastModifiedAt            int64              `json:"lastModifiedAt,omitempty"`
