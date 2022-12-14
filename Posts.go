@@ -46,14 +46,14 @@ type LifecycleStateInfo struct {
 }
 
 type DistributionTarget struct {
-	ConnectionsOnly  *bool     `json:"connectionsOnly"`
+	Degrees          *[]string `json:"degrees"`
+	FieldsOfStudy    *[]string `json:"fieldsOfStudy"`
 	Industries       *[]string `json:"industries"`
 	InterfaceLocales *[]Locale `json:"interfaceLocales"`
 	JobFunctions     *[]string `json:"jobFunctions"`
 	GeoLocations     *[]string `json:"geoLocations"`
 	Seniorities      *[]string `json:"seniorities"`
 	StaffCountRanges *[]string `json:"staffCountRanges"`
-	VisibleToGuest   *bool     `json:"visibleToGuest"`
 }
 
 type Locale struct {
