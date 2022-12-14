@@ -11,25 +11,25 @@ import (
 )
 
 type Post struct {
-	Author                    string             `json:"author,omitempty"`
-	Commentary                string             `json:"commentary,omitempty"`
-	Visibility                string             `json:"visibility,omitempty"`
-	Distribution              PostDistribution   `json:"distribution,omitempty"`
-	Content                   *PostContent       `json:"content,omitempty"`
-	LifecycleState            string             `json:"lifecycleState,omitempty"`
+	Author                    string              `json:"author,omitempty"`
+	Commentary                string              `json:"commentary,omitempty"`
+	Visibility                string              `json:"visibility,omitempty"`
+	Distribution              PostDistribution    `json:"distribution,omitempty"`
+	Content                   *PostContent        `json:"content,omitempty"`
+	LifecycleState            string              `json:"lifecycleState,omitempty"`
 	LifecycleStateInfo        *LifecycleStateInfo `json:"lifecycleStateInfo,omitempty"`
-	IsRepostDisabledByAuthor  bool               `json:"isRepostDisabledByAuthor,omitempty"`
-	IsReshareDisabledByAuthor bool               `json:"isReshareDisabledByAuthor,omitempty"`
-	LastModifiedAt            int64              `json:"lastModifiedAt,omitempty"`
-	PublishedAt               int64              `json:"publishedAt,omitempty"`
-	CreatedAt                 int64              `json:"createdAt,omitempty"`
-	Id                        string             `json:"id,omitempty"`
+	IsRepostDisabledByAuthor  bool                `json:"isRepostDisabledByAuthor,omitempty"`
+	IsReshareDisabledByAuthor bool                `json:"isReshareDisabledByAuthor,omitempty"`
+	LastModifiedAt            int64               `json:"lastModifiedAt,omitempty"`
+	PublishedAt               int64               `json:"publishedAt,omitempty"`
+	CreatedAt                 int64               `json:"createdAt,omitempty"`
+	Id                        string              `json:"id,omitempty"`
 }
 
 type PostDistribution struct {
-	FeedDistribution               string   `json:"feedDistribution"`
-	TargetEntities                 []string `json:"targetEntities,omitempty"`
-	ThirdPartyDistributionChannels []string `json:"thirdPartyDistributionChannels,omitempty"`
+	FeedDistribution               string               `json:"feedDistribution"`
+	TargetEntities                 []DistributionTarget `json:"targetEntities,omitempty"`
+	ThirdPartyDistributionChannels []string             `json:"thirdPartyDistributionChannels,omitempty"`
 }
 
 type PostContent struct {
@@ -43,6 +43,24 @@ type PostContentMedia struct {
 
 type LifecycleStateInfo struct {
 	IsEditedByAuthor bool `json:"isEditedByAuthor"`
+}
+
+type DistributionTarget struct {
+	ConnectionsOnly  *bool     `json:"connectionsOnly"`
+	Industries       *[]string `json:"industries"`
+	InterfaceLocales *[]Locale `json:"interfaceLocales"`
+	JobFunctions     *[]string `json:"jobFunctions"`
+	GeoLocations     *[]string `json:"geoLocations"`
+	Seniorities      *[]string `json:"seniorities"`
+	StaffCountRanges *[]string `json:"staffCountRanges"`
+	VisibleToGuest   *bool     `json:"visibleToGuest"`
+}
+
+type Locale struct {
+	Locale struct {
+		Country  string `json:"country"`
+		Language string `json:"language"`
+	} `json:"locale"`
 }
 
 func (service *Service) CreatePost(post *Post) *errortools.Error {
