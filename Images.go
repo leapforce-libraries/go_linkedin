@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-type InitializeUploadRequest struct {
+type InitializeUploadImageRequest struct {
 	Owner string `json:"owner"`
 }
 
-type InitializeUploadResponse struct {
+type InitializeUploadImageResponse struct {
 	Value struct {
 		UploadUrlExpiresAt int64  `json:"uploadUrlExpiresAt"`
 		UploadUrl          string `json:"uploadUrl"`
@@ -19,16 +19,16 @@ type InitializeUploadResponse struct {
 	} `json:"value"`
 }
 
-func (service *Service) InitializeUpload(owner string) (*InitializeUploadResponse, *errortools.Error) {
+func (service *Service) InitializeUploadImage(owner string) (*InitializeUploadImageResponse, *errortools.Error) {
 	if service == nil {
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
 	var initializeUploadRequest = struct {
-		InitializeUploadRequest `json:"initializeUploadRequest"`
-	}{InitializeUploadRequest{owner}}
+		InitializeUploadImageRequest `json:"initializeUploadRequest"`
+	}{InitializeUploadImageRequest{owner}}
 
-	var initializeUploadResponse InitializeUploadResponse
+	var initializeUploadResponse InitializeUploadImageResponse
 
 	var header = http.Header{}
 	header.Set("X-Restli-Protocol-Version", "2.0.0")
@@ -48,7 +48,7 @@ func (service *Service) InitializeUpload(owner string) (*InitializeUploadRespons
 	return &initializeUploadResponse, nil
 }
 
-func (service *Service) Upload(putUrl string, imageUrl string) *errortools.Error {
+func (service *Service) UploadImage(putUrl string, imageUrl string) *errortools.Error {
 	if service == nil {
 		return errortools.ErrorMessage("Service pointer is nil")
 	}
