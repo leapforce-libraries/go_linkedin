@@ -33,12 +33,22 @@ type PostDistribution struct {
 }
 
 type PostContent struct {
-	Media PostContentMedia `json:"media"`
+	Media      *PostContentMedia      `json:"media,omitempty"`
+	MultiImage *PostContentMultiImage `json:"multiImage,omitempty"`
 }
 
 type PostContentMedia struct {
 	Title string `json:"title"`
 	Id    string `json:"id"`
+}
+
+type PostContentMultiImage struct {
+	Images []PostContentMultiImageImage `json:"images"`
+}
+
+type PostContentMultiImageImage struct {
+	Id      string `json:"id"`
+	AltText string `json:"altText"`
 }
 
 type LifecycleStateInfo struct {
