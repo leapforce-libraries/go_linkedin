@@ -61,40 +61,51 @@ func (service *Service) InitializeUploadVideo(req *InitializeUploadVideoRequest)
 	return &initializeUploadVideoResponse, nil
 }
 
-func (service *Service) UploadVideo(putUrl string, videoUrl string) (string, *errortools.Error) {
+func (service *Service) UploadVideo(uploadInstructions *[]InitializeUploadVideoInstruction, videoUrl string) (*[]string, *errortools.Error) {
 	if service == nil {
-		return "", errortools.ErrorMessage("Service pointer is nil")
+		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
 	resp, err := http.Get(videoUrl)
 	if err != nil {
-		return "", errortools.ErrorMessage(err)
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	defer resp.Body.Close()
 
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", errortools.ErrorMessage(err)
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	var header = http.Header{}
-	header.Set("Content-Type", http.DetectContentType(bytes))
+	header.Set("Content-Type", "application/octet-stream")
 
-	requestConfig := go_http.RequestConfig{
-		Method:            http.MethodPut,
-		Url:               putUrl,
-		BodyRaw:           &bytes,
-		NonDefaultHeaders: &header,
+	var etags []string
+
+	for _, uploadInstruction := range *uploadInstructions {
+		b := bytes[uploadInstruction.FirstByte:uploadInstruction.LastByte]
+
+		requestConfig := go_http.RequestConfig{
+			Method:            http.MethodPut,
+			Url:               uploadInstruction.UploadUrl,
+			BodyRaw:           &b,
+			NonDefaultHeaders: &header,
+		}
+		_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		if e != nil {
+			return nil, e
+		}
+
+		etag := resp.Header.Get("etag")
+		if etag == "" {
+			return nil, errortools.ErrorMessage("UploadVideo did not return etag header")
+		}
+
+		etags = append(etags, etag)
 	}
-	_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
 
-	etag := resp.Header.Get("etag")
-	if etag == "" {
-		return "", errortools.ErrorMessage("UploadVideo did not return etag header")
-	}
-
-	return etag, e
+	return &etags, nil
 }
 
 type FinalizeUploadVideoRequest struct {
