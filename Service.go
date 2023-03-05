@@ -35,7 +35,6 @@ const (
 )
 
 // LinkedIn stores LinkedIn configuration
-//
 type Service struct {
 	clientId      string
 	oAuth2Service *oauth2.Service
@@ -49,7 +48,6 @@ type ServiceConfig struct {
 }
 
 // NewService return new instance of LinkedIn struct
-//
 func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	if serviceConfig == nil {
 		return nil, errortools.ErrorMessage("ServiceConfig must not be a nil pointer")
@@ -120,4 +118,9 @@ func (service Service) ApiCallCount() int64 {
 
 func (service *Service) ApiReset() {
 	service.oAuth2Service.ApiReset()
+}
+
+type CreatedModified struct {
+	Actor string `json:"actor"`
+	Time  int64  `json:"time"`
 }
