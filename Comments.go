@@ -14,16 +14,17 @@ type CommentsResponse struct {
 }
 
 type Comment struct {
-	Actor         string              `json:"actor"`
-	Created       CreatedModified     `json:"created"`
-	Id            string              `json:"id"`
-	LastModified  CreatedModified     `json:"lastModified"`
-	ParentComment string              `json:"parentComment"`
-	Message       CommentMessage      `json:"message"`
-	Urn           string              `json:"$URN"`
-	LikesSummary  CommentLikesSummary `json:"likesSummary"`
-	Content       []CommentContent    `json:"content"`
-	Object        string              `json:"object"`
+	Actor         *string              `json:"actor,omitempty"`
+	Agent         *string              `json:"agent,omitempty"`
+	Created       *CreatedModified     `json:"created,omitempty"`
+	Id            *string              `json:"id,omitempty"`
+	LastModified  *CreatedModified     `json:"lastModified,omitempty"`
+	ParentComment *string              `json:"parentComment,omitempty"`
+	Message       *CommentMessage      `json:"message,omitempty"`
+	Urn           *string              `json:"$URN,omitempty"`
+	LikesSummary  *CommentLikesSummary `json:"likesSummary,omitempty"`
+	Content       *[]CommentContent    `json:"content,omitempty"`
+	Object        *string              `json:"object,omitempty"`
 }
 
 type CommentLikesSummary struct {
@@ -34,8 +35,8 @@ type CommentLikesSummary struct {
 }
 
 type CommentMessage struct {
-	Attributes []CommentAttribute `json:"attributes"`
-	Text       string             `json:"text"`
+	Attributes *[]CommentAttribute `json:"attributes,omitempty"`
+	Text       string              `json:"text"`
 }
 
 type CommentAttribute struct {
@@ -93,4 +94,34 @@ func (service *Service) GetComments(urn string) (*[]Comment, *errortools.Error) 
 	}
 
 	return &comments, nil
+}
+
+func (service *Service) CreateComment(urn string, comment *Comment) (*Comment, *http.Response, *errortools.Error) {
+	if service == nil {
+		return nil, nil, errortools.ErrorMessage("Service pointer is nil")
+	}
+	if comment == nil {
+		return nil, nil, errortools.ErrorMessage("Comment pointer is nil")
+	}
+
+	var newComment Comment
+
+	url := service.urlRest(fmt.Sprintf("socialActions/%s/comments", urn))
+
+	var header = http.Header{}
+	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
+
+	requestConfig := go_http.RequestConfig{
+		Method:            http.MethodPost,
+		Url:               url,
+		BodyModel:         comment,
+		ResponseModel:     &newComment,
+		NonDefaultHeaders: &header,
+	}
+	_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	if e != nil {
+		return nil, resp, e
+	}
+
+	return &newComment, resp, nil
 }

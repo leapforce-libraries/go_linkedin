@@ -73,12 +73,12 @@ type Locale struct {
 	} `json:"locale"`
 }
 
-func (service *Service) CreatePost(post *Post) *errortools.Error {
+func (service *Service) CreatePost(post *Post) (string, *errortools.Error) {
 	if service == nil {
-		return errortools.ErrorMessage("Service pointer is nil")
+		return "", errortools.ErrorMessage("Service pointer is nil")
 	}
 	if post == nil {
-		return errortools.ErrorMessage("Post pointer is nil")
+		return "", errortools.ErrorMessage("Post pointer is nil")
 	}
 
 	var header = http.Header{}
@@ -90,9 +90,17 @@ func (service *Service) CreatePost(post *Post) *errortools.Error {
 		BodyModel:         post,
 		NonDefaultHeaders: &header,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	if e != nil {
+		return "", e
+	}
 
-	return e
+	var postId = resp.Header.Get("X-Linkedin-Id")
+	if postId == "" {
+		return "", errortools.ErrorMessage("CreatePost did not return PostID in header")
+	}
+
+	return postId, nil
 }
 
 type PostsByOwnerConfig struct {
