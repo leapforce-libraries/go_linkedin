@@ -12,18 +12,28 @@ import (
 
 type Post struct {
 	Author                    string              `json:"author,omitempty"`
+	AdContext                 *PostAdContext      `json:"adContext,omitempty"`
 	Commentary                string              `json:"commentary,omitempty"`
-	Visibility                string              `json:"visibility,omitempty"`
-	Distribution              PostDistribution    `json:"distribution,omitempty"`
+	Container                 string              `json:"container,omitempty"`
 	Content                   *PostContent        `json:"content,omitempty"`
-	LifecycleState            string              `json:"lifecycleState,omitempty"`
-	LifecycleStateInfo        *LifecycleStateInfo `json:"lifecycleStateInfo,omitempty"`
-	IsRepostDisabledByAuthor  bool                `json:"isRepostDisabledByAuthor,omitempty"`
+	ContentCallToActionLabel  string              `json:"contentCallToActionLabel,omitempty"`
+	CreatedAt                 int64               `json:"createdAt,omitempty"`
+	Distribution              PostDistribution    `json:"distribution,omitempty"`
+	Id                        string              `json:"id,omitempty"`
 	IsReshareDisabledByAuthor bool                `json:"isReshareDisabledByAuthor,omitempty"`
 	LastModifiedAt            int64               `json:"lastModifiedAt,omitempty"`
+	LifecycleState            string              `json:"lifecycleState,omitempty"`
+	LifecycleStateInfo        *LifecycleStateInfo `json:"lifecycleStateInfo,omitempty"`
 	PublishedAt               int64               `json:"publishedAt,omitempty"`
-	CreatedAt                 int64               `json:"createdAt,omitempty"`
-	Id                        string              `json:"id,omitempty"`
+	ReshareContext            *PostReshareContext `json:"reshareContext,omitempty"`
+	Visibility                string              `json:"visibility,omitempty"`
+}
+
+type PostAdContext struct {
+	DscStatus    string `json:"dscStatus"`
+	DscAdType    string `json:"dscAdType"`
+	IsDsc        bool   `json:"isDsc"`
+	DscAdAccount string `json:"dscAdAccount"`
 }
 
 type PostDistribution struct {
@@ -53,6 +63,10 @@ type PostContentMultiImageImage struct {
 
 type LifecycleStateInfo struct {
 	IsEditedByAuthor bool `json:"isEditedByAuthor"`
+}
+
+type PostReshareContext struct {
+	Parent string `json:"parent"`
 }
 
 type DistributionTarget struct {
