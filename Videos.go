@@ -44,8 +44,8 @@ func (service *Service) InitializeUploadVideo(req *InitializeUploadVideoRequest)
 	var initializeUploadVideoResponse InitializeUploadVideoResponse
 
 	var header = http.Header{}
-	header.Set("X-Restli-Protocol-Version", "2.0.0")
-	header.Set("LinkedIn-Version", "202209")
+	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
+	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
 
 	requestConfig := go_http.RequestConfig{
 		Method:            http.MethodPost,
@@ -124,8 +124,8 @@ func (service *Service) FinalizeUploadVideo(finalizeUploadVideoRequest *Finalize
 	}{*finalizeUploadVideoRequest}
 
 	var header = http.Header{}
-	header.Set("X-Restli-Protocol-Version", "2.0.0")
-	header.Set("LinkedIn-Version", "202209")
+	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
+	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
 
 	requestConfig := go_http.RequestConfig{
 		Method:            http.MethodPost,

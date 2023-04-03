@@ -215,7 +215,7 @@ func (service *Service) Posts(urns []string) (*[]Post, *errortools.Error) {
 			continue
 		}
 		_urnsMap[urn] = true
-		_urns = append(_urns, urn)
+		_urns = append(_urns, url.QueryEscape(urn))
 	}
 
 	for {
@@ -232,11 +232,13 @@ func (service *Service) Posts(urns []string) (*[]Post, *errortools.Error) {
 		postsResponse := PostsResponse{}
 
 		var header = http.Header{}
+		header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
+		header.Set("X-RestLi-Method", "BATCH_GET")
 		header.Set(linkedInVersionHeader, defaultLinkedInVersion)
 
 		requestConfig := go_http.RequestConfig{
 			Method:            http.MethodGet,
-			Url:               service.url(fmt.Sprintf("posts?ids=List(%s)", strings.Join(_urnsBatch, ","))),
+			Url:               service.urlRest(fmt.Sprintf("posts?ids=List(%s)", strings.Join(_urnsBatch, ","))),
 			ResponseModel:     &postsResponse,
 			NonDefaultHeaders: &header,
 		}

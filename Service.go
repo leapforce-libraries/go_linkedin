@@ -13,25 +13,27 @@ import (
 )
 
 const (
-	apiName                string = "LinkedIn"
-	apiUrl                 string = "https://api.linkedin.com/v2"
-	apiUrlRest             string = "https://api.linkedin.com/rest"
-	apiUrlWithoutVersion   string = "https://api.linkedin.com"
-	authUrl                string = "https://www.linkedin.com/oauth/v2/authorization"
-	tokenUrl               string = "https://www.linkedin.com/oauth/v2/accessToken"
-	linkedInVersionHeader  string = "LinkedIn-Version"
-	defaultLinkedInVersion string = "202210"
-	tokenHttpMethod        string = http.MethodPost
-	defaultRedirectUrl     string = "http://localhost:8080/oauth/redirect"
-	CampaignUrnPrefix      string = "urn:li:sponsoredCampaign:"
-	CreativeUrnPrefix      string = "urn:li:sponsoredCreative:"
-	InMailContentUrnPrefix string = "urn:li:adInMailContent:"
-	OrganizationUrnPrefix  string = "urn:li:organization:"
-	ShareUrnPrefix         string = "urn:li:share:"
-	UgcPostUrnPrefix       string = "urn:li:ugcPost:"
-	PostUrnPrefix          string = "urn:li:post:"
-	countDefault           uint   = 10
-	maxUrnsPerCall         uint   = 50
+	apiName                      string = "LinkedIn"
+	apiUrl                       string = "https://api.linkedin.com/v2"
+	apiUrlRest                   string = "https://api.linkedin.com/rest"
+	apiUrlWithoutVersion         string = "https://api.linkedin.com"
+	authUrl                      string = "https://www.linkedin.com/oauth/v2/authorization"
+	tokenUrl                     string = "https://www.linkedin.com/oauth/v2/accessToken"
+	linkedInVersionHeader        string = "LinkedIn-Version"
+	defaultLinkedInVersion       string = "202210"
+	restliProtocolVersionHeader  string = "X-Restli-Protocol-Version"
+	defaultRestliProtocolVersion string = "2.0.0"
+	tokenHttpMethod              string = http.MethodPost
+	defaultRedirectUrl           string = "http://localhost:8080/oauth/redirect"
+	CampaignUrnPrefix            string = "urn:li:sponsoredCampaign:"
+	CreativeUrnPrefix            string = "urn:li:sponsoredCreative:"
+	InMailContentUrnPrefix       string = "urn:li:adInMailContent:"
+	OrganizationUrnPrefix        string = "urn:li:organization:"
+	ShareUrnPrefix               string = "urn:li:share:"
+	UgcPostUrnPrefix             string = "urn:li:ugcPost:"
+	PostUrnPrefix                string = "urn:li:post:"
+	countDefault                 uint   = 10
+	maxUrnsPerCall               uint   = 50
 )
 
 // LinkedIn stores LinkedIn configuration

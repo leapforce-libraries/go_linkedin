@@ -128,7 +128,7 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		return nil, errortools.ErrorMessage("GetAdAnalyticsConfig must not be nil")
 	}
 
-	var values url.Values = url.Values{}
+	var values = url.Values{}
 
 	values.Set("q", "analytics")
 	values.Set("pivot", string(config.Pivot))

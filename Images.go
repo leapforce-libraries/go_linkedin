@@ -31,8 +31,8 @@ func (service *Service) InitializeUploadImage(owner string) (*InitializeUploadIm
 	var initializeUploadResponse InitializeUploadImageResponse
 
 	var header = http.Header{}
-	header.Set("X-Restli-Protocol-Version", "2.0.0")
-	header.Set("LinkedIn-Version", "202209")
+	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
+	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
 
 	requestConfig := go_http.RequestConfig{
 		Method:            http.MethodPost,
