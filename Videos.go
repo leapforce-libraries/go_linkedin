@@ -3,7 +3,7 @@ package linkedin
 import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -73,7 +73,7 @@ func (service *Service) UploadVideo(uploadInstructions *[]InitializeUploadVideoI
 
 	defer resp.Body.Close()
 
-	bytes, err := ioutil.ReadAll(resp.Body)
+	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, errortools.ErrorMessage(err)
 	}
@@ -84,7 +84,7 @@ func (service *Service) UploadVideo(uploadInstructions *[]InitializeUploadVideoI
 	var etags []string
 
 	for _, uploadInstruction := range *uploadInstructions {
-		b := bytes[uploadInstruction.FirstByte:uploadInstruction.LastByte]
+		b := bytes[uploadInstruction.FirstByte : uploadInstruction.LastByte+1]
 
 		requestConfig := go_http.RequestConfig{
 			Method:            http.MethodPut,

@@ -3,7 +3,7 @@ package linkedin
 import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -60,7 +60,7 @@ func (service *Service) UploadImage(putUrl string, imageUrl string) *errortools.
 
 	defer resp.Body.Close()
 
-	bytes, err := ioutil.ReadAll(resp.Body)
+	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return errortools.ErrorMessage(err)
 	}
