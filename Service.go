@@ -2,15 +2,14 @@ package linkedin
 
 import (
 	"fmt"
-	go_http "github.com/leapforce-libraries/go_http"
-	"net/http"
-	"strconv"
-	"strings"
-
 	errortools "github.com/leapforce-libraries/go_errortools"
+	go_http "github.com/leapforce-libraries/go_http"
 	oauth2 "github.com/leapforce-libraries/go_oauth2"
 	go_token "github.com/leapforce-libraries/go_oauth2/token"
 	tokensource "github.com/leapforce-libraries/go_oauth2/tokensource"
+	"net/http"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -36,10 +35,10 @@ const (
 	maxUrnsPerCall               uint   = 50
 )
 
-// LinkedIn stores LinkedIn configuration
 type Service struct {
 	clientId      string
 	oAuth2Service *oauth2.Service
+	errorResponse *ErrorResponse
 }
 
 type ServiceConfig struct {
@@ -75,7 +74,10 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 		return nil, e
 	}
 
-	return &Service{serviceConfig.ClientId, oAuth2Service}, nil
+	return &Service{
+		clientId:      serviceConfig.ClientId,
+		oAuth2Service: oAuth2Service,
+	}, nil
 }
 
 func (service *Service) versionedHttpRequest(requestConfig *go_http.RequestConfig, linkedInVersion *string) (*http.Request, *http.Response, *errortools.Error) {
@@ -91,7 +93,18 @@ func (service *Service) versionedHttpRequest(requestConfig *go_http.RequestConfi
 
 	requestConfig.NonDefaultHeaders = headers
 
-	return service.oAuth2Service.HttpRequest(requestConfig)
+	// add error model
+	service.errorResponse = &ErrorResponse{}
+	requestConfig.ErrorModel = service.errorResponse
+
+	request, response, e := service.oAuth2Service.HttpRequest(requestConfig)
+	if e != nil {
+		if service.errorResponse.Message != "" {
+			e.SetMessage(service.errorResponse.Message)
+		}
+	}
+
+	return request, response, e
 }
 
 /*
