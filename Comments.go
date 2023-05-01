@@ -62,7 +62,7 @@ func (service *Service) GetComments(urn string) (*[]Comment, *errortools.Error) 
 
 	comments := []Comment{}
 
-	url := service.url(fmt.Sprintf("socialActions/%s/comments", urn))
+	url := service.urlRest(fmt.Sprintf("socialActions/%s/comments", urn))
 
 	for {
 		commentsResponse := CommentsResponse{}
@@ -72,7 +72,7 @@ func (service *Service) GetComments(urn string) (*[]Comment, *errortools.Error) 
 			Url:           url,
 			ResponseModel: &commentsResponse,
 		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
 			return nil, e
 		}
@@ -84,7 +84,7 @@ func (service *Service) GetComments(urn string) (*[]Comment, *errortools.Error) 
 		url = ""
 		for _, l := range commentsResponse.Paging.Links {
 			if l.Rel == "next" {
-				url = fmt.Sprintf("%s%s", apiUrlWithoutVersion, l.Href)
+				url = fmt.Sprintf("%s%s", apiUrl, l.Href)
 				break
 			}
 		}
@@ -118,7 +118,7 @@ func (service *Service) CreateComment(urn string, comment *Comment) (*Comment, *
 		ResponseModel:     &newComment,
 		NonDefaultHeaders: &header,
 	}
-	_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, resp, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, resp, e
 	}

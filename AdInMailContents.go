@@ -56,10 +56,10 @@ func (service *Service) GetAdInMailContent(adInMailContentId int64) (*AdInMailCo
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.url(fmt.Sprintf("adInMailContentsV2/%v", adInMailContentId)),
+		Url:           service.urlRest(fmt.Sprintf("adInMailContents/%v", adInMailContentId)),
 		ResponseModel: &adInMailContent,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}

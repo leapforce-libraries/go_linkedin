@@ -38,10 +38,10 @@ func (service *Service) GetFollowerStatsTimebound(organizationId int64, startDat
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.url(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
+		Url:           service.urlRest(fmt.Sprintf("organizationalEntityFollowerStatistics?%s", values.Encode())),
 		ResponseModel: &followerStatsResponse,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}

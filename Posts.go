@@ -104,7 +104,7 @@ func (service *Service) CreatePost(post *Post) (string, *errortools.Error) {
 		BodyModel:         post,
 		NonDefaultHeaders: &header,
 	}
-	_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, resp, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return "", e
 	}
@@ -167,7 +167,7 @@ func (service *Service) PostsByOwner(cfg *PostsByOwnerConfig) (*[]Post, *errorto
 			ResponseModel:     &postsResponse,
 			NonDefaultHeaders: &header,
 		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
 			return nil, e
 		}
@@ -234,7 +234,6 @@ func (service *Service) Posts(urns []string) (*[]Post, *errortools.Error) {
 		var header = http.Header{}
 		header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
 		header.Set("X-RestLi-Method", "BATCH_GET")
-		header.Set(linkedInVersionHeader, defaultLinkedInVersion)
 
 		requestConfig := go_http.RequestConfig{
 			Method:            http.MethodGet,
@@ -242,7 +241,7 @@ func (service *Service) Posts(urns []string) (*[]Post, *errortools.Error) {
 			ResponseModel:     &postsResponse,
 			NonDefaultHeaders: &header,
 		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
 			return nil, e
 		}

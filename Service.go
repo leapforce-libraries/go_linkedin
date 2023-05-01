@@ -2,6 +2,7 @@ package linkedin
 
 import (
 	"fmt"
+	go_http "github.com/leapforce-libraries/go_http"
 	"net/http"
 	"strconv"
 	"strings"
@@ -14,9 +15,8 @@ import (
 
 const (
 	apiName                      string = "LinkedIn"
-	apiUrl                       string = "https://api.linkedin.com/v2"
 	apiUrlRest                   string = "https://api.linkedin.com/rest"
-	apiUrlWithoutVersion         string = "https://api.linkedin.com"
+	apiUrl                       string = "https://api.linkedin.com"
 	authUrl                      string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl                     string = "https://www.linkedin.com/oauth/v2/accessToken"
 	linkedInVersionHeader        string = "LinkedIn-Version"
@@ -78,9 +78,26 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	return &Service{serviceConfig.ClientId, oAuth2Service}, nil
 }
 
+func (service *Service) versionedHttpRequest(requestConfig *go_http.RequestConfig, linkedInVersion *string) (*http.Request, *http.Response, *errortools.Error) {
+	headers := requestConfig.NonDefaultHeaders
+	if headers == nil {
+		headers = &http.Header{}
+	}
+	version := defaultLinkedInVersion
+	if linkedInVersion != nil {
+		version = *linkedInVersion
+	}
+	(*headers).Set(linkedInVersionHeader, version)
+
+	requestConfig.NonDefaultHeaders = headers
+
+	return service.oAuth2Service.HttpRequest(requestConfig)
+}
+
+/*
 func (service *Service) url(path string) string {
 	return fmt.Sprintf("%s/%s", apiUrl, path)
-}
+}*/
 
 func (service *Service) urlRest(path string) string {
 	return fmt.Sprintf("%s/%s", apiUrlRest, path)

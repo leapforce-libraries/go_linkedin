@@ -19,20 +19,12 @@ func (service *Service) GetOrganizationNetworkSizes(organizationId int64, linked
 
 	organizationNetworkSizes := OrganizationNetworkSizes{}
 
-	headers := http.Header{}
-	version := defaultLinkedInVersion
-	if linkedInVersion != nil {
-		version = *linkedInVersion
-	}
-	headers.Set(linkedInVersionHeader, version)
-
 	requestConfig := go_http.RequestConfig{
-		Method:            http.MethodGet,
-		Url:               service.urlRest(fmt.Sprintf("networkSizes/urn:li:organization:%v?edgeType=CompanyFollowedByMember", organizationId)),
-		ResponseModel:     &organizationNetworkSizes,
-		NonDefaultHeaders: &headers,
+		Method:        http.MethodGet,
+		Url:           service.urlRest(fmt.Sprintf("networkSizes/urn:li:organization:%v?edgeType=CompanyFollowedByMember", organizationId)),
+		ResponseModel: &organizationNetworkSizes,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, linkedInVersion)
 	if e != nil {
 		return nil, e
 	}

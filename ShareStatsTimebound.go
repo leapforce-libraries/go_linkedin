@@ -40,10 +40,10 @@ func (service *Service) GetShareStatsTimebound(organizationId int64, startDateUn
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
+		Url:           service.urlRest(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &shareStatsResponse,
 	}
-	_, response, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, response, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, response, e
 	}

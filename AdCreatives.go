@@ -190,10 +190,10 @@ func (service *Service) SearchAdCreatives(config *SearchAdCreativesConfig) (*[]A
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			Url:           service.url(fmt.Sprintf("adCreativesV2?%s", values.Encode())),
+			Url:           service.urlRest(fmt.Sprintf("adCreatives?%s", values.Encode())),
 			ResponseModel: &adCreativesResponse,
 		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
 			return nil, e
 		}

@@ -99,10 +99,10 @@ func (service *Service) SearchAdCampaignGroups(config *SearchAdCampaignGroupsCon
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			Url:           service.url(fmt.Sprintf("adCampaignGroupsV2?%s", values.Encode())),
+			Url:           service.urlRest(fmt.Sprintf("adCampaignGroups?%s", values.Encode())),
 			ResponseModel: &adCampaignGroupsResponse,
 		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
 			return nil, e
 		}

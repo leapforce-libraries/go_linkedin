@@ -43,18 +43,13 @@ func (service *Service) InitializeUploadVideo(req *InitializeUploadVideoRequest)
 
 	var initializeUploadVideoResponse InitializeUploadVideoResponse
 
-	var header = http.Header{}
-	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
-	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
-
 	requestConfig := go_http.RequestConfig{
-		Method:            http.MethodPost,
-		Url:               service.urlRest("videos?action=initializeUpload"),
-		BodyModel:         initializeUploadVideoRequest,
-		ResponseModel:     &initializeUploadVideoResponse,
-		NonDefaultHeaders: &header,
+		Method:        http.MethodPost,
+		Url:           service.urlRest("videos?action=initializeUpload"),
+		BodyModel:     initializeUploadVideoRequest,
+		ResponseModel: &initializeUploadVideoResponse,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}
@@ -125,7 +120,6 @@ func (service *Service) FinalizeUploadVideo(finalizeUploadVideoRequest *Finalize
 
 	var header = http.Header{}
 	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
-	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
 
 	requestConfig := go_http.RequestConfig{
 		Method:            http.MethodPost,
@@ -133,7 +127,7 @@ func (service *Service) FinalizeUploadVideo(finalizeUploadVideoRequest *Finalize
 		BodyModel:         finalizeUploadVideoRequest_,
 		NonDefaultHeaders: &header,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 
 	return e
 }

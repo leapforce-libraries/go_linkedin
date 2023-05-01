@@ -114,10 +114,10 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			Url:           service.url(fmt.Sprintf("adAccountsV2?%s", values.Encode())),
+			Url:           service.urlRest(fmt.Sprintf("adAccounts?%s", values.Encode())),
 			ResponseModel: &adAccountsResponse,
 		}
-		_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
 			return nil, e
 		}

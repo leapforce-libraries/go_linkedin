@@ -28,10 +28,10 @@ func (service *Service) GetOrganizationAcls() (*[]OrganizationAcl, *errortools.E
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.url("organizationAcls?q=roleAssignee"),
+		Url:           service.urlRest("organizationAcls?q=roleAssignee"),
 		ResponseModel: &response,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}

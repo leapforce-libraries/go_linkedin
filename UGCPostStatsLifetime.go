@@ -35,10 +35,10 @@ func (service *Service) GetUgcPostStatsLifetime(organizationId int64, ugcPostIds
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.url(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
+		Url:           service.urlRest(fmt.Sprintf("organizationalEntityShareStatistics?%s", values.Encode())),
 		ResponseModel: &ugcPostStatsResponse,
 	}
-	_, response, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, response, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, response, e
 	}

@@ -23,10 +23,10 @@ func (service *Service) GetOrganization(organizationId int64) (*Organization, *e
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.url(fmt.Sprintf("organizations/%v", organizationId)),
+		Url:           service.urlRest(fmt.Sprintf("organizations/%v", organizationId)),
 		ResponseModel: &organization,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}

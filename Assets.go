@@ -3,7 +3,7 @@ package linkedin
 import (
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -90,7 +90,7 @@ func (service *Service) RegisterUploadAsset(req *RegisterUploadAssetRequest) (*R
 		ResponseModel:     &registerUploadAssetResponse,
 		NonDefaultHeaders: &header,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}
@@ -109,7 +109,7 @@ func (service *Service) UploadAsset(putUrl string, url string) (string, *errorto
 
 	defer resp.Body.Close()
 
-	bytes, err := ioutil.ReadAll(resp.Body)
+	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", errortools.ErrorMessage(err)
 	}
@@ -123,7 +123,7 @@ func (service *Service) UploadAsset(putUrl string, url string) (string, *errorto
 		BodyRaw:           &bytes,
 		NonDefaultHeaders: &header,
 	}
-	_, resp, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, resp, e := service.versionedHttpRequest(&requestConfig, nil)
 
 	etag := resp.Header.Get("etag")
 
@@ -156,7 +156,7 @@ func (service *Service) CompleteMultipartUploadAsset(completeMultipartUploadAsse
 		Url:       service.urlRest("assets?action=completeMultiPartUpload"),
 		BodyModel: completeMultipartUploadAssetRequest_,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 
 	return e
 }
