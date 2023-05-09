@@ -129,6 +129,9 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 	}
 
 	var values = url.Values{}
+	var itemType string
+	var items []string
+	var itemsPerBatch = 20
 
 	values.Set("q", "analytics")
 	values.Set("pivot", string(config.Pivot))
@@ -147,50 +150,79 @@ func (service *Service) GetAdAnalytics(config *GetAdAnalyticsConfig) (*[]AdAnaly
 		values.Set("campaignType", string(*config.CampaignType))
 	}
 	if config.Shares != nil {
-		for i, share := range *config.Shares {
-			values.Set(fmt.Sprintf("shares[%v]", i), share)
+		itemType = "shares"
+		for _, share := range *config.Shares {
+			items = append(items, share)
+			//itemValues.Set(fmt.Sprintf("shares", i), share)
 		}
-	}
-	if config.Campaigns != nil {
-		for i, campaign := range *config.Campaigns {
-			values.Set(fmt.Sprintf("campaigns[%v]", i), campaign)
+	} else if config.Campaigns != nil {
+		itemType = "campaigns"
+		for _, campaign := range *config.Campaigns {
+			items = append(items, campaign)
+			//values.Set(fmt.Sprintf("campaigns[%v]", i), campaign)
 		}
-	}
-	if config.Creatives != nil {
-		for i, creative := range *config.Creatives {
-			values.Set(fmt.Sprintf("creatives[%v]", i), creative)
+	} else if config.Creatives != nil {
+		itemType = "creatives"
+		for _, creative := range *config.Creatives {
+			items = append(items, creative)
+			//.Set(fmt.Sprintf("creatives[%v]", i), creative)
 		}
-	}
-	if config.CampaignGroups != nil {
-		for i, campaignGroup := range *config.CampaignGroups {
-			values.Set(fmt.Sprintf("campaignGroups[%v]", i), campaignGroup)
+	} else if config.CampaignGroups != nil {
+		itemType = "campaignGroups"
+		for _, campaignGroup := range *config.CampaignGroups {
+			items = append(items, campaignGroup)
+			//values.Set(fmt.Sprintf("campaignGroups[%v]", i), campaignGroup)
 		}
-	}
-	if config.Accounts != nil {
-		for i, account := range *config.Accounts {
-			values.Set(fmt.Sprintf("accounts[%v]", i), account)
+	} else if config.Accounts != nil {
+		itemType = "accounts"
+		for _, account := range *config.Accounts {
+			items = append(items, account)
+			//values.Set(fmt.Sprintf("accounts[%v]", i), account)
 		}
-	}
-	if config.Companies != nil {
-		for i, company := range *config.Companies {
-			values.Set(fmt.Sprintf("companies[%v]", i), company)
+	} else if config.Companies != nil {
+		itemType = "companies"
+		for _, company := range *config.Companies {
+			items = append(items, company)
+			//values.Set(fmt.Sprintf("companies[%v]", i), company)
 		}
 	}
 	if config.Fields != nil {
 		values.Set("fields", strings.Join(*config.Fields, ","))
 	}
 
-	adAnalyticsResponse := AdAnalyticsResponse{}
+	var adAnalytics []AdAnalytics
 
-	requestConfig := go_http.RequestConfig{
-		Method:        http.MethodGet,
-		Url:           service.urlRest(fmt.Sprintf("adAnalytics?%s", values.Encode())),
-		ResponseModel: &adAnalyticsResponse,
-	}
-	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
-	if e != nil {
-		return nil, e
+	for {
+		var values_ = values
+
+		for i, item := range items {
+			if i == itemsPerBatch {
+				break
+			}
+
+			values_.Set(fmt.Sprintf("%s[%v]", itemType, i), item)
+		}
+
+		adAnalyticsResponse := AdAnalyticsResponse{}
+
+		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
+			Url:           service.urlRest(fmt.Sprintf("adAnalytics?%s", values_.Encode())),
+			ResponseModel: &adAnalyticsResponse,
+		}
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
+		if e != nil {
+			return nil, e
+		}
+
+		adAnalytics = append(adAnalytics, adAnalyticsResponse.Elements...)
+
+		if len(items) <= itemsPerBatch {
+			break
+		}
+
+		items = items[itemsPerBatch:]
 	}
 
-	return &adAnalyticsResponse.Elements, nil
+	return &adAnalytics, nil
 }
