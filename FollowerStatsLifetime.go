@@ -16,22 +16,21 @@ type FollowerStatsLifetimeResponse struct {
 
 type FollowerStatsLifetime struct {
 	ByAssociationType    []LifetimeFollowerCountsByType `json:"followerCountsByAssociationType"`
-	ByStaffCountRange    []LifetimeFollowerCountsByType `json:"followerCountsByStaffCountRange"`
+	ByGeoCountry         []LifetimeFollowerCountsByType `json:"followerCountsByGeoCountry"`
 	ByFunction           []LifetimeFollowerCountsByType `json:"followerCountsByFunction"`
-	BySeniority          []LifetimeFollowerCountsByType `json:"followerCountsBySeniority"`
 	ByIndustry           []LifetimeFollowerCountsByType `json:"followerCountsByIndustry"`
-	ByRegion             []LifetimeFollowerCountsByType `json:"followerCountsByRegion"`
-	ByCountry            []LifetimeFollowerCountsByType `json:"followerCountsByCountry"`
+	ByGeo                []LifetimeFollowerCountsByType `json:"followerCountsByGeo"`
+	BySeniority          []LifetimeFollowerCountsByType `json:"followerCountsBySeniority"`
+	ByStaffCountRange    []LifetimeFollowerCountsByType `json:"followerCountsByStaffCountRange"`
 	OrganizationalEntity string                         `json:"organizationalEntity"`
 }
 
 type LifetimeFollowerCountsByType struct {
 	FollowerCounts  FollowerCounts `json:"followerCounts"`
 	AssociationType string         `json:"associationType"`
-	Country         string         `json:"country"`
+	Geo             string         `json:"geo"`
 	Function        string         `json:"function"`
 	Industry        string         `json:"industry"`
-	Region          string         `json:"region"`
 	Seniority       string         `json:"seniority"`
 	StaffCountRange string         `json:"staffCountRange"`
 }

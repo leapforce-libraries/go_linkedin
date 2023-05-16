@@ -31,6 +31,7 @@ const (
 	ShareUrnPrefix               string = "urn:li:share:"
 	UgcPostUrnPrefix             string = "urn:li:ugcPost:"
 	PostUrnPrefix                string = "urn:li:post:"
+	GeoUrnPrefix                 string = "urn:li:geo:"
 	countDefault                 uint   = 10
 	maxUrnsPerCall               uint   = 50
 )
@@ -107,10 +108,9 @@ func (service *Service) versionedHttpRequest(requestConfig *go_http.RequestConfi
 	return request, response, e
 }
 
-/*
-func (service *Service) url(path string) string {
-	return fmt.Sprintf("%s/%s", apiUrl, path)
-}*/
+func (service *Service) urlV2(path string) string {
+	return fmt.Sprintf("%s/v2/%s", apiUrl, path)
+}
 
 func (service *Service) urlRest(path string) string {
 	return fmt.Sprintf("%s/%s", apiUrlRest, path)
