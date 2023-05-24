@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.110.2
 	github.com/leapforce-libraries/go_errortools v0.0.0-20230306211452-9ccee0cdafe8
 	github.com/leapforce-libraries/go_http v0.0.0-20230420114702-86cc77fcf983
-	github.com/leapforce-libraries/go_oauth2 v0.0.0-20221214115901-39922a58efbf
+	github.com/leapforce-libraries/go_oauth2 v0.0.0-20230517200805-5f7fa4291c9d
 	github.com/leapforce-libraries/go_types v0.0.0-20230425074203-34c9cae0aa4e
 )
 
@@ -34,8 +34,8 @@ require (
 	github.com/klauspost/asmfmt v1.3.2 // indirect
 	github.com/klauspost/compress v1.15.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
-	github.com/leapforce-libraries/go_google v0.0.0-20221127152331-c262dabbdd2e // indirect
-	github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20220613120507-258e984f5c4f // indirect
+	github.com/leapforce-libraries/go_google v0.0.0-20230207215141-4e03131236a9 // indirect
+	github.com/leapforce-libraries/go_googlecloudstorage v0.0.0-20230307232225-3c80792180ad // indirect
 	github.com/leapforce-libraries/go_integration v0.0.0-20221219180324-1d9ce9d12c4c // indirect
 	github.com/leapforce-libraries/go_utilities v0.0.0-20230320164646-a793abe241b2 // indirect
 	github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8 // indirect

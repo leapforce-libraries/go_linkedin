@@ -34,6 +34,44 @@ type Creative struct {
 
 type CreativeContent struct {
 	Reference string `json:"reference"`
+	TextAd    *struct {
+		Image       string `json:"image"`
+		Description string `json:"description"`
+		Headline    string `json:"headline"`
+		LandingPage string `json:"landingPage"`
+	} `json:"textAd"`
+	Jobs *struct {
+		Logo                   string `json:"logo"`
+		ShowMemberProfilePhoto bool   `json:"showMemberProfilePhoto"`
+		OrganizationName       string `json:"organizationName"`
+		Headline               struct {
+			PreApproved string `json:"preApproved"`
+		} `json:"headline"`
+		ButtonLabel struct {
+			PreApproved string `json:"preApproved"`
+		} `json:"buttonLabel"`
+	} `json:"jobs"`
+	Spotlight *struct {
+		CallToAction           string `json:"callToAction"`
+		Description            string `json:"description"`
+		Headline               string `json:"headline"`
+		LandingPage            string `json:"landingPage"`
+		Logo                   string `json:"logo"`
+		OrganizationName       string `json:"organizationName"`
+		ShowMemberProfilePhoto bool   `json:"showMemberProfilePhoto"`
+	} `json:"spotlight"`
+	Follow *struct {
+		OrganizationName string `json:"organizationName"`
+		Logo             string `json:"logo"`
+		Headline         struct {
+			PreApproved string `json:"preApproved"`
+		} `json:"headline"`
+		Description struct {
+			PreApproved string `json:"preApproved"`
+		} `json:"description"`
+		CallToAction           string `json:"callToAction"`
+		ShowMemberProfilePhoto bool   `json:"showMemberProfilePhoto"`
+	} `json:"follow"`
 }
 
 type InlineContent struct {
