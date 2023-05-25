@@ -105,6 +105,9 @@ const (
 	AdAnalyticsPivotMemberCountryV2           AdAnalyticsPivot = "MEMBER_COUNTRY_V2"
 	AdAnalyticsPivotMemberRegionV2            AdAnalyticsPivot = "MEMBER_REGION_V2"
 	AdAnalyticsPivotMemberCompany             AdAnalyticsPivot = "MEMBER_COMPANY"
+	AdAnalyticsPivotPlacementName             AdAnalyticsPivot = "PLACEMENT_NAME"
+	AdAnalyticsImpressionDeviceType           AdAnalyticsPivot = "IMPRESSION_DEVICE_TYPE"
+	AdAnalyticsObjectiveType                  AdAnalyticsPivot = "OBJECTIVE_TYPE"
 )
 
 type GetAdAnalyticsConfig struct {
