@@ -24,6 +24,7 @@ const (
 	defaultRestliProtocolVersion string = "2.0.0"
 	tokenHttpMethod              string = http.MethodPost
 	defaultRedirectUrl           string = "http://localhost:8080/oauth/redirect"
+	AccountUrnPrefix             string = "urn:li:sponsoredAccount:"
 	CampaignUrnPrefix            string = "urn:li:sponsoredCampaign:"
 	CreativeUrnPrefix            string = "urn:li:sponsoredCreative:"
 	InMailContentUrnPrefix       string = "urn:li:adInMailContent:"
