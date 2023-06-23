@@ -126,7 +126,7 @@ func (service *Service) FromUrn(prefix string, urn string) int64 {
 }
 
 func (service *Service) AuthorizeUrl(scope string, accessType *string, prompt *string, state *string) string {
-	return service.oAuth2Service.AuthorizeUrl(scope, accessType, prompt, state)
+	return service.oAuth2Service.AuthorizeUrl(&scope, accessType, prompt, state)
 }
 
 func (service *Service) ValidateToken() (*go_token.Token, *errortools.Error) {
