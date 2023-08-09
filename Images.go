@@ -1,6 +1,7 @@
 package linkedin
 
 import (
+	"fmt"
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
 	"io"
@@ -77,4 +78,34 @@ func (service *Service) UploadImage(putUrl string, imageUrl string) *errortools.
 	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
 
 	return e
+}
+
+type Image struct {
+	Owner  string `json:"owner"`
+	Status string `json:"status"`
+	Id     string `json:"id"`
+}
+
+func (service *Service) GetImage(imageUrn string, fields string) (*Image, *errortools.Error) {
+	if service == nil {
+		return nil, errortools.ErrorMessage("Service pointer is nil")
+	}
+
+	var header = http.Header{}
+	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
+
+	var image Image
+
+	requestConfig := go_http.RequestConfig{
+		Method:            http.MethodGet,
+		Url:               service.urlRest(fmt.Sprintf("images/%s?fields=%s", imageUrn, fields)),
+		ResponseModel:     &image,
+		NonDefaultHeaders: &header,
+	}
+	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	if e != nil {
+		return nil, e
+	}
+
+	return &image, nil
 }
