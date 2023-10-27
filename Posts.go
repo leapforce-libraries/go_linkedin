@@ -118,11 +118,10 @@ func (service *Service) CreatePost(post *Post) (string, *errortools.Error) {
 }
 
 type PostsByOwnerConfig struct {
-	OrganizationId           int64
-	IsDirectSponsoredContent *bool
-	Fields                   *string
-	StartDateUnix            int64
-	EndDateUnix              int64
+	OrganizationId int64
+	Fields         *string
+	StartDateUnix  int64
+	EndDateUnix    int64
 }
 
 type PostsByOwnerResponse struct {
@@ -147,9 +146,6 @@ func (service *Service) PostsByOwner(cfg *PostsByOwnerConfig) (*[]Post, *errorto
 		values := url.Values{}
 		values.Set("q", "author")
 		values.Set("author", fmt.Sprintf("urn:li:organization:%v", cfg.OrganizationId))
-		if cfg.IsDirectSponsoredContent != nil {
-			values.Set("isDsc", fmt.Sprintf("%v", *cfg.IsDirectSponsoredContent))
-		}
 		if cfg.Fields != nil {
 			values.Set("fields", *cfg.Fields)
 		}
