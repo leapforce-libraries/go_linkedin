@@ -19,7 +19,7 @@ const (
 	authUrl                      string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl                     string = "https://www.linkedin.com/oauth/v2/accessToken"
 	linkedInVersionHeader        string = "LinkedIn-Version"
-	defaultLinkedInVersion       string = "202210"
+	defaultLinkedInVersion       string = "202304"
 	restliProtocolVersionHeader  string = "X-Restli-Protocol-Version"
 	defaultRestliProtocolVersion string = "2.0.0"
 	tokenHttpMethod              string = http.MethodPost
