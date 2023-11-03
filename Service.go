@@ -33,6 +33,7 @@ const (
 	UgcPostUrnPrefix             string = "urn:li:ugcPost:"
 	PostUrnPrefix                string = "urn:li:post:"
 	GeoUrnPrefix                 string = "urn:li:geo:"
+	ConversionUrnPrefix          string = "urn:lla:llaPartnerConversion:"
 	countDefault                 uint   = 10
 	maxUrnsPerCall               uint   = 50
 )
