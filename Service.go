@@ -19,7 +19,6 @@ const (
 	authUrl                      string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl                     string = "https://www.linkedin.com/oauth/v2/accessToken"
 	linkedInVersionHeader        string = "LinkedIn-Version"
-	defaultLinkedInVersion       string = "202304"
 	restliProtocolVersionHeader  string = "X-Restli-Protocol-Version"
 	defaultRestliProtocolVersion string = "2.0.0"
 	tokenHttpMethod              string = http.MethodPost
@@ -40,6 +39,7 @@ const (
 
 type Service struct {
 	clientId      string
+	apiVersion    string
 	oAuth2Service *oauth2.Service
 	errorResponse *ErrorResponse
 }
@@ -47,6 +47,7 @@ type Service struct {
 type ServiceConfig struct {
 	ClientId     string
 	ClientSecret string
+	ApiVersion   string
 	TokenSource  tokensource.TokenSource
 	RedirectUrl  *string
 }
@@ -79,6 +80,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 
 	return &Service{
 		clientId:      serviceConfig.ClientId,
+		apiVersion:    serviceConfig.ApiVersion,
 		oAuth2Service: oAuth2Service,
 	}, nil
 }
@@ -88,7 +90,7 @@ func (service *Service) versionedHttpRequest(requestConfig *go_http.RequestConfi
 	if headers == nil {
 		headers = &http.Header{}
 	}
-	version := defaultLinkedInVersion
+	version := service.apiVersion
 	if linkedInVersion != nil {
 		version = *linkedInVersion
 	}

@@ -33,7 +33,7 @@ func (service *Service) InitializeUploadImage(owner string) (*InitializeUploadIm
 
 	var header = http.Header{}
 	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
-	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
+	header.Set(linkedInVersionHeader, service.apiVersion)
 
 	requestConfig := go_http.RequestConfig{
 		Method:            http.MethodPost,
@@ -75,7 +75,7 @@ func (service *Service) UploadImage(putUrl string, imageUrl string) *errortools.
 		BodyRaw:           &bytes,
 		NonDefaultHeaders: &header,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 
 	return e
 }
@@ -91,18 +91,14 @@ func (service *Service) GetImage(imageUrn string, fields string) (*Image, *error
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
-	var header = http.Header{}
-	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
-
 	var image Image
 
 	requestConfig := go_http.RequestConfig{
-		Method:            http.MethodGet,
-		Url:               service.urlRest(fmt.Sprintf("images/%s?fields=%s", imageUrn, fields)),
-		ResponseModel:     &image,
-		NonDefaultHeaders: &header,
+		Method:        http.MethodGet,
+		Url:           service.urlRest(fmt.Sprintf("images/%s?fields=%s", imageUrn, fields)),
+		ResponseModel: &image,
 	}
-	_, _, e := service.oAuth2Service.HttpRequest(&requestConfig)
+	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
 		return nil, e
 	}

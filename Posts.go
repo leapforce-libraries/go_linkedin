@@ -95,14 +95,10 @@ func (service *Service) CreatePost(post *Post) (string, *errortools.Error) {
 		return "", errortools.ErrorMessage("Post pointer is nil")
 	}
 
-	var header = http.Header{}
-	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
-
 	requestConfig := go_http.RequestConfig{
-		Method:            http.MethodPost,
-		Url:               service.urlRest("posts"),
-		BodyModel:         post,
-		NonDefaultHeaders: &header,
+		Method:    http.MethodPost,
+		Url:       service.urlRest("posts"),
+		BodyModel: post,
 	}
 	_, resp, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
@@ -154,14 +150,10 @@ func (service *Service) PostsByOwner(cfg *PostsByOwnerConfig) (*[]Post, *errorto
 
 		postsResponse := PostsByOwnerResponse{}
 
-		var header = http.Header{}
-		header.Set(linkedInVersionHeader, defaultLinkedInVersion)
-
 		requestConfig := go_http.RequestConfig{
-			Method:            http.MethodGet,
-			Url:               service.urlRest(fmt.Sprintf("posts?%s", values.Encode())),
-			ResponseModel:     &postsResponse,
-			NonDefaultHeaders: &header,
+			Method:        http.MethodGet,
+			Url:           service.urlRest(fmt.Sprintf("posts?%s", values.Encode())),
+			ResponseModel: &postsResponse,
 		}
 		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {

@@ -108,15 +108,11 @@ func (service *Service) CreateComment(urn string, comment *Comment) (*Comment, *
 
 	url := service.urlRest(fmt.Sprintf("socialActions/%s/comments", urn))
 
-	var header = http.Header{}
-	header.Set(linkedInVersionHeader, defaultLinkedInVersion)
-
 	requestConfig := go_http.RequestConfig{
-		Method:            http.MethodPost,
-		Url:               url,
-		BodyModel:         comment,
-		ResponseModel:     &newComment,
-		NonDefaultHeaders: &header,
+		Method:        http.MethodPost,
+		Url:           url,
+		BodyModel:     comment,
+		ResponseModel: &newComment,
 	}
 	_, resp, e := service.versionedHttpRequest(&requestConfig, nil)
 	if e != nil {
