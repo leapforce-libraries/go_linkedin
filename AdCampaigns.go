@@ -80,7 +80,7 @@ const (
 )
 
 type SearchAdCampaignsConfig struct {
-	Account          *[]int64
+	Account          int64
 	CampaignGroup    *[]int64
 	AssociatedEntity *[]string
 	Id               *[]int64
@@ -100,11 +100,6 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 	values.Set("q", "search")
 
 	if config != nil {
-		if config.Account != nil {
-			for i, account := range *config.Account {
-				values.Set(fmt.Sprintf("search.account.values[%v]", i), fmt.Sprintf("urn:li:sponsoredAccount:%v", account))
-			}
-		}
 		if config.CampaignGroup != nil {
 			for i, campaignGroup := range *config.CampaignGroup {
 				values.Set(fmt.Sprintf("search.campaignGroup.values[%v]", i), fmt.Sprintf("urn:li:sponsoredCampaignGroup:%v", campaignGroup))
@@ -149,6 +144,7 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 	adCampaigns := []AdCampaign{}
 
 	for {
+		values.Set("q", "search")
 		if start > 0 {
 			values.Set("start", fmt.Sprintf("%v", start))
 		}
@@ -158,7 +154,7 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			Url:           service.urlRest(fmt.Sprintf("adCampaigns?%s", values.Encode())),
+			Url:           service.urlRest(fmt.Sprintf("adAccounts/%v/adCampaigns?%s", config.Account, values.Encode())),
 			ResponseModel: &adCampaignsResponse,
 		}
 		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
@@ -186,21 +182,4 @@ func (service *Service) SearchAdCampaigns(config *SearchAdCampaignsConfig) (*[]A
 	}
 
 	return &adCampaigns, nil
-}
-
-func (service *Service) GetAdCampaigns(accountId int64) (*[]AdCampaign, *errortools.Error) {
-	account := []int64{accountId}
-
-	campaigns, e := service.SearchAdCampaigns(&SearchAdCampaignsConfig{
-		Account: &account,
-	})
-	if e != nil {
-		return nil, e
-	}
-
-	if campaigns == nil {
-		return nil, nil
-	}
-
-	return campaigns, nil
 }

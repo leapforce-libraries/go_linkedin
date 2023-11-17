@@ -21,7 +21,7 @@ func (service *Service) GetOrganizationNetworkSizes(organizationId int64, linked
 
 	requestConfig := go_http.RequestConfig{
 		Method:        http.MethodGet,
-		Url:           service.urlRest(fmt.Sprintf("networkSizes/urn:li:organization:%v?edgeType=CompanyFollowedByMember", organizationId)),
+		Url:           service.urlV2(fmt.Sprintf("networkSizes/urn:li:organization:%v?edgeType=CompanyFollowedByMember", organizationId)),
 		ResponseModel: &organizationNetworkSizes,
 	}
 	_, _, e := service.versionedHttpRequest(&requestConfig, linkedInVersion)

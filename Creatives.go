@@ -108,7 +108,7 @@ type CreativeReview struct {
 }
 
 type SearchCreativesConfig struct {
-	Accounts                                *[]string
+	Account                                 int64
 	Campaigns                               *[]string
 	ContentReferences                       *[]string
 	Creatives                               *[]string
@@ -129,11 +129,6 @@ func (service *Service) SearchCreatives(config *SearchCreativesConfig) (*[]Creat
 	params = append(params, "q=criteria")
 
 	if config != nil {
-		if config.Accounts != nil {
-			if len(*config.Accounts) > 0 {
-				params = append(params, fmt.Sprintf("accounts=List(%s)", url.QueryEscape(strings.Join(*config.Accounts, ","))))
-			}
-		}
 		if config.Campaigns != nil {
 			if len(*config.Campaigns) > 0 {
 				params = append(params, fmt.Sprintf("campaigns=List(%s)", url.QueryEscape(strings.Join(*config.Campaigns, ","))))
@@ -193,7 +188,7 @@ func (service *Service) SearchCreatives(config *SearchCreativesConfig) (*[]Creat
 
 		requestConfig := go_http.RequestConfig{
 			Method:            http.MethodGet,
-			Url:               service.urlRest(fmt.Sprintf("creatives?%s", strings.Join(params_, "&"))),
+			Url:               service.urlRest(fmt.Sprintf("adAccounts/%v/creatives?%s", config.Account, strings.Join(params_, "&"))),
 			ResponseModel:     &creativesResponse,
 			NonDefaultHeaders: &header,
 		}
