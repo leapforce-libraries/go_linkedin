@@ -41,8 +41,6 @@ type AdAnalytics struct {
 	OneClickLeads                            int64                  `json:"oneClickLeads"`
 	Opens                                    int64                  `json:"opens"`
 	OtherEngagements                         int64                  `json:"otherEngagements"`
-	Pivot                                    string                 `json:"pivot"`
-	PivotValue                               string                 `json:"pivotValue"`
 	PivotValues                              []string               `json:"pivotValues"`
 	Reactions                                int64                  `json:"reactions"`
 	Sends                                    int64                  `json:"sends"`
