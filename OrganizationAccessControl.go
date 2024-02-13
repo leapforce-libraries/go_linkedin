@@ -42,7 +42,7 @@ func (service *Service) GetOrganizationAcls() (*[]OrganizationAcl, *errortools.E
 
 		requestConfig := go_http.RequestConfig{
 			Method:        http.MethodGet,
-			Url:           service.urlRest("organizationAcls?q=roleAssignee"),
+			Url:           service.urlRest(fmt.Sprintf("organizationAcls?%s", values.Encode())),
 			ResponseModel: &response,
 		}
 		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
