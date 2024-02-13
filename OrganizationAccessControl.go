@@ -1,7 +1,9 @@
 package linkedin
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
@@ -24,17 +26,38 @@ func (service *Service) GetOrganizationAcls() (*[]OrganizationAcl, *errortools.E
 		return nil, errortools.ErrorMessage("Service pointer is nil")
 	}
 
-	response := OrganizationAclResponse{}
+	var count = 100
+	var start = 0
 
-	requestConfig := go_http.RequestConfig{
-		Method:        http.MethodGet,
-		Url:           service.urlRest("organizationAcls?q=roleAssignee"),
-		ResponseModel: &response,
-	}
-	_, _, e := service.versionedHttpRequest(&requestConfig, nil)
-	if e != nil {
-		return nil, e
+	var organizationAcls []OrganizationAcl
+
+	var values url.Values
+	values.Set("q", "roleAssignee")
+	values.Set("count", fmt.Sprintf("%v", count))
+
+	for {
+		values.Set("start", fmt.Sprintf("%v", start))
+
+		response := OrganizationAclResponse{}
+
+		requestConfig := go_http.RequestConfig{
+			Method:        http.MethodGet,
+			Url:           service.urlRest("organizationAcls?q=roleAssignee"),
+			ResponseModel: &response,
+		}
+		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
+		if e != nil {
+			return nil, e
+		}
+
+		organizationAcls = append(organizationAcls, response.Elements...)
+
+		if len(response.Elements) < count {
+			break
+		}
+
+		start += count
 	}
 
-	return &response.Elements, nil
+	return &organizationAcls, nil
 }
