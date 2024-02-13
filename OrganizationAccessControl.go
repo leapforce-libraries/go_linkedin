@@ -31,7 +31,7 @@ func (service *Service) GetOrganizationAcls() (*[]OrganizationAcl, *errortools.E
 
 	var organizationAcls []OrganizationAcl
 
-	var values url.Values
+	values := url.Values{}
 	values.Set("q", "roleAssignee")
 	values.Set("count", fmt.Sprintf("%v", count))
 
