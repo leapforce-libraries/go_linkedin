@@ -59,11 +59,14 @@ type SearchAdAccountsConfig struct {
 }
 
 func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdAccount, *errortools.Error) {
-	var values url.Values = url.Values{}
+	var values = url.Values{}
 	var start uint = 0
 	var count uint = countDefault
 
 	values.Set("q", "search")
+
+	var header = http.Header{}
+	header.Set(restliProtocolVersionHeader, defaultRestliProtocolVersion)
 
 	if config != nil {
 		if config.Status != nil {
@@ -113,9 +116,10 @@ func (service *Service) SearchAdAccounts(config *SearchAdAccountsConfig) (*[]AdA
 		adAccountsResponse := AdAccountsResponse{}
 
 		requestConfig := go_http.RequestConfig{
-			Method:        http.MethodGet,
-			Url:           service.urlRest(fmt.Sprintf("adAccounts?%s", values.Encode())),
-			ResponseModel: &adAccountsResponse,
+			Method:            http.MethodGet,
+			Url:               service.urlRest(fmt.Sprintf("adAccounts?%s", values.Encode())),
+			ResponseModel:     &adAccountsResponse,
+			NonDefaultHeaders: &header,
 		}
 		_, _, e := service.versionedHttpRequest(&requestConfig, nil)
 		if e != nil {
