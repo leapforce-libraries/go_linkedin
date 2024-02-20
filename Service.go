@@ -16,6 +16,7 @@ const (
 	apiName                      string = "LinkedIn"
 	apiUrlRest                   string = "https://api.linkedin.com/rest"
 	apiUrl                       string = "https://api.linkedin.com"
+	oauthUrl                     string = "https://www.linkedin.com/oauth/v2"
 	authUrl                      string = "https://www.linkedin.com/oauth/v2/authorization"
 	tokenUrl                     string = "https://www.linkedin.com/oauth/v2/accessToken"
 	linkedInVersionHeader        string = "LinkedIn-Version"
@@ -39,6 +40,7 @@ const (
 
 type Service struct {
 	clientId      string
+	clientSecret  string
 	apiVersion    string
 	oAuth2Service *oauth2.Service
 	errorResponse *ErrorResponse
@@ -80,6 +82,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 
 	return &Service{
 		clientId:      serviceConfig.ClientId,
+		clientSecret:  serviceConfig.ClientSecret,
 		apiVersion:    serviceConfig.ApiVersion,
 		oAuth2Service: oAuth2Service,
 	}, nil
@@ -118,6 +121,10 @@ func (service *Service) urlV2(path string) string {
 
 func (service *Service) urlRest(path string) string {
 	return fmt.Sprintf("%s/%s", apiUrlRest, path)
+}
+
+func (service *Service) urlOAuth(path string) string {
+	return fmt.Sprintf("%s/%s", oauthUrl, path)
 }
 
 func (service *Service) FromUrn(prefix string, urn string) int64 {
