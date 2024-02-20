@@ -20,6 +20,9 @@ type IntrospectTokenResponse struct {
 func (service *Service) IntrospectToken(token string) (*IntrospectTokenResponse, *errortools.Error) {
 	var response IntrospectTokenResponse
 
+	t := true
+	header := http.Header{}
+	header.Set("Content-Type", "application/x-www-form-urlencoded")
 	requestConfig := go_http.RequestConfig{
 		Method: http.MethodPost,
 		Url:    service.urlOAuth("introspectToken"),
@@ -32,7 +35,9 @@ func (service *Service) IntrospectToken(token string) (*IntrospectTokenResponse,
 			service.clientSecret,
 			token,
 		},
-		ResponseModel: &response,
+		ResponseModel:      &response,
+		XWwwFormUrlEncoded: &t,
+		NonDefaultHeaders:  &header,
 	}
 
 	httpService, e := go_http.NewService(nil)
